@@ -18,6 +18,7 @@ from app.api.ddr import rig_endpoints as rig_endpoints
 from app.api.ddr import audit_endpoints as audit_endpoints
 from app.api.ddr import trend_endpoints as trend_endpoints
 from app.api.transiq import analyze as sixsigma_analyze
+from pipelines.evaluation.confusion_matrix_router import router as confusion_matrix_router
 from app.middleware.auth import APIKeyMiddleware
 from services.db import init_db, close_db
 from core.logging.logger import setup_logging, get_logger
@@ -125,6 +126,7 @@ app.include_router(audit_endpoints.router, tags=["DDR Audit"])  # P2: Field-leve
 app.include_router(trend_endpoints.router, tags=["DDR Trends"])  # P3: Multi-report time-series trends
 app.include_router(sixsigma_analyze.router, prefix="/api/v2", tags=["Six Sigma"])  # TransIQ deterministic analysis
 app.include_router(observability_endpoints.router, tags=["Observability"])  # System health, drift, model status
+app.include_router(confusion_matrix_router, tags=["Confusion Matrix"])  # ML confusion matrix analysis
 
 # Root endpoint
 @app.get("/")
