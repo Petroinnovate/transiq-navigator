@@ -1,6 +1,6 @@
 """Tests for transiq.regression."""
 import pytest
-from transiq.regression import (
+from domain.transiq.regression import (
     pearson_r, r_squared, linear_regression, predict, residuals,
     multiple_regression,
 )

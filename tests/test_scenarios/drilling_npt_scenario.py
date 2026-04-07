@@ -18,10 +18,10 @@ import sys
 # Add parent directories to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from app.intelligence.deduction_enrichment import (
+from pipelines.inference.deduction_enrichment import (
     BusinessEntityExtractor
 )
-from app.intelligence.impact_engine import (
+from pipelines.inference.impact_engine import (
     ImpactEngine,
     Entity,
     Relationship,

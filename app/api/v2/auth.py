@@ -7,10 +7,10 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
 
-from app.db.session import get_db
-from app.db.models import User
-from app.auth import verify_password, get_password_hash, create_access_token, get_current_user
-from app.utils.logger import get_logger
+from services.db.session import get_db
+from services.db.models import User
+from core.security import verify_password, get_password_hash, create_access_token, get_current_user
+from core.logging.logger import get_logger
 
 logger = get_logger(__name__)
 

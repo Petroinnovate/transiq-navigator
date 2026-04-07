@@ -23,8 +23,8 @@ try:
         BatchAnalysisRequest,
         BatchAnalysisResponse
     )
-    from app.intelligence.impact_engine import Entity, Relationship, ImpactEngine
-    from app.intelligence.deduction_enrichment import EntityTypePattern
+    from pipelines.inference.impact_engine import Entity, Relationship, ImpactEngine
+    from pipelines.inference.deduction_enrichment import EntityTypePattern
     IMPORTS_OK = True
 except ImportError as e:
     print(f"[WARN] Import error: {e}")

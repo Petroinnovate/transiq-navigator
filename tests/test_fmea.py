@@ -1,6 +1,6 @@
 """Tests for transiq.fmea."""
 import pytest
-from transiq.fmea import compute_rpn, fmea_analysis, sort_failure_modes
+from domain.transiq.fmea import compute_rpn, fmea_analysis, sort_failure_modes
 
 
 class TestComputeRPN:

@@ -11,7 +11,7 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from transiq.api.analyze import router
+from domain.transiq.api.analyze import router
 
 # Isolated test app (no auth, no DB)
 _app = FastAPI()

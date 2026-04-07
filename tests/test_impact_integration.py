@@ -17,11 +17,11 @@ from typing import List, Dict, Any
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from app.intelligence.deduction_enrichment import (
+from pipelines.inference.deduction_enrichment import (
     BusinessEntityExtractor,
     EntityTypePattern
 )
-from app.intelligence.impact_engine import (
+from pipelines.inference.impact_engine import (
     ImpactEngine,
     Entity,
     Relationship,

@@ -1,11 +1,11 @@
 """Tests for transiq.spc_charts."""
 import pytest
-from transiq.spc_charts import (
+from domain.transiq.spc_charts import (
     xbar_r_limits, xbar_s_limits, imr_limits,
     p_chart_limits, np_chart_limits, c_chart_limits, u_chart_limits,
     western_electric_rules, nelson_rules,
 )
-from transiq.utils import A2_TABLE, D3_TABLE, D4_TABLE
+from domain.transiq.utils import A2_TABLE, D3_TABLE, D4_TABLE
 
 
 class TestXbarRChart:

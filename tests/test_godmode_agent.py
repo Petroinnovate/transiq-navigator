@@ -3,7 +3,7 @@ import importlib
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from app.agents import godmode_agent as godmode_module
+from agents import godmode_agent as godmode_module
 from app.api.v2 import endpoints
 
 

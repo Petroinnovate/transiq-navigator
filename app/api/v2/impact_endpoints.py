@@ -19,7 +19,7 @@ from pydantic import BaseModel, Field
 from typing import List, Dict, Optional
 import logging
 
-from app.intelligence import (
+from pipelines.inference import (
     BusinessEntityExtractor,
     create_extractor,
     create_impact_engine,
@@ -369,7 +369,7 @@ async def find_entity_relationships(request: EntityRelationshipRequest):
     **Returns**: Direct relationships and multi-hop paths between entities.
     """
     try:
-        from app.storage.graph_storage import GraphStorage
+        from services.storage.graph_storage import GraphStorage
 
         all_paths: list = []
         direct_relationships: list = []

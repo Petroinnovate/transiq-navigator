@@ -5,7 +5,7 @@ import time
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 
-from section_analyzer import generate_full_report_analysis
+from pipelines.processing.section_analyzer import generate_full_report_analysis
 
 # Simulate a multi-page Six Sigma report
 chunks = [

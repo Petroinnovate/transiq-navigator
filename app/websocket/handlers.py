@@ -11,8 +11,8 @@ try:
 except ImportError:
     REDIS_AVAILABLE = False
     redis = None
-from app.utils.logger import get_logger
-from app.config.settings import settings
+from core.logging.logger import get_logger
+from core.config.settings import settings
 
 logger = get_logger(__name__)
 

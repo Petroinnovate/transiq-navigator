@@ -1,5 +1,5 @@
 """Offline test — scoring, tier, routing, budget enforcement. No LLM calls."""
-from section_analyzer import (
+from pipelines.processing.section_analyzer import (
     SectionNode, DocumentBrain, score_all, classify_all,
     route_models, estimate_cost, enforce_budget,
 )

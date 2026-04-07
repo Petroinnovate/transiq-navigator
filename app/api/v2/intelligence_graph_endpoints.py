@@ -17,8 +17,8 @@ from pydantic import BaseModel, Field
 from fastapi import APIRouter, HTTPException, Query
 from datetime import datetime
 
-from app.intelligence.impact_engine import Entity, Relationship
-from app.intelligence.deduction_enrichment import EntityTypePattern
+from pipelines.inference.impact_engine import Entity, Relationship
+from pipelines.inference.deduction_enrichment import EntityTypePattern
 
 
 # =============================================================================
@@ -193,7 +193,7 @@ async def get_intelligence_network(
 ):
     """Get entity relationship graph with intelligence engine weights."""
     try:
-        from app.storage.graph_storage import GraphStorage
+        from services.storage.graph_storage import GraphStorage
 
         weighted_nodes: list = []
         weighted_edges: list = []
@@ -224,7 +224,7 @@ async def get_intelligence_network(
 
                 if include_financial:
                     try:
-                        from app.intelligence.financial_engine import compute_financial_impact
+                        from pipelines.inference.financial_engine import compute_financial_impact
                         impact = compute_financial_impact(
                             float(primary.get("properties", {}).get("value", 0)),
                             primary.get("properties", {}).get("unit", ""),
@@ -236,7 +236,7 @@ async def get_intelligence_network(
 
                 if include_esg:
                     try:
-                        from app.intelligence.esg_engine import classify_kpi_esg
+                        from pipelines.inference.esg_engine import classify_kpi_esg
                         esg_class = classify_kpi_esg({"title": primary.get("name", ""), "unit": ""})
                         esg_ctx = {"normalization_factor": 0.5, "scores": esg_class}
                         esg_summary = esg_class
@@ -325,7 +325,7 @@ async def get_intelligence_network(
 async def cross_engine_analysis(entity_id: str):
     """Get unified analysis from all intelligence engines using real data."""
     try:
-        from app.storage.graph_storage import GraphStorage
+        from services.storage.graph_storage import GraphStorage
 
         financial_impact = 0.0
         financial_drivers: list = []
@@ -356,7 +356,7 @@ async def cross_engine_analysis(entity_id: str):
 
                 # Financial analysis
                 try:
-                    from app.intelligence.financial_engine import compute_kpi_financial_scores, compute_portfolio_summary
+                    from pipelines.inference.financial_engine import compute_kpi_financial_scores, compute_portfolio_summary
                     if related_kpis:
                         scored = compute_kpi_financial_scores(related_kpis)
                         portfolio = compute_portfolio_summary(scored)
@@ -368,7 +368,7 @@ async def cross_engine_analysis(entity_id: str):
 
                 # ESG analysis
                 try:
-                    from app.intelligence.esg_engine import build_esg_view
+                    from pipelines.inference.esg_engine import build_esg_view
                     if related_kpis:
                         esg = build_esg_view(related_kpis)
                         scores = esg.get("scores", {})
@@ -382,7 +382,7 @@ async def cross_engine_analysis(entity_id: str):
 
                 # Drilling analysis
                 try:
-                    from app.intelligence.drilling_engine import build_drilling_view
+                    from pipelines.inference.drilling_engine import build_drilling_view
                     if related_kpis:
                         drill = build_drilling_view(related_kpis)
                         npt_metrics = drill.get("npt", {})
@@ -433,7 +433,7 @@ async def cross_engine_analysis(entity_id: str):
 async def get_unified_recommendations(entity_id: str):
     """Get unified recommendations from all engines using real graph data."""
     try:
-        from app.storage.graph_storage import GraphStorage
+        from services.storage.graph_storage import GraphStorage
 
         recommendations: list = []
         portfolio_summary: dict = {}
@@ -452,7 +452,7 @@ async def get_unified_recommendations(entity_id: str):
 
                 # Drilling recommendations
                 try:
-                    from app.intelligence.drilling_engine import build_drilling_view
+                    from pipelines.inference.drilling_engine import build_drilling_view
                     if related_kpis:
                         drill = build_drilling_view(related_kpis)
                         for rec in drill.get("recommendations", [])[:3]:
@@ -469,7 +469,7 @@ async def get_unified_recommendations(entity_id: str):
 
                 # Financial recommendations
                 try:
-                    from app.intelligence.financial_engine import compute_portfolio_summary, compute_kpi_financial_scores
+                    from pipelines.inference.financial_engine import compute_portfolio_summary, compute_kpi_financial_scores
                     if related_kpis:
                         scored = compute_kpi_financial_scores(related_kpis)
                         portfolio_summary = compute_portfolio_summary(scored)
@@ -487,7 +487,7 @@ async def get_unified_recommendations(entity_id: str):
 
                 # ESG recommendations
                 try:
-                    from app.intelligence.esg_engine import build_esg_view
+                    from pipelines.inference.esg_engine import build_esg_view
                     if related_kpis:
                         esg = build_esg_view(related_kpis)
                         for rec in esg.get("recommendations", [])[:2]:

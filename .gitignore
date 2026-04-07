@@ -3,6 +3,20 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+# =========================================
+# TransIQ Runtime (generated at runtime)
+# =========================================
+storage_runtime/
+*.db
+*.bin
+*.bin.map
+
+# Migration artifacts
+migration_log.txt
+import_rewrite_log.txt
+migrate_structure.py
+rewrite_imports.py
+
 # C extensions
 *.so
 

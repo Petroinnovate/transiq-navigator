@@ -5,8 +5,8 @@ example_analysis.py — Demonstrates TransIQ capability analysis on sample data.
 Shows how to compute process capability (Cp/Cpk), sigma level, and DPMO
 using the transiq library based on the ASQ Green Belt Handbook.
 """
-from transiq.process_capability import cp, cpk, sigma_level, dpmo_from_sigma
-from transiq.statistics import mean, std_dev, cdf_normal
+from domain.transiq.process_capability import cp, cpk, sigma_level, dpmo_from_sigma
+from domain.transiq.statistics import mean, std_dev, cdf_normal
 
 # --- Sample process data ---
 data = [7.2, 7.5, 7.8, 7.1, 7.6, 7.4, 7.3, 7.7, 7.5, 7.2,

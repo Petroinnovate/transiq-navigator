@@ -10,8 +10,8 @@ from pydantic import BaseModel, Field
 from fastapi import APIRouter, HTTPException, Query
 from datetime import datetime
 
-from app.intelligence.impact_engine import ImpactEngine, Entity, Relationship, ImpactPath
-from app.intelligence.deduction_enrichment import BusinessEntityExtractor, EntityTypePattern
+from pipelines.inference.impact_engine import ImpactEngine, Entity, Relationship, ImpactPath
+from pipelines.inference.deduction_enrichment import BusinessEntityExtractor, EntityTypePattern
 
 # =============================================================================
 # VISUALIZATION MODELS

@@ -1,6 +1,6 @@
 """Tests for transiq.process_capability."""
 import pytest
-from transiq.process_capability import (
+from domain.transiq.process_capability import (
     cp, cpk, cpu, cpl, pp, ppk,
     sigma_level, sigma_with_shift,
     dpmo, dpmo_from_sigma, sigma_from_dpmo,

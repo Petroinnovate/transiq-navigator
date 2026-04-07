@@ -80,7 +80,7 @@ def main():
     print_section("3. Vector Storage Service")
     
     try:
-        from vector_storage import get_vector_service
+        from services.vector_store.vector_storage import get_vector_service
         service = get_vector_service()
         print(f"  {check_mark(True)} Vector service initialized")
         print(f"    Model: {service.model_name}")
@@ -100,7 +100,7 @@ def main():
     print_section("4. Supabase Connection")
     
     try:
-        from supabase_service import supabase_service
+        from services.supabase.supabase_service import supabase_service
         
         has_client = supabase_service.client is not None
         print(f"  {check_mark(has_client)} Supabase client initialized")

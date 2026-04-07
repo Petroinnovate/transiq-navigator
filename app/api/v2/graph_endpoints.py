@@ -7,10 +7,10 @@ from typing import List, Dict, Any, Optional
 from fastapi import APIRouter, Query, HTTPException, Depends
 from pydantic import BaseModel
 
-from app.storage.graph_storage import GraphStorage
-from app.processors.graph_rag import GraphAnalytics
+from services.storage.graph_storage import GraphStorage
+from pipelines.processing.graph_rag import GraphAnalytics
 from app.config.security import verify_api_key
-from app.utils.logger import get_logger
+from core.logging.logger import get_logger
 
 logger = get_logger(__name__)
 

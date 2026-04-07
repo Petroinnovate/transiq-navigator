@@ -1,6 +1,6 @@
 """Tests for transiq.doe."""
 import pytest
-from transiq.doe import (
+from domain.transiq.doe import (
     full_factorial_design, coded_factorial_design, fractional_factorial,
     main_effects, interaction_effects, anova_factorial,
 )

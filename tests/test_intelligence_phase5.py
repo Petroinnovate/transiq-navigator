@@ -15,8 +15,8 @@ from app.api.v2.intelligence_graph_endpoints import (
     CrossEngineAnalysis,
     RecommendationPackage
 )
-from app.intelligence.impact_engine import Entity, Relationship
-from app.intelligence.deduction_enrichment import EntityTypePattern
+from pipelines.inference.impact_engine import Entity, Relationship
+from pipelines.inference.deduction_enrichment import EntityTypePattern
 
 
 # =============================================================================

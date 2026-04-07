@@ -1,6 +1,6 @@
 """Tests for transiq.lean_tools."""
 import pytest
-from transiq.lean_tools import (
+from domain.transiq.lean_tools import (
     calculate_oee, takt_time, cycle_time_analysis,
     calculate_throughput, identify_waste, kaizen_event,
     value_stream_metrics,

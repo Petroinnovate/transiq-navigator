@@ -1,7 +1,7 @@
 """Tests for transiq.statistics."""
 import math
 import pytest
-from transiq.statistics import (
+from domain.transiq.statistics import (
     mean, variance, std_dev, median, mode, percentile, range_, iqr,
     pdf_normal, cdf_normal, z_score, inverse_normal,
     pmf_binomial, cdf_binomial, pmf_poisson, cdf_poisson,

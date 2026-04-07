@@ -119,8 +119,8 @@ print()
 print("[CHUNKER] Chunking Implementation Status:")
 print("-" * 60)
 try:
-    from app.processors.chunker.adaptive import AdaptiveChunker
-    from app.config.settings import settings
+    from pipelines.processing.chunking.adaptive import AdaptiveChunker
+    from core.config.settings import settings
     
     chunker = AdaptiveChunker()
     print(f"[OK] AdaptiveChunker loaded successfully")
@@ -157,8 +157,8 @@ print()
 print("[EMBEDDINGS] Embedding Model Status:")
 print("-" * 60)
 try:
-    from app.embeddings.models import EmbeddingModel
-    from app.config.settings import settings
+    from services.vector_store.embedding_model import EmbeddingModel
+    from core.config.settings import settings
     
     emb_model = EmbeddingModel()
     print(f"[OK] EmbeddingModel loaded successfully")

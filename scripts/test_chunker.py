@@ -1,6 +1,6 @@
 ﻿import sys, time
 sys.path.insert(0, '.')
-from app.processors.chunker.adaptive import AdaptiveChunker
+from pipelines.processing.chunking.adaptive import AdaptiveChunker
 
 # Simulate a medium-sized document with tables
 text = '''

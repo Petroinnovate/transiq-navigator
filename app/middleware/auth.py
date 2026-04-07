@@ -14,8 +14,8 @@ from typing import Callable, Dict, List, Optional
 from enum import IntEnum
 import time
 from collections import defaultdict
-from app.config.settings import settings
-from app.utils.logger import get_logger
+from core.config.settings import settings
+from core.logging.logger import get_logger
 
 logger = get_logger(__name__)
 

@@ -8,8 +8,8 @@ import sys
 os.environ['GEMINI_API_KEY'] = 'AIzaSyCS0pWbCGmpBscDdaMn0GWKPZD9cPRhChc'
 
 try:
-    from app.llm.factory import LLMFactory
-    from app.config.settings import settings
+    from services.llm.factory import LLMFactory
+    from core.config.settings import settings
     
     print("=" * 60)
     print("Testing Gemini API Configuration")

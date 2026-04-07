@@ -1,7 +1,7 @@
 """Tests for transiq.dashboard."""
 import pytest
-from transiq.dashboard import compute_metrics
-from transiq import statistics, process_capability
+from domain.transiq.dashboard import compute_metrics
+from domain.transiq import statistics, process_capability
 
 
 def test_compute_metrics_basic():

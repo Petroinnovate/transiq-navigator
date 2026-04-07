@@ -15,20 +15,20 @@ import pytest
 import time
 from typing import List, Dict, Any
 
-from app.intelligence.graphrag_connector import (
+from pipelines.inference.graphrag_connector import (
     GraphRAGConnector,
     GraphAlgorithms,
     EntityDeduplicator,
     CacheManager,
     create_graphrag_connector
 )
-from app.intelligence.real_data_provider import (
+from pipelines.inference.real_data_provider import (
     RealDataProvider,
     AdvancedVisualization,
     create_real_data_provider
 )
-from app.intelligence.impact_engine import Entity, Relationship
-from app.intelligence.deduction_enrichment import EntityTypePattern
+from pipelines.inference.impact_engine import Entity, Relationship
+from pipelines.inference.deduction_enrichment import EntityTypePattern
 
 
 # =============================================================================

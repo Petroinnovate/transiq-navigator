@@ -5,7 +5,7 @@ example_spc.py — Demonstrates SPC control chart analysis with TransIQ.
 Computes X-bar R chart limits and runs Nelson rule checks on subgroup data.
 Uses the transiq library based on the ASQ Green Belt Handbook.
 """
-from transiq.spc_charts import xbar_r_limits, imr_limits, nelson_rules
+from domain.transiq.spc_charts import xbar_r_limits, imr_limits, nelson_rules
 
 # --- Subgroup data (5 samples per subgroup, 8 subgroups) ---
 subgroups = [

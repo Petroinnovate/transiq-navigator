@@ -1,6 +1,6 @@
 """Tests for transiq.voc."""
 import pytest
-from transiq.voc import capture_voc, ctq_tree, qfd_matrix, kano_classify
+from domain.transiq.voc import capture_voc, ctq_tree, qfd_matrix, kano_classify
 
 
 class TestCaptureVOC:

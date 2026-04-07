@@ -11,16 +11,16 @@ from app.api.v2 import auth as auth_endpoints
 from app.api.v2 import impact_endpoints
 from app.api.v2 import dashboard_endpoints
 from app.api.v2 import intelligence_graph_endpoints
-from app.ddr import endpoints as ddr_endpoints
-from app.ddr import fleet_endpoints as fleet_endpoints
-from app.ddr import rig_endpoints as rig_endpoints
-from app.ddr import audit_endpoints as audit_endpoints
-from app.ddr import trend_endpoints as trend_endpoints
-from transiq.api import analyze as sixsigma_analyze
+from app.api.ddr import endpoints as ddr_endpoints
+from app.api.ddr import fleet_endpoints as fleet_endpoints
+from app.api.ddr import rig_endpoints as rig_endpoints
+from app.api.ddr import audit_endpoints as audit_endpoints
+from app.api.ddr import trend_endpoints as trend_endpoints
+from domain.transiq.api import analyze as sixsigma_analyze
 from app.middleware.auth import APIKeyMiddleware
-from app.db import init_db, close_db
-from app.utils.logger import setup_logging, get_logger
-from app.config.settings import settings
+from services.db import init_db, close_db
+from core.logging.logger import setup_logging, get_logger
+from core.config.settings import settings
 
 # Setup logging
 setup_logging()

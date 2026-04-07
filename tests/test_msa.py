@@ -1,6 +1,6 @@
 """Tests for transiq.msa."""
 import pytest
-from transiq.msa import gage_rr_anova, precision_to_tolerance
+from domain.transiq.msa import gage_rr_anova, precision_to_tolerance
 
 
 class TestGageRR:

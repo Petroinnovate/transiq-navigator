@@ -10,14 +10,14 @@ import json
 from pathlib import Path
 from pydantic import BaseModel, Field
 
-from app.workers.tasks import enqueue_document
-from app.storage.local import LocalStorage
-from app.embeddings.models import EmbeddingModel
-from app.search.hybrid import HybridSearch, ReRanker
-from app.config.settings import settings
-from app.config.schemas import ProcessingRequest, SearchRequest
-from app.utils.logger import get_logger
-from app.utils.errors import ProcessingError, SearchError
+from pipelines.workers.tasks import enqueue_document
+from services.storage.local import LocalStorage
+from services.vector_store.embedding_model import EmbeddingModel
+from services.vector_store.hybrid_search import HybridSearch, ReRanker
+from core.config.settings import settings
+from core.config.schemas import ProcessingRequest, SearchRequest
+from core.logging.logger import get_logger
+from core.errors import ProcessingError, SearchError
 from app.websocket.handlers import manager
 
 logger = get_logger(__name__)
@@ -67,7 +67,7 @@ async def health_check():
     
     # 2. Check Qdrant
     try:
-        from vector_storage import VectorStorageService
+        from services.vector_store.vector_storage import VectorStorageService
         vs = VectorStorageService()
         # If initialization succeeds, Qdrant is accessible
         status["services"]["qdrant"] = "ok" if vs._client else "down"
@@ -77,7 +77,7 @@ async def health_check():
     
     # 3. Check Database
     try:
-        from app.storage.local import LocalStorage
+        from services.storage.local import LocalStorage
         db = LocalStorage()
         # Simple query to verify DB is accessible
         db.conn.execute("SELECT 1").fetchone()
@@ -87,7 +87,7 @@ async def health_check():
     
     # 4. Check LLM Provider
     try:
-        from app.config.settings import settings
+        from core.config.settings import settings
         llm_providers = []
         if settings.GEMINI_API_KEY:
             llm_providers.append("gemini")
@@ -103,7 +103,7 @@ async def health_check():
     
     # 5. Check Celery Workers (optional, non-blocking)
     try:
-        from app.workers.processor import celery, CELERY_AVAILABLE
+        from pipelines.workers.processor import celery, CELERY_AVAILABLE
         if CELERY_AVAILABLE and celery:
             import asyncio
             try:
@@ -141,7 +141,7 @@ def _enrich_kpis_with_intelligence(kpis: list) -> Tuple[list, dict]:
     Falls back gracefully if kpi_engine is unavailable.
     """
     try:
-        from app.kpi_engine import process_kpis, map_kpis_to_widgets
+        from pipelines.feature_engineering import process_kpis, map_kpis_to_widgets
         enriched = process_kpis(kpis)
         widgets = map_kpis_to_widgets(enriched)
         return enriched, widgets
@@ -157,7 +157,7 @@ def _build_predictive_block(kpis: list) -> dict:
     Falls back gracefully.
     """
     try:
-        from app.kpi_engine import forecast_kpi, enrich_kpi_with_predictions, compare_scenarios, PRESET_SCENARIOS
+        from pipelines.feature_engineering import forecast_kpi, enrich_kpi_with_predictions, compare_scenarios, PRESET_SCENARIOS
 
         forecasts = []
         enriched_for_scenarios = []
@@ -247,8 +247,8 @@ def _transform_to_dashboard_response(doc_id: str, doc: dict, dashboard_data: dic
     # Transform KPIs — apply deterministic financial scoring before sending to frontend
     raw_kpis = dashboard_data.get('kpis', [])
     try:
-        from app.intelligence.financial_engine import compute_kpi_financial_scores
-        from app.intelligence.validation import validate_kpis
+        from pipelines.inference.financial_engine import compute_kpi_financial_scores
+        from pipelines.inference.validation import validate_kpis
         raw_kpis = validate_kpis(raw_kpis)
         raw_kpis = compute_kpi_financial_scores(raw_kpis)
     except Exception as _ie:
@@ -281,9 +281,9 @@ def _transform_to_dashboard_response(doc_id: str, doc: dict, dashboard_data: dic
     # Build ESG and drilling views from raw KPIs if not already present
     if not intelligence_data:
         try:
-            from app.intelligence.esg_engine import build_esg_view
-            from app.intelligence.drilling_engine import build_drilling_view
-            from app.intelligence.financial_engine import compute_portfolio_summary
+            from pipelines.inference.esg_engine import build_esg_view
+            from pipelines.inference.drilling_engine import build_drilling_view
+            from pipelines.inference.financial_engine import compute_portfolio_summary
             intelligence_data = {
                 "esg": build_esg_view(raw_kpis),
                 "drilling": build_drilling_view(raw_kpis),
@@ -964,7 +964,7 @@ async def search(request: SearchRequest):
 async def run_agent(request: AgentRunRequest):
     """Run the lightweight GodMode-style agent against a high-level goal."""
     try:
-        from app.agents.godmode_agent import GodModeAgent
+        from agents.godmode_agent import GodModeAgent
 
         agent = GodModeAgent()
         result = agent.run(goal=request.goal, context=request.context)
@@ -1106,7 +1106,7 @@ async def export_dashboard_pdf(doc_id: str):
     """Export dashboard as a formatted PDF report"""
     try:
         from fastapi.responses import Response
-        from app.utils.export_service import generate_dashboard_pdf
+        from services.export_service import generate_dashboard_pdf
 
         doc = storage.get_document(doc_id)
         if not doc:
@@ -1147,7 +1147,7 @@ async def export_dashboard_excel(doc_id: str):
     """Export dashboard as a multi-sheet Excel workbook"""
     try:
         from fastapi.responses import Response
-        from app.utils.export_service import generate_dashboard_excel
+        from services.export_service import generate_dashboard_excel
 
         doc = storage.get_document(doc_id)
         if not doc:

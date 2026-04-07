@@ -1,6 +1,6 @@
 """Tests for transiq.hypothesis."""
 import pytest
-from transiq.hypothesis import (
+from domain.transiq.hypothesis import (
     z_test, t_test_one_sample, t_test_two_sample, t_test_paired,
     chi2_goodness_of_fit, chi2_independence, f_test_variance,
     anova_oneway,
