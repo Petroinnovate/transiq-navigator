@@ -31,6 +31,12 @@ class Role(IntEnum):
     ADMIN    = 40
 
 
+# Default role for JWT-authenticated users (frontend).
+# Set to ENGINEER for dev/demo (unlocks upload, export, what-if).
+# Change to OPERATOR for production (read-only by default).
+DEFAULT_JWT_ROLE: Role = Role.ENGINEER
+
+
 # Map API key → role. Configure via env: API_KEY_ROLES='{"key1":"admin","key2":"engineer"}'
 # Fallback: all configured keys get ADMIN if no role mapping exists.
 _KEY_ROLE_MAP: Dict[str, Role] = {}
@@ -253,19 +259,19 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
 
                     logger.debug(f"JWT authenticated: user_id={user_id} path={request.url.path}")
 
-                    # JWT users get OPERATOR role by default.
+                    # JWT users get DEFAULT_JWT_ROLE (ENGINEER for dev, OPERATOR for prod).
                     # Extend with per-user DB roles when needed.
                     request.state.api_key = None
                     request.state.user_id = user_id
-                    request.state.role = Role.OPERATOR
+                    request.state.role = DEFAULT_JWT_ROLE
 
                     # RBAC check for JWT users
-                    if not check_permission(request.url.path, Role.OPERATOR):
+                    if not check_permission(request.url.path, DEFAULT_JWT_ROLE):
                         return JSONResponse(
                             status_code=status.HTTP_403_FORBIDDEN,
                             content={
                                 "error": "Forbidden",
-                                "message": "Your role (OPERATOR) does not have access to this endpoint.",
+                                "message": f"Your role ({DEFAULT_JWT_ROLE.name}) does not have access to this endpoint.",
                             },
                         )
 

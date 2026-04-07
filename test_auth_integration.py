@@ -210,8 +210,8 @@ def run_http_tests():
         try:
             r = requests.get(f"{BASE_URL}/api/v2/financial",
                              headers={"Authorization": f"Bearer {jwt_token}"}, timeout=5)
-            # OPERATOR should be blocked from /api/v2/financial (requires MANAGER)
-            record("JWT OPERATOR blocked from /financial → 403", r.status_code == 403,
+            # ENGINEER should be blocked from /api/v2/financial (requires MANAGER)
+            record("JWT ENGINEER blocked from /financial → 403", r.status_code == 403,
                    f"status={r.status_code}")
         except Exception as e:
             record("JWT OPERATOR blocked from /financial → 403", False, str(e))
