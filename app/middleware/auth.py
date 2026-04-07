@@ -178,11 +178,14 @@ def require_role(min_role: Role):
 
 class APIKeyMiddleware(BaseHTTPMiddleware):
     """
-    Middleware to enforce API key authentication + RBAC.
-    
-    Checks for X-API-Key header on all /api/* routes.
+    Middleware to enforce authentication + RBAC.
+
+    Authentication priority:
+      1. X-API-Key header  (existing API key flow)
+      2. Authorization: Bearer <jwt>  (React frontend flow)
+
     Excludes /docs, /openapi.json, /health, /auth/* from authentication.
-    Includes rate limiting per API key and role-based access control.
+    Includes rate limiting and role-based access control.
     """
     
     EXCLUDED_PATHS = [
@@ -223,17 +226,54 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
             request.state.role = Role.ADMIN
             return await call_next(request)
         
-        # Get API key from header
+        # ── Authentication: API Key OR Bearer JWT ──────────────────────────
+
+        # 1. Try X-API-Key header (existing integrations)
         api_key = request.headers.get("X-API-Key") or request.headers.get("x-api-key")
-        
+
+        # 2. Fallback: try Bearer JWT (React frontend sends this via axios interceptor)
         if not api_key:
-            logger.warning(f"Unauthorized access attempt from {request.client.host} - No API key provided")
+            auth_header = request.headers.get("Authorization", "")
+            if auth_header.startswith("Bearer "):
+                jwt_token = auth_header[7:]
+                try:
+                    from core.security.jwt import decode_access_token
+                    user_id = decode_access_token(jwt_token)
+                    if not user_id:
+                        raise ValueError("Invalid or expired JWT token")
+
+                    logger.debug(f"JWT authenticated: user_id={user_id} path={request.url.path}")
+
+                    # JWT users get OPERATOR role by default.
+                    # Extend with per-user DB roles when needed.
+                    request.state.api_key = None
+                    request.state.user_id = user_id
+                    request.state.role = Role.OPERATOR
+
+                    # RBAC check for JWT users
+                    if not check_permission(request.url.path, Role.OPERATOR):
+                        return JSONResponse(
+                            status_code=status.HTTP_403_FORBIDDEN,
+                            content={
+                                "error": "Forbidden",
+                                "message": "Your role (OPERATOR) does not have access to this endpoint.",
+                            },
+                        )
+
+                    return await call_next(request)
+
+                except Exception as e:
+                    logger.warning(f"Invalid Bearer JWT from {request.client.host}: {e}")
+                    # Fall through to 401 below
+
+        # 3. No valid credential found
+        if not api_key:
+            logger.warning(f"Unauthorized: {request.client.host} — no X-API-Key or valid Bearer token")
             return JSONResponse(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 content={
                     "error": "Unauthorized",
-                    "message": "Missing API key. Include 'X-API-Key' header in your request.",
-                    "hint": "Example: curl -H 'X-API-Key: your-key-here' http://..."
+                    "message": "Authentication required. Include either 'X-API-Key' header or 'Authorization: Bearer <token>'.",
                 }
             )
         
