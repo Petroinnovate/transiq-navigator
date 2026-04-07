@@ -154,15 +154,24 @@ def require_role(min_role: Role):
     """
     FastAPI dependency — enforce minimum role on a specific endpoint.
 
+    Works for both API key and JWT-authenticated requests.
+
     Usage:
         @router.get("/admin/users", dependencies=[Depends(require_role(Role.ADMIN))])
         async def list_users(): ...
     """
     async def _check(request: Request):
-        api_key = getattr(request.state, "api_key", None)
-        if not api_key:
+        # JWT path sets user_id + role; API key path sets api_key + role
+        role = getattr(request.state, "role", None)
+        has_api_key = getattr(request.state, "api_key", None)
+        has_user_id = getattr(request.state, "user_id", None)
+
+        if not has_api_key and not has_user_id:
             raise HTTPException(status_code=401, detail="Authentication required")
-        role = get_role_for_key(api_key)
+
+        if role is None:
+            raise HTTPException(status_code=401, detail="Authentication required")
+
         if role < min_role:
             raise HTTPException(
                 status_code=403,

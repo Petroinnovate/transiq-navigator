@@ -187,6 +187,13 @@ def _get_client():
     from app.main import app
     return TestClient(app, raise_server_exceptions=False)
 
+def _auth_headers():
+    """Return auth headers for protected endpoint tests."""
+    from core.config.settings import settings
+    if settings.API_KEY:
+        return {"X-API-Key": settings.API_KEY}
+    return {}
+
 
 def test_root_endpoint():
     c = _get_client()
@@ -203,7 +210,7 @@ def test_six_sigma_analyze():
         "usl": 6.0,
         "lsl": 4.0,
     }
-    r = c.post("/api/v2/six-sigma/analyze", json=payload)
+    r = c.post("/api/v2/six-sigma/analyze", json=payload, headers=_auth_headers())
     assert r.status_code == 200, f"Status {r.status_code}: {r.text[:200]}"
     body = r.json()
     # Validate response schema
@@ -216,18 +223,18 @@ def test_six_sigma_analyze():
 
 def test_six_sigma_invalid():
     c = _get_client()
-    r = c.post("/api/v2/six-sigma/analyze", json={"data": [], "usl": 10, "lsl": 0})
+    r = c.post("/api/v2/six-sigma/analyze", json={"data": [], "usl": 10, "lsl": 0}, headers=_auth_headers())
     assert r.status_code == 422, "Empty data should fail validation"
 
 def test_six_sigma_history():
     c = _get_client()
-    r = c.get("/api/v2/six-sigma/history")
+    r = c.get("/api/v2/six-sigma/history", headers=_auth_headers())
     assert r.status_code == 200
     assert isinstance(r.json(), list)
 
 def test_observability_health_api():
     c = _get_client()
-    r = c.get("/api/v2/observability/health")
+    r = c.get("/api/v2/observability/health", headers=_auth_headers())
     assert r.status_code == 200
     body = r.json()
     assert "status" in body
@@ -235,7 +242,7 @@ def test_observability_health_api():
 
 def test_observability_models_api():
     c = _get_client()
-    r = c.get("/api/v2/observability/models")
+    r = c.get("/api/v2/observability/models", headers=_auth_headers())
     assert r.status_code == 200
     body = r.json()
     assert "total" in body
@@ -243,7 +250,7 @@ def test_observability_models_api():
 
 def test_observability_features_api():
     c = _get_client()
-    r = c.get("/api/v2/observability/features")
+    r = c.get("/api/v2/observability/features", headers=_auth_headers())
     assert r.status_code == 200
     body = r.json()
     assert "total" in body
@@ -251,12 +258,12 @@ def test_observability_features_api():
 
 def test_observability_predictions_api():
     c = _get_client()
-    r = c.get("/api/v2/observability/predictions")
+    r = c.get("/api/v2/observability/predictions", headers=_auth_headers())
     assert r.status_code == 200
 
 def test_observability_drift_api():
     c = _get_client()
-    r = c.get("/api/v2/observability/drift")
+    r = c.get("/api/v2/observability/drift", headers=_auth_headers())
     assert r.status_code == 200
     body = r.json()
     assert "timestamp" in body
@@ -647,7 +654,7 @@ def test_volume_drift():
 
 def test_observability_health_structure():
     c = _get_client()
-    r = c.get("/api/v2/observability/health")
+    r = c.get("/api/v2/observability/health", headers=_auth_headers())
     body = r.json()
     assert "status" in body
     assert "timestamp" in body
@@ -658,13 +665,13 @@ def test_observability_health_structure():
 
 def test_observability_models_structure():
     c = _get_client()
-    body = c.get("/api/v2/observability/models").json()
+    body = c.get("/api/v2/observability/models", headers=_auth_headers()).json()
     assert isinstance(body["models"], list)
     assert isinstance(body["total"], int)
 
 def test_observability_drift_structure():
     c = _get_client()
-    body = c.get("/api/v2/observability/drift").json()
+    body = c.get("/api/v2/observability/drift", headers=_auth_headers()).json()
     assert "production_models" in body or "production_models_error" in body
     assert "confidence_trend" in body or "confidence_trend_error" in body
 
@@ -860,13 +867,13 @@ def test_e2e_api_analyze_roundtrip():
         "usl": 6.0,
         "lsl": 4.0,
     }
-    r = c.post("/api/v2/six-sigma/analyze", json=payload)
+    r = c.post("/api/v2/six-sigma/analyze", json=payload, headers=_auth_headers())
     assert r.status_code == 200
     body = r.json()
     cpk = body["metrics"]["cpk"]
     assert cpk > 0, f"Cpk should be positive, got {cpk}"
     # History should include at least this analysis
-    h = c.get("/api/v2/six-sigma/history")
+    h = c.get("/api/v2/six-sigma/history", headers=_auth_headers())
     assert h.status_code == 200
 
 
