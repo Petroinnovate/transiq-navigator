@@ -11,6 +11,7 @@ from app.api.v2 import auth as auth_endpoints
 from app.api.v2 import impact_endpoints
 from app.api.v2 import dashboard_endpoints
 from app.api.v2 import intelligence_graph_endpoints
+from app.api.v2 import observability_endpoints
 from app.api.ddr import endpoints as ddr_endpoints
 from app.api.ddr import fleet_endpoints as fleet_endpoints
 from app.api.ddr import rig_endpoints as rig_endpoints
@@ -123,6 +124,7 @@ app.include_router(rig_endpoints.router, tags=["Rig Analytics"])  # P2: Per-rig 
 app.include_router(audit_endpoints.router, tags=["DDR Audit"])  # P2: Field-level audit trail
 app.include_router(trend_endpoints.router, tags=["DDR Trends"])  # P3: Multi-report time-series trends
 app.include_router(sixsigma_analyze.router, prefix="/api/v2", tags=["Six Sigma"])  # TransIQ deterministic analysis
+app.include_router(observability_endpoints.router, tags=["Observability"])  # System health, drift, model status
 
 # Root endpoint
 @app.get("/")

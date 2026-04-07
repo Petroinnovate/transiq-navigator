@@ -48,9 +48,82 @@ class RetrainingResult:
     old_metrics: Dict[str, float] = field(default_factory=dict)
     new_metrics: Dict[str, float] = field(default_factory=dict)
     promoted: bool = False
+    promotion_gate: str = ""  # "passed" | "rejected:reason" | "shadow"
     duration_ms: float = 0
     success: bool = True
     error: Optional[str] = None
+
+
+class PromotionGuardrail:
+    """
+    Gating logic for model promotion.
+
+    Rules (ALL must pass for auto-promote):
+      1. New model must beat current on primary metric by min_improvement
+      2. New model must NOT regress on any metric by more than max_regression
+      3. New model must meet absolute minimum thresholds
+      4. If shadow_mode=True, register as shadow (no promote) for manual review
+    """
+
+    def __init__(
+        self,
+        min_improvement: float = 0.02,
+        max_regression: float = 0.01,
+        absolute_thresholds: Optional[Dict[str, float]] = None,
+        primary_metric: str = "accuracy",
+        shadow_mode: bool = False,
+    ):
+        self.min_improvement = min_improvement
+        self.max_regression = max_regression
+        self.absolute_thresholds = absolute_thresholds or {"accuracy": 0.70}
+        self.primary_metric = primary_metric
+        self.shadow_mode = shadow_mode
+
+    def evaluate(
+        self, old_metrics: Dict[str, float], new_metrics: Dict[str, float]
+    ) -> tuple[bool, str]:
+        """
+        Evaluate whether the new model should be promoted.
+
+        Returns:
+            (should_promote: bool, reason: str)
+        """
+        if self.shadow_mode:
+            return False, "shadow: new model registered for shadow testing only"
+
+        # Gate 1: Absolute minimum thresholds
+        for metric, threshold in self.absolute_thresholds.items():
+            val = new_metrics.get(metric, 0)
+            if val < threshold:
+                return False, (
+                    f"rejected: {metric}={val:.4f} below absolute minimum {threshold:.4f}"
+                )
+
+        # Gate 2: No baseline → auto-promote
+        if not old_metrics:
+            return True, "passed: no baseline (first model)"
+
+        # Gate 3: Primary metric improvement
+        old_primary = old_metrics.get(self.primary_metric, 0)
+        new_primary = new_metrics.get(self.primary_metric, 0)
+        if new_primary < old_primary + self.min_improvement:
+            return False, (
+                f"rejected: {self.primary_metric} improvement "
+                f"{new_primary - old_primary:+.4f} < required {self.min_improvement:.4f}"
+            )
+
+        # Gate 4: No regression on any tracked metric
+        for metric in old_metrics:
+            old_val = old_metrics[metric]
+            new_val = new_metrics.get(metric, 0)
+            regression = old_val - new_val
+            if regression > self.max_regression:
+                return False, (
+                    f"rejected: {metric} regressed by {regression:.4f} "
+                    f"> max allowed {self.max_regression:.4f}"
+                )
+
+        return True, "passed: all gates cleared"
 
 
 class RetrainingPipeline:
@@ -70,15 +143,25 @@ class RetrainingPipeline:
         data_drift_threshold: float = 0.20,
         model_drift_threshold: float = 0.15,
         min_improvement: float = 0.02,
+        max_regression: float = 0.01,
         auto_promote: bool = True,
+        shadow_mode: bool = False,
+        absolute_thresholds: Optional[Dict[str, float]] = None,
+        primary_metric: str = "accuracy",
     ):
         self.model_name = model_name
         self.data_drift_threshold = data_drift_threshold
         self.model_drift_threshold = model_drift_threshold
-        self.min_improvement = min_improvement
         self.auto_promote = auto_promote
 
         self._registry = get_model_registry()
+        self._guardrail = PromotionGuardrail(
+            min_improvement=min_improvement,
+            max_regression=max_regression,
+            absolute_thresholds=absolute_thresholds or {"accuracy": 0.70},
+            primary_metric=primary_metric,
+            shadow_mode=shadow_mode,
+        )
 
     # ── Public API ─────────────────────────────────────────────────
 
@@ -150,20 +233,25 @@ class RetrainingPipeline:
             )
             result.new_model_id = mv.model_id
 
-            # Step 6: Promote if better
-            if self.auto_promote and self._is_improvement(result.old_metrics, new_metrics):
+            # Step 6: Promotion guardrail
+            should_promote, gate_reason = self._guardrail.evaluate(
+                result.old_metrics, new_metrics
+            )
+            result.promotion_gate = gate_reason
+
+            if self.auto_promote and should_promote:
                 self._registry.promote(mv.model_id, "production")
                 # Archive old production model
                 if prod:
                     self._registry.promote(prod.model_id, "archived")
                 result.promoted = True
                 logger.info(
-                    "[retrain] New model promoted to production (id=%s)",
-                    mv.model_id,
+                    "[retrain] Model promoted to production (id=%s): %s",
+                    mv.model_id, gate_reason,
                 )
             else:
                 logger.info(
-                    "[retrain] New model not promoted (insufficient improvement)"
+                    "[retrain] Model NOT promoted: %s", gate_reason
                 )
 
         except Exception as e:
@@ -242,20 +330,6 @@ class RetrainingPipeline:
         if eval_fn:
             return eval_fn(model, data)
         return {"accuracy": 0.0, "f1_score": 0.0}
-
-    def _is_improvement(self, old_metrics: Dict[str, float], new_metrics: Dict[str, float]) -> bool:
-        """Check if new metrics are better than old by min_improvement."""
-        if not old_metrics:
-            return True  # No baseline = always promote
-
-        # Compare primary metric (accuracy, then f1_score)
-        for key in ["accuracy", "f1_score"]:
-            old_val = old_metrics.get(key, 0)
-            new_val = new_metrics.get(key, 0)
-            if new_val >= old_val + self.min_improvement:
-                return True
-
-        return False
 
     def _next_version(self) -> str:
         """Auto-increment version string."""
