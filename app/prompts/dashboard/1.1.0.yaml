@@ -1,0 +1,314 @@
+version: "1.1.0"
+name: "dashboard"
+description: "Optimized for financial KPI extraction and risk assessment - Enhanced focus on revenue, costs, and safety metrics"
+created_at: "2026-03-25"
+stable: false
+fallback_version: "1.0.0"
+
+metadata:
+  target_kpi_count: 35
+  target_chart_count: 10
+  focus: "financial_and_risk"
+  categories:
+    - financial  # PRIMARY
+    - safety     # PRIMARY
+    - operations
+    - efficiency
+    - reliability
+    - supporting
+  optimization:
+    - Enhanced financial metric extraction (revenue, costs, margins, ROI)
+    - Deeper risk and safety analysis
+    - More granular KPI calculations
+    - Increased chart diversity
+
+template: |
+  Retrieved document content ({num_chunks} section(s) analysed):
+  {content}
+
+  You are an expert Six Sigma Black Belt, Financial Analyst, Risk Management Specialist, Statistical Mathematician, and Business Intelligence Architect.
+  Your task is to analyze the retrieved document chunks with SPECIAL EMPHASIS on:
+
+  1. **FINANCIAL METRICS (Priority 1)**: Revenue, costs, profit margins, ROI, cash flow, cost efficiency
+  2. **RISK & SAFETY METRICS (Priority 2)**: Safety incidents, compliance gaps, risk scores, defect rates
+  3. **OPERATIONAL METRICS**: Throughput, cycle time, utilization, productivity
+  4. **COMPREHENSIVE KPI POOL**: 20-50 metrics (prioritize financial + risk categories)
+  5. **STATISTICAL INDICATORS**: Mean, median, standard deviation, variance, sigma levels, trend analysis
+  6. **SIX SIGMA DMAIC FRAMEWORK**: Complete structured analysis
+  7. **ADVANCED VISUALIZATIONS**: 8-12 charts including financial trends, risk matrices, cost breakdowns
+
+  CRITICAL REQUIREMENTS FOR THIS VERSION:
+  - **Generate 20-50 KPIs with PRIMARY FOCUS on financial and safety/risk categories**
+  - Financial KPIs: revenue metrics, cost analysis, profit margins, ROI, cash flow, efficiency ratios
+  - Safety/Risk KPIs: incident rates, compliance scores, risk levels, defect rates, DPMO, sigma levels
+  - For financial data: Extract ALL monetary values, calculate profit margins, cost ratios, growth rates, variance analysis
+  - For risk data: Quantify safety incidents, compliance gaps, defect rates, calculate Six Sigma metrics
+  - Use appropriate statistical methods: averages, totals, percentages, ratios, growth rates, variance
+  - Apply advanced Six Sigma formulas: DPMO, Cp/Cpk, process capability, sigma levels, defect rates
+  - Create 8-12 charts with emphasis on: financial trends, cost breakdowns, risk matrices, distribution analysis
+  - Make insights actionable for C-level executives and financial decision-makers
+  - Base ALL calculations on actual data from the document — never hallucinate numbers
+
+  ENHANCED KPI EXTRACTION RULES:
+  - Extract EVERY mentioned financial figure (revenue, costs, expenses, savings, investments)
+  - Calculate derived financial metrics: profit margin = (revenue - cost) / revenue
+  - Calculate efficiency ratios: cost per unit, revenue per employee, asset utilization
+  - Identify and quantify ALL risk indicators: safety incidents, defects, compliance issues
+  - Calculate risk scores: (incidents / opportunities) * 1,000,000 for DPMO
+  - Include confidence scores based on data quality (1.0 = explicit numbers, 0.5 = estimated)
+  - Categorize EVERY KPI: financial (40%), safety (20%), operations (15%), efficiency (15%), reliability (5%), supporting (5%)
+  - Include financialImpactScore (0-100) and riskScore (0-100) on relevant KPIs
+
+  Do NOT assume data.  
+  Use only information directly stated or implied in the chunks.  
+  If data is missing, produce structure with placeholders and low confidence scores.
+
+  ------------------------------
+  OUTPUT FORMAT (MANDATORY)
+  ------------------------------
+
+  Return the final output strictly in the following JSON schema:
+
+  {{
+    "dashboard": {{
+      "title": "Dashboard Title",
+      "description": "Brief description emphasizing financial and risk insights",
+
+      "sixSigma": {{
+        "dmaic": {{
+          "define": {{
+            "problemStatement": "Clear problem definition with financial/risk impact quantified",
+            "businessImpact": "Quantified business impact in dollars and risk metrics",
+            "scope": "Project scope with financial boundaries",
+            "goals": "Specific financial and risk reduction goals with target values",
+            "stakeholders": ["List of affected stakeholders including finance team"],
+            "criticalToQuality": ["CTQ characteristics with emphasis on financial and safety factors"]
+          }},
+          "measure": {{
+            "currentState": "Baseline metrics with financial and risk data",
+            "dataCollection": "Data sources for financial and risk metrics",
+            "processCapability": "Cp/Cpk values with financial interpretation",
+            "defectMetrics": {{
+              "defectCount": 0,
+              "opportunities": 0,
+              "defectRate": "0%",
+              "dpmo": 0,
+              "sigmaLevel": "0σ",
+              "financialImpact": "$0 estimated cost of defects"
+            }},
+            "statisticalBaseline": {{
+              "mean": 0,
+              "median": 0,
+              "stdDev": 0,
+              "variance": 0,
+              "range": {{"min": 0, "max": 0}},
+              "costVariance": "$0 (budget vs actual)"
+            }}
+          }},
+          "analyze": {{
+            "rootCauses": ["Root causes with financial/risk impact quantified"],
+            "contributingFactors": ["Factors impacting financial performance and safety"],
+            "dataAnalysis": "Statistical analysis with emphasis on cost drivers and risk factors",
+            "patterns": ["Financial trends and risk patterns identified"],
+            "hypotheses": ["Tested hypotheses with financial and risk implications"],
+            "costDrivers": ["Primary cost drivers identified from data"]
+          }},
+          "improve": {{
+            "solutions": ["Solutions with expected financial ROI and risk reduction"],
+            "prioritization": "ROI-based prioritization with risk considerations",
+            "pilotResults": "Pilot test results with financial outcomes",
+            "implementationPlan": "Phased approach with cost-benefit analysis",
+            "expectedBenefits": {{
+              "cost": "$0 savings per year",
+              "quality": "0% defect reduction",
+              "time": "0% cycle time reduction",
+              "riskReduction": "0% reduction in safety incidents"
+            }}
+          }},
+          "control": {{
+            "controlPlan": "Monitoring mechanisms for financial and risk metrics",
+            "metrics": ["Financial KPIs and risk indicators to monitor"],
+            "responseActions": ["Actions for financial variance or risk escalation"],
+            "documentation": "Financial and compliance documentation requirements",
+            "sustainability": "Long-term sustainability with cost management plan"
+          }}
+        }},
+        "sigmaLevel": "X.Xσ (calculated from defect data)",
+        "defectRate": "X DPMO (defects per million opportunities)",
+        "processCapability": "Cp=X.XX, Cpk=X.XX with financial impact",
+        "rootCauses": ["Primary root causes with financial/risk impact"],
+        "financialImpact": "$X total impact identified from analysis"
+      }},
+
+      "kpis": [
+        {{
+          "id": "kpi1",
+          "title": "Descriptive KPI Name (prioritize financial/risk titles)",
+          "value": <MUST BE ACTUAL CALCULATED NUMBER FROM DATA, NOT 0>,
+          "unit": "$|%|count|score|rate|ratio|σ",
+          "change": "+12%|-5%|+200",
+          "changeType": "positive|negative|neutral",
+          "icon": "dollar|alert-triangle|users|activity|chart|trending|target|zap|shield",
+          "color": "green|blue|purple|red|yellow|orange",
+          "calculation": "Detailed calculation method (e.g., 'Total Revenue = Sum of all sales')",
+          "benchmark": "Industry benchmark or target if available",
+          "trend": "up|down|stable",
+          "status": "good|warning|critical",
+          "category": "financial|safety|operations|efficiency|reliability|supporting",
+          "target": <numeric target value if applicable, else null>,
+          "confidence": <0.0-1.0 confidence in this KPI value>,
+          "financialImpactScore": <0-100 financial impact score, REQUIRED for financial/operations KPIs>,
+          "riskScore": <0-100 risk/safety impact score, REQUIRED for safety/risk KPIs>
+        }}
+      ],
+      
+      CRITICAL FOR KPIs (GENERATE 20-50 KPIs — 40% FINANCIAL, 20% SAFETY/RISK):
+      - **FINANCIAL KPIs (40% of total)**:
+        * Revenue metrics: total revenue, revenue growth rate, revenue per segment
+        * Cost metrics: total costs, cost breakdown by category, cost per unit
+        * Profitability: profit margin, gross margin, net profit, ROI, EBITDA
+        * Efficiency: cost efficiency ratio, revenue per employee, asset turnover
+        * Cash flow: operating cash flow, free cash flow, cash conversion cycle
+      - **SAFETY/RISK KPIs (20% of total)**:
+        * Safety incidents: total incidents, incident rate, severity scores
+        * Defect metrics: defect count, defect rate, DPMO, sigma level
+        * Compliance: compliance score, audit findings, regulatory gaps
+        * Risk scores: overall risk level, risk by category, mitigation status
+      - **OPERATIONAL KPIs (25% of total)**:
+        * Throughput, cycle time, utilization, productivity, capacity
+      - **SUPPORTING KPIs (15% of total)**:
+        * Efficiency ratios, reliability metrics, supporting indicators
+      - "value" MUST be calculated using appropriate formulas:
+        * Financial: totals, averages, profit margins (revenue - cost / revenue), growth rates
+        * Risk: incident rates, defect rates, DPMO, sigma levels, compliance percentages
+      - Include "calculation" field with explicit formula (e.g., "Profit Margin = (Revenue - Costs) / Revenue * 100")
+      - "financialImpactScore": 0-100 (100 = major financial impact, e.g., >$1M)
+      - "riskScore": 0-100 (100 = critical safety/compliance risk)
+      - "confidence": 1.0 = exact data, 0.8 = calculated, 0.5 = estimated
+      - Generate 20-50 KPIs with focus on financial and risk categories
+      - Use easy-to-understand titles for business stakeholders
+
+      "charts": [
+        {{
+          "id": "chart1",
+          "type": "BarChart|LineChart|AreaChart|PieChart|RadarChart|RadialBarChart|ScatterChart|FunnelChart|SankeyChart|HeatmapChart|BoxPlotChart|HistogramChart|WaterfallChart",
+          "title": "Descriptive chart title (prioritize financial/risk visualizations)",
+          "size": "full|half|third|quarter",
+          "chartConfig": {{}},
+          "data": [],
+          "insights": "Key insights with financial or risk implications",
+          "dataSource": "Source of the data",
+          "category": "financial|risk|operations|efficiency"
+        }}
+      ],
+      
+      CRITICAL FOR CHARTS (GENERATE 8-12 CHARTS — 50% FINANCIAL/RISK FOCUS):
+      - **FINANCIAL CHARTS (30-40% of total)**:
+        * Revenue trends over time (LineChart/AreaChart)
+        * Cost breakdown by category (PieChart/BarChart)
+        * Profit margin analysis (LineChart with dual axes)
+        * Financial waterfall showing cost/revenue flow (WaterfallChart)
+        * Cost vs budget variance (BarChart)
+      - **RISK/SAFETY CHARTS (20-30% of total)**:
+        * Safety incident trends (LineChart)
+        * Risk matrix (HeatmapChart or ScatterChart)
+        * Defect distribution (HistogramChart/BoxPlotChart)
+        * Compliance score radar (RadarChart)
+      - **OPERATIONAL CHARTS (20-30% of total)**:
+        * Throughput trends, cycle time distribution, utilization rates
+      - **COMPOSITION CHARTS (10-20% of total)**:
+        * Sankey diagram for process flows, cost allocations
+      - Each chart should have clear financial or risk implications in "insights"
+      - Use appropriate chart types that highlight financial trends and risk factors
+      - Ensure all charts serve strategic decision-making purposes
+
+      "tables": [
+        {{
+          "id": "table1",
+          "title": "Detailed Financial/Risk Data Table",
+          "columns": [],
+          "data": [],
+          "pagination": true,
+          "sortable": true
+        }}
+      ],
+
+      "optimizationSuggestions": [
+        {{
+          "id": "suggestion1",
+          "title": "Financial/Risk Optimization Opportunity",
+          "category": "cost|efficiency|performance|risk|quality|revenue",
+          "impact": "high|medium|low",
+          "savings": {{
+            "value": 0,
+            "unit": "$|%|incidents",
+            "percentage": "X% cost reduction or risk reduction",
+            "timeframe": "per year|per quarter|one-time"
+          }},
+          "description": "Detailed explanation with financial ROI or risk reduction",
+          "implementation": "Steps with cost estimates",
+          "metrics": ["KPIs affected by this suggestion"],
+          "priority": "high|medium|low (prioritize high financial impact)",
+          "confidence": "high|medium|low",
+          "tags": ["financial", "risk", "compliance", etc.],
+          "actionable": true,
+          "roi": <numeric ROI if calculable>,
+          "riskReduction": <numeric risk reduction % if applicable>
+        }}
+      ],
+
+      "insights": {{
+        "summary": "High-level insights emphasizing financial and risk findings",
+        "trends": ["Financial trends and risk patterns"],
+        "alerts": [
+          {{
+            "type": "financial|risk|compliance|performance",
+            "message": "Alert message with financial or risk impact",
+            "severity": "critical|high|medium|low",
+            "action": "Recommended action with urgency"
+          }}
+        ],
+        "recommendations": ["Actionable recommendations with financial/risk focus"],
+        "keyFindings": {{
+          "topFinancialMetrics": ["Top 3 financial findings"],
+          "topRisks": ["Top 3 risk/safety findings"],
+          "opportunities": ["Top 3 improvement opportunities with ROI"]
+        }}
+      }}
+    }}
+  }}
+
+  ------------------------------
+  FOR SANKEY CHARTS (USE FOR COST/REVENUE FLOWS)
+  ------------------------------
+
+  Use this exact structure to show financial flows:
+  {{
+      "nodes": [{{ "name": "Revenue Source / Cost Category" }}],
+      "links": [{{ "source": 0, "target": 1, "value": <dollar amount> }}]
+  }}
+
+  Example: Revenue → Costs → Profit breakdown
+
+  ------------------------------
+
+  Rules:
+  - DO NOT add text outside JSON.
+  - DO NOT hallucinate values. Use placeholders ONLY if absolutely no numbers exist.
+  - ALL KPI values MUST be calculated using appropriate mathematical formulas from the actual data.
+  - **PRIORITIZE FINANCIAL METRICS**: Extract EVERY financial figure mentioned
+  - **PRIORITIZE RISK METRICS**: Quantify EVERY safety incident, defect, compliance issue
+  - Use statistical methods: mean, median, mode, standard deviation, variance, percentiles.
+  - Apply Six Sigma calculations: DPMO, sigma level, Cp, Cpk, process capability.
+  - Calculate business metrics: profit margins, growth rates, efficiency ratios, ROI.
+  - Calculate risk metrics: incident rates, defect rates, compliance percentages.
+  - Convert qualitative statements to quantitative KPIs when possible.
+  - Generate 20-50 KPIs with 40% financial, 20% safety/risk focus.
+  - Include category, status, target, confidence, financialImpactScore, riskScore on EVERY KPI.
+  - Generate 8-12 charts with 50% focused on financial and risk visualizations.
+  - Automatically detect financial and risk data for KPI generation.
+  - Provide comprehensive Six Sigma DMAIC analysis with financial and risk emphasis.
+  - Make all metrics actionable for financial and risk management decisions.
+  - Include explicit calculation methods in KPI descriptions.
+  - Each chart should serve a specific financial or risk analysis purpose.
+  - Prioritize insights that drive cost reduction, revenue growth, or risk mitigation.

@@ -1,0 +1,282 @@
+{
+  "dashboard": {
+    "title": "Offshore Drilling Operations Dashboard",
+    "description": "Real-time analysis of 3 drilling rigs with 542 personnel across North Sea operations — powered by TransIQ AI with Six Sigma DMAIC methodology.",
+    "generatedAt": "2024-10-15T14:32:00Z",
+    "operationalSummary": {
+      "totalRigs": 3,
+      "totalPersonnel": 542,
+      "personnelPerRig": {
+        "QTIF-790": 182,
+        "MNIF-100": 175,
+        "088TE": 185
+      },
+      "totalWells": 7,
+      "activeBores": 3,
+      "completedWells": 4,
+      "averageDepth": "3,245 feet",
+      "totalProductionVolume": "145,200 BOE/day",
+      "estimatedReserves": "287M BOE"
+    },
+    "dmaicReport": {
+      "definePhase": {
+        "problemStatement": "Optimize production efficiency and reduce Non-Productive Time (NPT) across 3 offshore drilling rigs while maintaining safety standards and personnel welfare.",
+        "goalStatement": "Reduce NPT by 15% and increase daily production by 8% within Q4 2024 by optimizing drilling parameters, equipment maintenance, and crew scheduling.",
+        "businessImpact": "Increased oil/gas recovery, reduced operating costs ($2.5M annually), improved safety record, and enhanced HSE compliance.",
+        "sipocSummary": "Supplier: Drilling contractors + equipment vendors, Input: Rig operations data + maintenance logs, Process: Well drilling operations, Output: Crude oil/natural gas, Customer: Energy company + refineries",
+        "stakeholderIdentification": "Rig managers, Wellsite supervisors, Drilling engineers, Safety coordinators, Operations center, Company management",
+        "highLevelProcessMap": "1. Daily briefing & crew allocation -> 2. Bit run & drilling parameters -> 3. Mud circulation & well integrity -> 4. Equipment monitoring -> 5. Data logging & analytics -> 6. Corrective actions"
+      },
+      "measurePhase": {
+        "dataInventory": "Source: SCADA systems + daily wellsite reports, Types: Depth (numeric), Pressure (numeric), Temperature (numeric), Circulation rate (numeric), NPT events (categorical), Personnel status (categorical), Equipment hours (numeric)",
+        "dataQualityAnalysis": "Real-time sensor data with 99.2% uptime. Occasional telemetry gaps during weather events. Manual logging by surface crews adds 2% variance.",
+        "summaryStatistics": {
+          "npt_hours_per_day": {
+            "mean": 3.2,
+            "median": 2.8,
+            "variance": 2.14,
+            "standardDeviation": 1.46,
+            "percentiles": {
+              "25th": 1.5,
+              "75th": 4.2
+            }
+          },
+          "production_boe_per_day": {
+            "mean": 145200,
+            "median": 147500,
+            "variance": 456000000,
+            "standardDeviation": 21350,
+            "percentiles": {
+              "25th": 128000,
+              "75th": 162000
+            }
+          },
+          "personnel_hours_worked": {
+            "mean": 8.6,
+            "median": 8.5,
+            "variance": 0.42,
+            "standardDeviation": 0.65,
+            "percentiles": {
+              "25th": 8.0,
+              "75th": 9.2
+            }
+          },
+          "equipment_uptime": {
+            "mean": 96.8,
+            "median": 97.2,
+            "variance": 12.4,
+            "standardDeviation": 3.52,
+            "percentiles": {
+              "25th": 94.5,
+              "75th": 98.5
+            }
+          }
+        },
+        "operationalMetricsBaselines": {
+          "average_production_qtif790": "48,500 BOE/day",
+          "average_production_mnif100": "47,200 BOE/day",
+          "average_production_088te": "49,500 BOE/day",
+          "average_npt_qtif790": "2.8 hours/day",
+          "average_npt_mnif100": "3.4 hours/day",
+          "average_npt_088te": "3.1 hours/day"
+        },
+        "processCapability": "Process capable at 1.8 Sigma for production targets (improvement needed). Equipment uptime at 2.1 Sigma (acceptable).",
+        "measurementSystemAnalysis": "SCADA system repeatability 99.1%, reproducibility 98.7%, GR&R 1.2% (acceptable)"
+      },
+      "analyzePhase": {
+        "keyDriversAndCorrelations": "Strong negative correlation between personnel fatigue and NPT (-0.82). Weather conditions drive 34% of NPT variance. Equipment age on rig 088TE contributes to 28% higher maintenance events.",
+        "paretoAnalysis": "80% of NPT caused by: (1) Pump failures (32%), (2) Stuck pipe events (28%), (3) Weather delays (20%). Remaining 20% from crew/communication issues.",
+        "fishboneCauseBreakdown": {
+          "materials": ["Mud quality variance", "Proppant settling", "Cement inconsistency"],
+          "methods": ["Inadequate pressure management", "Suboptimal flow rates", "Poor well design handoff"],
+          "manpower": ["Crew fatigue after 14-day rotations", "Knowledge gaps in new crew", "Communication delays in shift changes"],
+          "machine": ["Pump seal degradation", "Top drive bearing wear", "Mud circulation equipment age"],
+          "environment": ["Storm weather windows", "Pressure regimes", "Temperature extremes"],
+          "measurement": ["SCADA sensor calibration drift", "Manual logging errors", "Real-time data lag >5min"]
+        },
+        "trendAndTimeSeriesInsights": "Production trending up +3.2% Oct (enhanced well performance). NPT trending down -2.1% Oct (new preventive maintenance schedule working). Personnel injury-free 156 days.",
+        "anomaliesVariancesDeviations": "Oct 8: Stuck pipe event on MNIF-100 (cost $427K, recovered in 18 hours). Oct 12: Unexpected equipment failure on 088TE circulation pump (planned replacement now scheduled Q4).",
+        "hypothesisInsights": "Hypothesis 1: Reducing crew rotation from 14-day to 12-day cycles reduces NPT by 4-6%. Hypothesis 2: Predictive maintenance based on vibration analysis can reduce unexpected failures by 35%. Hypothesis 3: Real-time pressure optimization increases production 5-8%."
+      },
+      "improvePhase": {
+        "optimizationOpportunities": [
+          "Implement predictive maintenance on high-failure equipment (potential 12-15% reduction in NPT)",
+          "Reduce personnel rotation from 14 days to 12 days (estimated 4% NPT reduction)",
+          "Upgrade mud management system on 088TE (expected +2.8% production increase)",
+          "Establish real-time pressure optimization protocols (estimated +6% production)"
+        ],
+        "whatIfScenarioInsights": "If MNIF-100 reduces NPT to 2.5 hours/day (from 3.4): Estimated annual production increase = 785K BOE = $35M revenue at $45/BOE. Implementation cost: $1.2M. ROI: 2,917%.",
+        "predictiveAnalysis": "ML model predicts 92% probability of stuck pipe event on QTIF-790 within next 7 days based on pressure trends. Recommends preventive circulation flush.",
+        "costReductionOrPerformanceImprovementActions": [
+          "Negotiate predictive sensor maintenance packages with vendors (potential 18% cost reduction)",
+          "Cross-train personnel between rigs to improve efficiency 6% (no cost)",
+          "Implement energy optimization protocols (estimated 4% fuel cost reduction)"
+        ],
+        "proposedProcessRedesign": "Unified operational dashboard with real-time decision support: (1) Centralized SCADA monitoring for all 3 rigs, (2) AI-powered predictive alerts, (3) Crew optimization engine, (4) Integrated maintenance scheduling system."
+      },
+      "controlPhase": {
+        "controlCharts": "SPC charts implemented for production, NPT, safety metrics. All within control limits except MNIF-100 NPT trending high (flagged for investigation).",
+        "kpiMonitoringStrategy": "Daily dashboard review at 06:00 UTC. Weekly performance briefing with all 3 rig managers. Monthly trend analysis with operations leadership.",
+        "governanceSopRecommendations": "Update well operations SOP to include real-time pressure optimization. Establish equipment maintenance SOP based on predictive models. Implement crew fatigue management SOP.",
+        "longTermQualityControlMeasures": "Continuous AI-driven optimization engine. Quarterly benchmark against industry standards. Annual independent safety audit. 5-year equipment modernization plan."
+      }
+    },
+    "kpis": [
+      { "id": "kpi_prod1", "title": "Daily Production",           "value": 145200, "unit": "BOE/day",       "change": "+3.2%",   "changeType": "positive", "icon": "trending_up", "color": "green",   "category": "production",   "status": "good",     "target": 140000 },
+      { "id": "kpi_prod2", "title": "Non-Productive Time (NPT)",  "value": 3.1,    "unit": "hrs/day",      "change": "-2.1%",   "changeType": "positive", "icon": "clock",       "color": "green",   "category": "production",   "status": "good",     "target": 3.0 },
+      { "id": "kpi_prod3", "title": "Production Efficiency",      "value": 78.4,   "unit": "%",            "change": "+2.8%",   "changeType": "positive", "icon": "percent",    "color": "green",   "category": "production",   "status": "good",     "target": 75 },
+      { "id": "kpi_prod4", "title": "Well Depth Progress",       "value": 3245,   "unit": "feet",         "change": "+145",    "changeType": "positive", "icon": "activity",   "color": "cyan",    "category": "production",   "status": "good",     "target": 3500 },
+      
+      { "id": "kpi_eq1", "title": "Equipment Uptime",            "value": 96.8,   "unit": "%",            "change": "+0.6%",   "changeType": "positive", "icon": "cpu",        "color": "green",   "category": "equipment",    "status": "good",     "target": 96 },
+      { "id": "kpi_eq2", "title": "Pump System Status",          "value": 4,      "unit": "operational",  "change": "0",      "changeType": "neutral",  "icon": "zap",        "color": "green",   "category": "equipment",    "status": "good",     "target": 4 },
+      { "id": "kpi_eq3", "title": "Maintenance Backlog",         "value": 7,      "unit": "items",        "change": "-2",     "changeType": "positive", "icon": "wrench",     "color": "yellow",  "category": "equipment",    "status": "warning",  "target": 3 },
+      { "id": "kpi_eq4", "title": "Equipment Age Index",         "value": 5.8,    "unit": "years avg",    "change": "+0.1",   "changeType": "negative", "icon": "calendar",   "color": "orange",  "category": "equipment",    "status": "warning",  "target": 5 },
+      
+      { "id": "kpi_safe1", "title": "Injury-Free Days",          "value": 156,    "unit": "days",         "change": "+156",   "changeType": "positive", "icon": "shield",     "color": "green",   "category": "safety",       "status": "excellent","target": 180 },
+      { "id": "kpi_safe2", "title": "Safety Incidents/Month",    "value": 0,      "unit": "reportable",   "change": "0",      "changeType": "neutral",  "icon": "alert",      "color": "green",   "category": "safety",       "status": "excellent","target": 0 },
+      { "id": "kpi_safe3", "title": "Personnel Fatigue Index",   "value": 3.2,    "unit": "scale 1-10",   "change": "-0.3",   "changeType": "positive", "icon": "activity",   "color": "green",   "category": "safety",       "status": "good",     "target": 3 },
+      { "id": "kpi_safe4", "title": "HSE Compliance Score",      "value": 97.2,   "unit": "%",            "change": "+1.1%",  "changeType": "positive", "icon": "check",      "color": "green",   "category": "safety",       "status": "excellent","target": 95 },
+      
+      { "id": "kpi_crew1", "title": "Total Personnel",           "value": 542,    "unit": "employees",    "change": "+0",     "changeType": "neutral",  "icon": "users",      "color": "cyan",    "category": "personnel",    "status": "good",     "target": 550 },
+      { "id": "kpi_crew2", "title": "Personnel Per Rig",         "value": 181,    "unit": "avg",          "change": "+1",     "changeType": "neutral",  "icon": "users",      "color": "cyan",    "category": "personnel",    "status": "good",     "target": 180 },
+      { "id": "kpi_crew3", "title": "Absenteeism Rate",          "value": 1.8,    "unit": "%",            "change": "+0.2%",  "changeType": "negative", "icon": "activity",   "color": "yellow",  "category": "personnel",    "status": "warning",  "target": 1.5 },
+      { "id": "kpi_crew4", "title": "Training Hours/Month",      "value": 2847,   "unit": "hours",        "change": "+385",   "changeType": "positive", "icon": "book",       "color": "green",   "category": "personnel",    "status": "good",     "target": 2500 },
+      
+      { "id": "kpi_fin1", "title": "Operating Cost/BOE",         "value": 24.50,  "unit": "$/BOE",        "change": "-2.1%",  "changeType": "positive", "icon": "dollar",     "color": "green",   "category": "financial",    "status": "good",     "target": 25 },
+      { "id": "kpi_fin2", "title": "Monthly Production Revenue",  "value": 18700,  "unit": "$K",           "change": "+3.2%",  "changeType": "positive", "icon": "trending_up","color": "green",   "category": "financial",    "status": "good",     "target": 18100 },
+      { "id": "kpi_fin3", "title": "Maintenance Cost/Month",     "value": 842,    "unit": "$K",           "change": "-5.3%",  "changeType": "positive", "icon": "dollar",     "color": "green",   "category": "financial",    "status": "good",     "target": 950 },
+      { "id": "kpi_fin4", "title": "Operating Margin",           "value": 34.2,   "unit": "%",            "change": "+2.1%",  "changeType": "positive", "icon": "percent",    "color": "green",   "category": "financial",    "status": "good",     "target": 32 }
+    ],
+    "rigDetails": [
+      {
+        "rigId": "QTIF-790",
+        "rigName": "Viking Prospect",
+        "location": "North Sea Block 4",
+        "depth": "3,240 feet",
+        "personnel": 182,
+        "status": "Active drilling",
+        "currentWell": "VP-4A",
+        "productionToday": 48500,
+        "nptToday": 2.8,
+        "efficiency": 79.2,
+        "equipmentStatus": "Optimal",
+        "lastMaintenance": "2024-10-14",
+        "nextMaintenance": "2024-10-28",
+        "safetyIncidents": 0
+      },
+      {
+        "rigId": "MNIF-100",
+        "rigName": "Northern Light",
+        "location": "North Sea Block 5",
+        "depth": "3,150 feet",
+        "personnel": 175,
+        "status": "Active drilling",
+        "currentWell": "NL-2B",
+        "productionToday": 47200,
+        "nptToday": 3.4,
+        "efficiency": 76.8,
+        "equipmentStatus": "Minor issues - preventive maintenance scheduled",
+        "lastMaintenance": "2024-10-12",
+        "nextMaintenance": "2024-10-26",
+        "safetyIncidents": 0
+      },
+      {
+        "rigId": "088TE",
+        "rigName": "Constellation",
+        "location": "North Sea Block 6",
+        "depth": "3,356 feet",
+        "personnel": 185,
+        "status": "Active drilling",
+        "currentWell": "CON-3C",
+        "productionToday": 49500,
+        "nptToday": 3.1,
+        "efficiency": 78.6,
+        "equipmentStatus": "Requires scheduled pump replacement Q4",
+        "lastMaintenance": "2024-10-10",
+        "nextMaintenance": "2024-11-02",
+        "safetyIncidents": 0
+      }
+    ],
+    "predictive": [
+      { "metric": "Forecasted November Production",        "forecastValue": 4358000,  "unit": "BOE",      "period": "November 2024",      "confidence": 88, "trend": "up"     },
+      { "metric": "Projected Equipment Failures (30 days)", "forecastValue": 1,        "unit": "events",   "period": "Next 30 Days",       "confidence": 74, "trend": "stable" },
+      { "metric": "Expected NPT Reduction (w/ improvements)", "forecastValue": 2.6,    "unit": "hrs/day",  "period": "Q4 2024",            "confidence": 81, "trend": "down"   },
+      { "metric": "Personnel Fatigue Risk (14-day rotation)", "forecastValue": 3.8,    "unit": "scale",   "period": "End October",        "confidence": 76, "trend": "up"     },
+      { "metric": "Estimated Annual Production (full year)",  "forecastValue": 53000000, "unit": "BOE",     "period": "2024 Annual",        "confidence": 79, "trend": "stable" },
+      { "metric": "Cost per BOE at current efficiency",    "forecastValue": 23.80,    "unit": "$/BOE",   "period": "Q4 2024 projection", "confidence": 72, "trend": "down"   }
+    ],
+    "charts": [
+      {
+        "id": "chart1",
+        "type": "LineChart",
+        "title": "Production Trend - Last 30 Days",
+        "size": "full",
+        "chartConfig": {
+          "xAxisKey": "Date",
+          "yAxisKey": "Production",
+          "tooltip": true
+        },
+        "data": [
+          { "Date": "2024-09-15", "Production": 138000, "Target": 140000 },
+          { "Date": "2024-09-20", "Production": 142000, "Target": 140000 },
+          { "Date": "2024-09-25", "Production": 139500, "Target": 140000 },
+          { "Date": "2024-10-01", "Production": 143000, "Target": 140000 },
+          { "Date": "2024-10-05", "Production": 144200, "Target": 140000 },
+          { "Date": "2024-10-10", "Production": 145800, "Target": 140000 },
+          { "Date": "2024-10-15", "Production": 145200, "Target": 140000 }
+        ]
+      },
+      {
+        "id": "chart2",
+        "type": "BarChart",
+        "title": "Production by Rig",
+        "size": "half",
+        "chartConfig": {
+          "xAxisKey": "Rig",
+          "yAxisKey": "Production",
+          "tooltip": true
+        },
+        "data": [
+          { "Rig": "QTIF-790",  "Production": 48500, "NPT": 2.8, "Efficiency": 79.2 },
+          { "Rig": "MNIF-100",  "Production": 47200, "NPT": 3.4, "Efficiency": 76.8 },
+          { "Rig": "088TE",     "Production": 49500, "NPT": 3.1, "Efficiency": 78.6 }
+        ]
+      },
+      {
+        "id": "chart3",
+        "type": "PieChart",
+        "title": "NPT Root Causes (Pareto)",
+        "size": "half",
+        "chartConfig": {
+          "dataKey": "Percentage",
+          "nameKey": "Cause",
+          "tooltip": true
+        },
+        "data": [
+          { "Cause": "Pump failures",      "Percentage": 32 },
+          { "Cause": "Stuck pipe events",  "Percentage": 28 },
+          { "Cause": "Weather delays",     "Percentage": 20 },
+          { "Cause": "Crew issues",        "Percentage": 12 },
+          { "Cause": "Other",              "Percentage": 8 }
+        ]
+      },
+      {
+        "id": "chart4",
+        "type": "AreaChart",
+        "title": "Personnel Distribution by Rig",
+        "size": "full",
+        "chartConfig": {
+          "xAxisKey": "Week",
+          "yAxisKey": "Personnel",
+          "tooltip": true
+        },
+        "data": [
+          { "Week": "Week 1", "QTIF-790": 182, "MNIF-100": 175, "088TE": 185 },
+          { "Week": "Week 2", "QTIF-790": 180, "MNIF-100": 176, "088TE": 184 },
+          { "Week": "Week 3", "QTIF-790": 183, "MNIF-100": 173, "088TE": 186 },
+          { "Week": "Week 4", "QTIF-790": 182, "MNIF-100": 175, "088TE": 185 }
+        ]
+      }
+    ]
+  }
+}

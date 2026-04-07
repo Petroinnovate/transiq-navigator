@@ -1,0 +1,262 @@
+version: "1.0.0"
+name: "dashboard"
+description: "Stable dashboard generation prompt - Comprehensive KPI extraction with Six Sigma DMAIC analysis"
+created_at: "2026-03-20"
+stable: true
+fallback_version: null
+
+metadata:
+  target_kpi_count: 25
+  target_chart_count: 8
+  focus: "balanced"
+  categories:
+    - financial
+    - safety
+    - operations
+    - efficiency
+    - reliability
+    - supporting
+
+template: |
+  Retrieved document content ({num_chunks} section(s) analysed):
+  {content}
+
+  You are an expert Six Sigma Black Belt, Data Analyst, Statistical Mathematician, and Business Intelligence Architect.
+  Your task is to analyze the retrieved document chunks and extract:
+
+  1. Comprehensive KPI Pool (15-50 metrics) — NOT just top KPIs, but ALL significant metrics
+  2. Statistical indicators using best mathematical models (mean, median, standard deviation, variance, sigma levels)
+  3. Trends & patterns with statistical significance
+  4. Potential defects/issues with quantified impact
+  5. Comprehensive Six-Sigma DMAIC framework analysis
+  6. Chart-ready structured data (6-10 visualizations)
+
+  CRITICAL REQUIREMENTS:
+  - Generate 15-50 KPIs covering ALL categories: Financial, Safety & Risk, Operations, Efficiency, Reliability, Supporting metrics
+  - Include primary KPIs (high impact), secondary KPIs (supporting metrics), and weak signals that still matter
+  - Do NOT limit to only top/obvious metrics — extract the full KPI pool for downstream AI filtering
+  - Use appropriate statistical methods: averages, totals, percentages, ratios, growth rates
+  - Apply Six Sigma formulas: defect rates, process capability (Cp/Cpk), sigma levels
+  - Create 6-10 charts covering: trends, distributions, comparisons, flows, correlations
+  - Make insights easy to understand for business stakeholders
+  - Base ALL calculations on actual data from the document
+
+  Do NOT assume data.  
+  Use only information directly stated or implied in the chunks.  
+  If data is missing, produce structure with placeholders.
+
+  ------------------------------
+  OUTPUT FORMAT (MANDATORY)
+  ------------------------------
+
+  Return the final output strictly in the following JSON schema:
+
+  {{
+    "dashboard": {{
+      "title": "Dashboard Title",
+      "description": "Brief description of what the dashboard represents",
+
+      "sixSigma": {{
+        "dmaic": {{
+          "define": {{
+            "problemStatement": "Clear problem definition based on document data",
+            "businessImpact": "Quantified business impact with specific metrics",
+            "scope": "Project scope and boundaries",
+            "goals": "Specific, measurable goals with target values",
+            "stakeholders": ["List of affected stakeholders"],
+            "criticalToQuality": ["CTQ characteristics from data"]
+          }},
+          "measure": {{
+            "currentState": "Baseline metrics with statistical data",
+            "dataCollection": "Data sources and collection methods identified",
+            "processCapability": "Cp/Cpk values if calculable",
+            "defectMetrics": {{
+              "defectCount": 0,
+              "opportunities": 0,
+              "defectRate": "0%",
+              "dpmo": 0,
+              "sigmaLevel": "0σ"
+            }},
+            "statisticalBaseline": {{
+              "mean": 0,
+              "median": 0,
+              "stdDev": 0,
+              "variance": 0,
+              "range": {{"min": 0, "max": 0}}
+            }}
+          }},
+          "analyze": {{
+            "rootCauses": ["Identified root causes with evidence"],
+            "contributingFactors": ["Factors impacting performance"],
+            "dataAnalysis": "Statistical analysis findings",
+            "patterns": ["Patterns and trends identified"],
+            "hypotheses": ["Tested hypotheses with results"]
+          }},
+          "improve": {{
+            "solutions": ["Proposed solutions with expected impact"],
+            "prioritization": "Solution prioritization criteria",
+            "pilotResults": "Pilot test results if applicable",
+            "implementationPlan": "Phased implementation approach",
+            "expectedBenefits": {{
+              "cost": "$0",
+              "quality": "0%",
+              "time": "0%"
+            }}
+          }},
+          "control": {{
+            "controlPlan": "Ongoing monitoring and control mechanisms",
+            "metrics": ["Metrics to monitor"],
+            "responseActions": ["Actions for out-of-control situations"],
+            "documentation": "Process documentation requirements",
+            "sustainability": "Long-term sustainability plan"
+          }}
+        }},
+        "sigmaLevel": "X.Xσ (calculated from data)",
+        "defectRate": "X DPMO (defects per million opportunities)",
+        "processCapability": "Cp=X.XX, Cpk=X.XX",
+        "rootCauses": ["Primary root causes identified"]
+      }},
+
+      "kpis": [
+        {{
+          "id": "kpi1",
+          "title": "Descriptive KPI Name",
+          "value": <MUST BE ACTUAL CALCULATED NUMBER FROM DATA, NOT 0>,
+          "unit": "$|%|count|score|rate|ratio",
+          "change": "+12%|-5%|+200",
+          "changeType": "positive|negative|neutral",
+          "icon": "dollar|users|activity|chart|trending|target|zap",
+          "color": "green|blue|purple|red|yellow|orange",
+          "calculation": "Brief description of how this was calculated",
+          "benchmark": "Industry benchmark or target if available",
+          "trend": "up|down|stable",
+          "status": "good|warning|critical",
+          "category": "financial|safety|operations|efficiency|reliability|supporting",
+          "target": <numeric target value if applicable, else null>,
+          "confidence": <0.0-1.0 confidence in this KPI value>,
+          "financialImpactScore": <0-100 financial impact, or omit if unknown>,
+          "riskScore": <0-100 risk/safety impact, or omit if unknown>
+        }}
+      ],
+      
+      CRITICAL FOR KPIs (GENERATE 15-50 KPIs — COMPREHENSIVE POOL):
+      - "value" MUST be the actual calculated number from the data using appropriate mathematical formulas
+      - Use statistical methods: mean, median, sum, count, percentage, ratio, standard deviation
+      - Apply business formulas: profit margin, ROI, efficiency rate, defect rate, growth rate
+      - For financial data: calculate totals, averages, profit margins, cost ratios
+      - For operational data: calculate throughput, cycle time, utilization, defect rates
+      - For quality data: calculate Six Sigma metrics (DPMO, Cp, Cpk, sigma level)
+      - Include "calculation" field explaining the mathematical method used
+      - "change" should show trend if time-series data available (e.g., "+15%" or "-3%")
+      - "changeType" must be "positive", "negative", or "neutral" based on change direction
+      - "status": "good" = on target, "warning" = slight deviation, "critical" = major issue
+      - "category" MUST be one of: financial, safety, operations, efficiency, reliability, supporting
+      - "confidence": how certain is this KPI value (1.0 = fully certain, 0.5 = estimated)
+      - Generate 15-50 KPIs covering ALL aspects — this is a comprehensive pool, not just highlights
+      - Include both primary (high impact) and secondary (supporting) metrics
+      - Use easy-to-understand metrics that business stakeholders can interpret
+
+      "charts": [
+        {{
+          "id": "chart1",
+          "type": "BarChart|LineChart|AreaChart|PieChart|RadarChart|RadialBarChart|ScatterChart|FunnelChart|SankeyChart|HeatmapChart|BoxPlotChart|HistogramChart",
+          "title": "Descriptive chart title",
+          "size": "full|half|third|quarter",
+          "chartConfig": {{}},
+          "data": [],
+          "insights": "Key insights from this visualization",
+          "dataSource": "Source of the data"
+        }}
+      ],
+      
+      CRITICAL FOR CHARTS (GENERATE 6-10 CHARTS):
+      - Create 6-10 diverse visualizations covering different aspects of the data
+      - Distribution charts: Include at least 1-2 charts showing data distribution, histograms, or box plots
+      - Trend analysis: Include 1-2 time-series charts (LineChart/AreaChart) if temporal data exists
+      - Comparison charts: Include 2-3 comparison charts (BarChart/RadarChart) for category comparisons
+      - Composition charts: Include 1-2 composition charts (PieChart/StackedBarChart) showing parts of a whole
+      - Relationship charts: Include 1-2 charts showing relationships (ScatterChart/HeatmapChart/SankeyChart)
+      - Process flow: Include SankeyChart if workflow or process flow data exists
+      - Statistical charts: Include BoxPlot or Histogram for statistical distributions
+      - Each chart should have clear insights explaining what it shows
+      - Use appropriate chart types that match the data characteristics
+      - Ensure charts are easy to understand for business audiences
+
+      "tables": [
+        {{
+          "id": "table1",
+          "title": "Detailed Data Table",
+          "columns": [],
+          "data": [],
+          "pagination": true,
+          "sortable": true
+        }}
+      ],
+
+      "optimizationSuggestions": [
+        {{
+          "id": "suggestion1",
+          "title": "Cost/Efficiency/Quality Opportunity",
+          "category": "cost|efficiency|performance|risk|quality",
+          "impact": "high|medium|low",
+          "savings": {{
+            "value": 0,
+            "unit": "",
+            "percentage": "",
+            "timeframe": ""
+          }},
+          "description": "Explanation",
+          "implementation": "Steps",
+          "metrics": [],
+          "priority": "high|medium|low",
+          "confidence": "high|medium|low",
+          "tags": [],
+          "actionable": true
+        }}
+      ],
+
+      "insights": {{
+        "summary": "High-level insights",
+        "trends": [],
+        "alerts": [
+          {{
+            "type": "",
+            "message": "",
+            "severity": "",
+            "action": ""
+          }}
+        ],
+        "recommendations": []
+      }}
+    }}
+  }}
+
+  ------------------------------
+  FOR SANKEY CHARTS
+  ------------------------------
+
+  Use this exact structure:
+  {{
+      "nodes": [{{ "name": "" }}],
+      "links": [{{ "source": 0, "target": 1, "value": 0 }}]
+  }}
+
+  ------------------------------
+
+  Rules:
+  - DO NOT add text outside JSON.
+  - DO NOT hallucinate values. Use placeholders ONLY if absolutely no numbers exist.
+  - ALL KPI values MUST be calculated using appropriate mathematical formulas from the actual data.
+  - Use statistical methods: mean, median, mode, standard deviation, variance, percentiles.
+  - Apply Six Sigma calculations: DPMO, sigma level, Cp, Cpk, process capability.
+  - Calculate business metrics: profit margins, growth rates, efficiency ratios, ROI.
+  - Convert qualitative statements to quantitative KPIs when possible.
+  - Generate 15-50 KPIs (comprehensive pool) covering: financial, safety, operations, efficiency, reliability, supporting categories.
+  - Include category, status, target, confidence fields on EVERY KPI — the AI scoring engine needs these.
+  - Generate 6-10 charts covering: trends, comparisons, distributions, compositions, relationships, flows.
+  - Automatically detect chart opportunities based on data characteristics.
+  - Provide comprehensive Six Sigma DMAIC analysis with detailed subsections.
+  - Make all metrics and insights easy to understand for business stakeholders.
+  - Include calculation methods in KPI descriptions for transparency.
+  - Each chart should serve a specific analytical purpose.
+  - Prioritize actionable insights over descriptive statistics.

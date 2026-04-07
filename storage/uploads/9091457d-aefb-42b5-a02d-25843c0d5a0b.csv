@@ -1,0 +1,13 @@
+Product,Sales,Region,Month,Customer_Satisfaction
+Widget A,45000,North,January,4.5
+Widget B,52000,South,January,4.7
+Widget C,38000,East,January,4.2
+Widget A,48000,North,February,4.6
+Widget B,55000,South,February,4.8
+Widget C,41000,East,February,4.3
+Widget A,51000,North,March,4.7
+Widget B,58000,South,March,4.9
+Widget C,44000,East,March,4.4
+Widget A,47000,North,April,4.5
+Widget B,53000,South,April,4.6
+Widget C,39000,East,April,4.1

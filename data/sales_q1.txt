@@ -1,0 +1,6 @@
+﻿Q1 Sales Analysis
+Revenue: ,000
+Expenses: ,000
+Profit: ,000
+Growth Rate: 25%
+Customers: 450

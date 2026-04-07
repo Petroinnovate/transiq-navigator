@@ -1,0 +1,78 @@
+# Core dependencies
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+python-multipart>=0.0.6
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+
+# Document processing
+PyMuPDF>=1.23.0  # For PDF processing (text extraction from PDFs)
+pdfplumber>=0.10.0  # For structured PDF extraction (bounding boxes, tables) — DDR parser
+python-docx>=1.1.0  # For Word documents
+pandas>=2.0.0  # For Excel and CSV processing
+openpyxl>=3.1.0  # For Excel processing and export
+Pillow>=10.0.0  # Image processing (OCR fallback, PDF rendering)
+
+# OCR
+pytesseract>=0.3.10  # OCR fallback when pdfplumber text extraction fails
+
+# PDF/Report generation
+reportlab>=4.1.0  # PDF report generation for dashboard exports
+
+# LLM integration
+google-genai>=1.15.0  # For Gemini models
+openai>=1.0.0  # For OpenAI models
+anthropic>=0.25.0  # For Claude/Anthropic models
+
+# Utilities
+tqdm>=4.66.0  # For progress bars
+python-dotenv>=1.0.0  # For environment variables
+PyYAML>=6.0.0  # For YAML configuration files (prompt versioning)
+tabulate>=0.9.0  # For CLI table formatting
+
+# Vector embeddings and similarity search
+sentence-transformers>=2.2.0  # For generating text embeddings
+numpy>=1.24.0  # Required for vector operations
+qdrant-client>=1.7.0  # Vector similarity search (local file mode, replaces faiss-cpu)
+
+# Search
+rank-bm25>=0.2.2  # BM25 keyword search
+
+# Machine Learning & Statistical Analysis
+scikit-learn>=1.3.0  # For pattern recognition (anomaly detection, clustering)
+scipy>=1.11.0  # Statistical functions (SPC, control charts, distributions)
+statsmodels>=0.14.0  # ARIMA time-series forecasting in predictive engine
+xgboost>=2.0.0  # XGBoost gradient boosting for KPI forecasting
+prophet>=1.1.5  # Facebook Prophet for seasonal/trend forecasting
+
+# Rate limiting
+slowapi>=0.1.9  # FastAPI-compatible rate limiting middleware
+
+# Background workers
+celery>=5.3.0  # Task queue
+redis>=5.0.0  # Redis client for Celery and caching
+flower>=2.0.0  # Celery monitoring dashboard (optional)
+
+# Auth and database related
+psycopg2-binary>=2.9.9  # PostgreSQL database adapter
+sqlalchemy>=2.0.0  # SQL toolkit and ORM (used for GraphRAG entity/relationship models)
+alembic>=1.13.0  # Database migrations
+python-jose[cryptography]>=3.3.0  # JWT token handling
+passlib[bcrypt]>=1.7.4  # Password hashing
+
+# GraphRAG - Knowledge Graph Processing
+# Note: Uses existing dependencies (sqlalchemy, numpy, scikit-learn, celery, redis)
+# For entity resolution and graph analytics
+
+# Supabase integration (optional)
+supabase>=2.0.0  # Supabase Python client
+gotrue>=2.0.0  # Authentication library for Supabase
+postgrest>=1.0.0  # PostgREST client for Supabase
+realtime>=2.0.0  # Realtime client for Supabase
+storage3>=0.10.0  # Storage client for Supabase
+supafunc>=0.8.0  # Functions client for Supabase
+httpx>=0.25.0  # HTTP client (required by Supabase)
+asyncpg>=0.29.0  # Async PostgreSQL adapter
+
+# WebSocket support (built into FastAPI)
+# No additional package needed

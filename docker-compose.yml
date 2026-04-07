@@ -1,0 +1,132 @@
+version: '3.8'
+
+services:
+  # ============================================
+  # Redis - Task Queue + Caching
+  # ============================================
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============================================
+  # Qdrant - Vector Database (LOCAL)
+  # ============================================
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - '6333:6333'
+      - '6334:6334'  # gRPC port
+    volumes:
+      - qdrant_data:/qdrant/storage
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    environment:
+      QDRANT__SERVICE__HTTP_PORT: 6333
+
+  # ============================================
+  # FastAPI Backend
+  # ============================================
+  api:
+    build: .
+    ports:
+      - '8001:8001'  # Changed to 8001 to match your current setup
+    volumes:
+      - ./:/app
+      - ./storage:/app/storage
+      - ./qdrant_storage:/app/qdrant_storage  # Keep local folder as backup
+      - ./local_file_storage:/app/local_file_storage
+    depends_on:
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+    restart: unless-stopped
+    environment:
+      # Redis Configuration
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+      
+      # Database (SQLite local)
+      - DATABASE_URL=sqlite:///./storage/local_storage.db
+      
+      # Qdrant (use Docker service, fallback to local)
+      - QDRANT_URL=http://qdrant:6333
+      - QDRANT_PATH=./qdrant_storage
+      - USE_LOCAL_QDRANT=false  # Use Docker Qdrant
+      
+      # Embedding model (downloads to container on first run)
+      - EMBEDDING_MODEL=all-MiniLM-L6-v2
+      
+      # Feature flags
+      - ENABLE_SUPABASE=false  # Disable external dependency
+      - ENABLE_WEBSOCKET=true
+      - ENABLE_HYBRID_SEARCH=true
+      
+    env_file:
+      - .env  # Only LLM API keys needed here
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload
+
+  # ============================================
+  # Celery Worker (Distributed Processing)
+  # ============================================
+  worker:
+    build: .
+    volumes:
+      - ./:/app
+      - ./storage:/app/storage
+      - ./qdrant_storage:/app/qdrant_storage
+      - ./local_file_storage:/app/local_file_storage
+    depends_on:
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+    restart: unless-stopped
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+      - DATABASE_URL=sqlite:///./storage/local_storage.db
+      - QDRANT_URL=http://qdrant:6333
+      - QDRANT_PATH=./qdrant_storage
+      - USE_LOCAL_QDRANT=false
+      - EMBEDDING_MODEL=all-MiniLM-L6-v2
+      - ENABLE_SUPABASE=false
+    env_file:
+      - .env
+    command: celery -A app.workers.processor.celery worker --loglevel=info --concurrency=2
+
+  # ============================================
+  # Optional: Flower (Celery Monitoring UI)
+  # ============================================
+  flower:
+    build: .
+    ports:
+      - '5555:5555'
+    depends_on:
+      - redis
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/1
+    command: celery -A app.workers.processor.celery flower --port=5555
+
+volumes:
+  redis_data:
+    driver: local
+  qdrant_data:
+    driver: local
+
+

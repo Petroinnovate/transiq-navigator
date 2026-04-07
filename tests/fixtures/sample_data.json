@@ -1,0 +1,197 @@
+{
+  "test_facts": [
+    {
+      "subject": "weather",
+      "predicate": "caused",
+      "object": "drilling_delays",
+      "confidence": 0.92
+    },
+    {
+      "subject": "drilling_delays",
+      "predicate": "increased",
+      "object": "npt",
+      "confidence": 0.88
+    },
+    {
+      "subject": "npt",
+      "predicate": "increased",
+      "object": "well_cost",
+      "confidence": 0.90
+    },
+    {
+      "subject": "well_cost",
+      "predicate": "reduced",
+      "object": "project_margin",
+      "confidence": 0.85
+    },
+    {
+      "subject": "rig_inefficiency",
+      "predicate": "caused",
+      "object": "high_npt",
+      "confidence": 0.78
+    },
+    {
+      "subject": "equipment_failure",
+      "predicate": "triggered",
+      "object": "unplanned_downtime",
+      "confidence": 0.95
+    },
+    {
+      "subject": "unplanned_downtime",
+      "predicate": "increased",
+      "object": "npt",
+      "confidence": 0.92
+    }
+  ],
+  "test_entities": [
+    {
+      "id": "weather",
+      "name": "Weather Conditions",
+      "entity_type": "LOCATION"
+    },
+    {
+      "id": "drilling_delays",
+      "name": "Drilling Delays",
+      "entity_type": "PROCESS"
+    },
+    {
+      "id": "npt",
+      "name": "Non-Productive Time",
+      "entity_type": "KPI"
+    },
+    {
+      "id": "well_cost",
+      "name": "Well Cost",
+      "entity_type": "KPI"
+    },
+    {
+      "id": "project_margin",
+      "name": "Project Margin",
+      "entity_type": "KPI"
+    },
+    {
+      "id": "drilling_dept",
+      "name": "Drilling Department",
+      "entity_type": "DEPARTMENT"
+    },
+    {
+      "id": "rig_efficiency",
+      "name": "Rig Efficiency",
+      "entity_type": "KPI"
+    },
+    {
+      "id": "rig_inefficiency",
+      "name": "Rig Inefficiency",
+      "entity_type": "PROCESS"
+    },
+    {
+      "id": "equipment_failure",
+      "name": "Equipment Failure",
+      "entity_type": "EQUIPMENT"
+    },
+    {
+      "id": "unplanned_downtime",
+      "name": "Unplanned Downtime",
+      "entity_type": "PROCESS"
+    }
+  ],
+  "test_relationships": [
+    {
+      "source": "drilling_delays",
+      "target": "npt",
+      "type": "CAUSES",
+      "strength": 0.85,
+      "evidence": "Delays directly increase non-productive time"
+    },
+    {
+      "source": "npt",
+      "target": "well_cost",
+      "type": "AFFECTS",
+      "strength": 0.88,
+      "evidence": "More NPT hours at rig rate increases total well cost"
+    },
+    {
+      "source": "well_cost",
+      "target": "project_margin",
+      "type": "AFFECTS",
+      "strength": 0.92,
+      "evidence": "Higher costs reduce project profitability"
+    },
+    {
+      "source": "rig_inefficiency",
+      "target": "npt",
+      "type": "CAUSES",
+      "strength": 0.80,
+      "evidence": "Inefficient rig operations lead to productive downtime"
+    },
+    {
+      "source": "equipment_failure",
+      "target": "unplanned_downtime",
+      "type": "CAUSES",
+      "strength": 0.95,
+      "evidence": "Equipment failure directly causes downtime"
+    },
+    {
+      "source": "unplanned_downtime",
+      "target": "npt",
+      "type": "AFFECTS",
+      "strength": 0.90,
+      "evidence": "Unplanned downtime is categorized as NPT"
+    },
+    {
+      "source": "drilling_dept",
+      "target": "npt",
+      "type": "RESPONSIBLE_FOR",
+      "strength": 0.88,
+      "evidence": "Drilling department manages NPT optimization"
+    }
+  ],
+  "test_scenarios": [
+    {
+      "name": "Drilling NPT Cascade",
+      "description": "Weather causes drilling delays which increase NPT, reducing well margin",
+      "starting_kpi": "npt",
+      "expected_direct_impacts": ["well_cost", "rig_efficiency"],
+      "expected_cascading_impacts": ["project_margin"],
+      "expected_root_causes": ["weather", "rig_inefficiency", "equipment_failure"]
+    },
+    {
+      "name": "Cost Waterfall",
+      "description": "Well cost increases cascade through project financials",
+      "starting_kpi": "well_cost",
+      "expected_direct_impacts": ["project_margin"],
+      "expected_cascading_impacts": [],
+      "expected_root_causes": ["npt", "equipment_failure"]
+    },
+    {
+      "name": "Financial Impact",
+      "description": "Calculate concrete financial impact of KPI changes",
+      "starting_kpi": "npt",
+      "financial_context": {
+        "rig_rate_per_hour": 15000,
+        "baseline_margin": 500000,
+        "npt_increase_hours": 24
+      },
+      "expected_direct_cost": 360000,
+      "expected_margin_reduction_percent": 0.15
+    }
+  ],
+  "financial_data": {
+    "oil_price_per_barrel": 70,
+    "gas_price_per_mcf": 3.50,
+    "rig_rate_per_hour": 15000,
+    "npt_cost_per_hour": 15000,
+    "equipment_failure_cost": 250000,
+    "weather_delay_hours": 8,
+    "baseline_well_cost": 2500000,
+    "baseline_project_margin": 500000
+  },
+  "dmaic_expectations": {
+    "drilling_npt": {
+      "define": "Excessive non-productive time impacting well cost and margins",
+      "measure": ["Total NPT hours", "NPT cost", "Well cost impact"],
+      "analyze": ["Weather conditions", "Equipment reliability", "Rig efficiency"],
+      "improve": ["Improve equipment reliability", "Better weather forecasting", "Crew training"]
+    }
+  }
+}

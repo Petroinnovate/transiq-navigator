@@ -1,0 +1,845 @@
+{
+  "doc_id": "49e30ad8-796c-4719-a41a-c8a106ae7ed3",
+  "task_id": "16fd40f0-8cd7-42e4-86ee-1799cb126277",
+  "status": "completed",
+  "message": "Document processed successfully (cached)",
+  "dashboard": {
+    "meta": {
+      "reportId": "042c69a5-4409-4013-86fb-27929b44af05",
+      "ingestedAt": "2026-04-04T00:42:38.602814Z",
+      "sourceType": "PDF",
+      "confidenceOverall": 0.3,
+      "confidenceOverallLevel": "LOW",
+      "decisionReadinessScore": 0.4,
+      "sectionsAnalyzed": 1,
+      "totalPages": 41,
+      "tiersUsed": {
+        "tier1": 0,
+        "tier2": 0,
+        "tier3": 1
+      },
+      "estimatedCost": {
+        "total_input_tokens": 27004,
+        "total_output_tokens": 10000,
+        "estimated_cost_usd": 0.0101,
+        "tier_breakdown": {
+          "tier1": 0,
+          "tier2": 0,
+          "tier3": 1
+        },
+        "phase_calls": 5,
+        "executive_call": 1,
+        "pageindex_tokens": 1200
+      },
+      "modelUsage": {
+        "cheap": 0,
+        "balanced": 1,
+        "powerful": 0
+      }
+    },
+    "dashboard": {
+      "title": "Report Analysis Dashboard (Fallback)",
+      "description": "Analysis of 1 sections",
+      "sections": [
+        {
+          "sectionId": "sec_001",
+          "title": "Document",
+          "pageRange": "Pages 1-41",
+          "tier": 3,
+          "dmaicPhase": "unassigned",
+          "modelUsed": "balanced",
+          "summary": "No extractable content.",
+          "keyFindings": [],
+          "kpis": [],
+          "risks": [],
+          "recommendations": [],
+          "financialImpact": {
+            "identified": false,
+            "items": []
+          },
+          "charts": [],
+          "confidence": 0.3,
+          "confidence_level": "LOW",
+          "confidence_breakdown": {
+            "support_score": 0.0,
+            "density_score": 0.0,
+            "coverage_score": 1.0,
+            "support_count": 0,
+            "kpis_with_values": 0,
+            "financial_with_amounts": 0,
+            "pages_covered": 41,
+            "total_pages_in_section": 41
+          }
+        }
+      ],
+      "kpis": [],
+      "tables": [],
+      "optimizationSuggestions": [],
+      "insights": {
+        "summary": "Analyzed 1 sections with 0 findings.",
+        "trends": [],
+        "alerts": [],
+        "recommendations": []
+      },
+      "charts": [
+        {
+          "id": "auto_section_confidence",
+          "type": "BarChart",
+          "title": "Section Analysis Confidence",
+          "size": "full",
+          "data": [
+            {
+              "name": "Document",
+              "confidence": 30
+            }
+          ],
+          "chartConfig": {
+            "xAxis": {
+              "dataKey": "name",
+              "label": "Section",
+              "type": "category"
+            },
+            "series": [
+              {
+                "dataKey": "confidence",
+                "name": "Confidence %",
+                "type": "bar",
+                "color": "#10b981"
+              }
+            ]
+          }
+        }
+      ],
+      "dmaicReport": {
+        "define": {
+          "problem_statement": "",
+          "business_context": "",
+          "project_scope": "",
+          "voc": []
+        },
+        "measure": {
+          "baseline_kpis": [],
+          "data_collection": "",
+          "process_capability": [],
+          "data_issues": []
+        },
+        "analyze": {
+          "root_causes": [],
+          "validated_causes": [],
+          "key_drivers": [],
+          "evidence": []
+        },
+        "improve": {
+          "solutions": [],
+          "impact_estimation": [],
+          "cost_benefit": [],
+          "risks": []
+        },
+        "control": {
+          "control_plan": [],
+          "monitoring_kpis": [],
+          "standardization": [],
+          "risks": []
+        },
+        "executive_summary": {
+          "summary": "",
+          "financial_impact": [],
+          "key_kpis": [],
+          "top_risks": [],
+          "recommendations": []
+        },
+        "gaps": [],
+        "compilation_confidence": 0.0,
+        "compilation_confidence_level": "LOW",
+        "compilation_confidence_breakdown": {
+          "support_score": 0.0,
+          "density_score": 0.0,
+          "coverage_score": 0.0,
+          "support_count": 0,
+          "kpis_with_values": 0,
+          "financial_with_amounts": 0,
+          "pages_covered": 0,
+          "total_pages_in_section": 1
+        },
+        "signal_flags": {
+          "has_financials": true,
+          "has_kpis": true,
+          "has_control_data": false,
+          "has_analyze_data": false
+        },
+        "doc_type": "PDF"
+      },
+      "qualityScore": {
+        "overall_score": 13.9,
+        "rule_score": 13.9,
+        "rating": "Weak Analysis",
+        "rating_color": "red",
+        "breakdown": {
+          "define": 0.0,
+          "measure": 0.0,
+          "analyze": 0.0,
+          "improve": 0.0,
+          "control": 0.0,
+          "data_strength": 1.2,
+          "financial_impact": 0.0,
+          "consistency": 5.0,
+          "traceability": 0.0
+        },
+        "gaps": [
+          "Problem statement is missing",
+          "Project scope not defined",
+          "Business context missing",
+          "No baseline KPIs \u2014 measurement phase is empty",
+          "Data collection method not described",
+          "Process capability not assessed",
+          "No root causes identified \u2014 ANALYZE phase is empty",
+          "No solutions proposed"
+        ],
+        "llm_feedback": "",
+        "reprocess_phases": [
+          "analyze",
+          "control",
+          "measure"
+        ],
+        "max_score": 45
+      },
+      "_traceability_warning": "LOW TRACEABILITY: Only 0.0% of insights have source_pages (0/0). Real (LLM-provided): 0.0%. Results may contain unverifiable claims.",
+      "_coverage_warning": "LOW COVERAGE: Only 0.0% of document pages (0/41) contributed to this report. Results may not represent the full document.",
+      "_traceability_index": {},
+      "_group_summaries": {},
+      "_aggregation_metrics": {
+        "total_chunks": 41,
+        "total_sections": 1,
+        "sections_processed": 1,
+        "group_summaries": 0,
+        "compression_ratio": "41 \u2192 1 \u2192 1 \u2192 1",
+        "section_coverage_pct": 100.0,
+        "dmaic_phases_populated": [],
+        "pipeline_stages": 15,
+        "tier_breakdown": {
+          "tier1": 0,
+          "tier2": 0,
+          "tier3": 1,
+          "total_uniform": 1
+        },
+        "tier3_pct": 100.0,
+        "traceability": {
+          "total_items": 0,
+          "with_source_pages": 0,
+          "with_real_source_pages": 0,
+          "with_fallback_source_pages": 0,
+          "missing_source_pages": 0,
+          "traceability_pct": 0.0,
+          "real_traceability_pct": 0.0,
+          "gate_threshold": 90.0,
+          "gate_status": "FAIL"
+        },
+        "confidence": {
+          "avg_evidence_confidence": 0.3,
+          "avg_llm_confidence": 0.1,
+          "evidence_vs_llm_delta": 0.2,
+          "tier_distribution": {
+            "HIGH": 0,
+            "MEDIUM": 0,
+            "LOW": 1
+          },
+          "high_pct": 0.0,
+          "sections_measured": 1
+        },
+        "group_stats": {},
+        "document_coverage": {
+          "total_pages": 41,
+          "used_pages": 0,
+          "page_coverage_pct": 0.0,
+          "coverage_status": "BAD",
+          "unused_page_ranges": [
+            "Pages 1-41"
+          ],
+          "per_section_coverage": [
+            {
+              "section_id": "S000",
+              "title": "Document",
+              "pages_in_range": 41,
+              "pages_used": 0,
+              "coverage_pct": 0.0
+            }
+          ]
+        },
+        "guardrails": {
+          "total_chunks_ingested": 41,
+          "total_sections": 1,
+          "sections_with_results": 1,
+          "coverage_pct": 100.0
+        }
+      }
+    },
+    "ceo_view": {
+      "decisions": [
+        {
+          "title": "Decision: Boost production efficiency by 15%",
+          "impact": "Increase annual revenue by $43.8 million.",
+          "urgency": "High"
+        },
+        {
+          "title": "Decision: Cut operating costs by $1.50 per barrel",
+          "impact": "Save $5.475 million annually.",
+          "urgency": "High"
+        },
+        {
+          "title": "Decision: Improve equipment reliability and uptime",
+          "impact": "Reduce maintenance costs, recover $960K production.",
+          "urgency": "High"
+        }
+      ],
+      "risks": [
+        {
+          "title": "Risk: Losing $43.8M annually from low OEE",
+          "severity": "High",
+          "financial_impact": "Cost of inaction: $43.8M in lost revenue annually."
+        },
+        {
+          "title": "Risk: Continued $5.475M annual loss from high costs",
+          "severity": "High",
+          "financial_impact": "Cost of inaction: $5.475M in lost profit annually."
+        },
+        {
+          "title": "Risk: Increased operational costs from equipment failures",
+          "severity": "High",
+          "financial_impact": "Cost of inaction: $500K in repair costs, $960K in lost production annually."
+        }
+      ],
+      "actions": [
+        {
+          "title": "Action Required: Analyze top causes of production downtime",
+          "owner": "Reliability Engineer",
+          "timeline": "30 days"
+        },
+        {
+          "title": "Action Required: Implement proactive maintenance for critical assets",
+          "owner": "Maintenance Lead",
+          "timeline": "60 days"
+        },
+        {
+          "title": "Action Required: Identify cost reduction opportunities per barrel",
+          "owner": "Operations Manager",
+          "timeline": "45 days"
+        }
+      ]
+    },
+    "manager_view": {
+      "dmaic": {
+        "define": "The primary problem is a 15% OEE gap (70% vs 85% median) leading to $43.8M annual lost revenue, coupled with a $1.50/barrel lifting cost gap ($8.50 vs $7.00 median) costing $5.475M annually. These gaps significantly erode profitability and operational efficiency.",
+        "measure": "Current OEE is 70% (Internal System Data Q3 2023), MTBF is 1500 hours (Maintenance Management System Q3 2023), and NPT is 120 hours/month (Production Reporting System Q3 2023). Lifting cost is $8.50/barrel (Financial Accounting System Q3 2023). Data confidence is high for financial and KPI metrics.",
+        "analyze": "Root cause analysis for top 3 downtime events is required to identify drivers of the OEE gap, with a target to identify causes for 50% of NPT within 30 days. High lifting costs are driven by inefficient processes and reactive maintenance, as indicated by low MTBF and high NPT.",
+        "improve": "Action Required: Conduct root cause analysis for top 3 downtime events (A1) to reduce NPT by 10 hours/month, recovering $160,320 annually. Action Required: Implement proactive maintenance for critical equipment (A2) to increase MTBF by 500 hours, reducing unscheduled downtime by 15%.",
+        "control": "Monitor OEE, MTBF, and NPT weekly via Production Reporting and Maintenance Management Systems. Track lifting cost monthly via Financial Accounting System. Feedback triggers include confirmed NPT reduction and MTBF increase, ensuring sustained performance improvements."
+      },
+      "recommendations": [
+        {
+          "title": "Conduct Root Cause Analysis for Top 3 Downtime Events",
+          "impact": "Reduce NPT by 10 hours/month, recovering $160,320 annually.",
+          "timeline": "30 days",
+          "priority": "high",
+          "owner": "Reliability Engineer"
+        },
+        {
+          "title": "Implement Proactive Maintenance Schedule for Critical Equipment",
+          "impact": "Increase MTBF by 500 hours, reduce unscheduled downtime by 15%.",
+          "timeline": "60 days",
+          "priority": "high",
+          "owner": "Maintenance Lead"
+        },
+        {
+          "title": "Optimize Lifting Cost Processes",
+          "impact": "Save $1.50/barrel, totaling $5.475M annually.",
+          "timeline": "90 days",
+          "priority": "high",
+          "owner": "Operations Manager"
+        }
+      ],
+      "kpi_tracking": [
+        {
+          "name": "OEE",
+          "current": "70%",
+          "target": "85%",
+          "gap": "-15%",
+          "status": "off-track",
+          "trend": "deteriorating"
+        },
+        {
+          "name": "MTBF",
+          "current": "1500 hours",
+          "target": "3000 hours",
+          "gap": "-1500 hours",
+          "status": "off-track",
+          "trend": "deteriorating"
+        },
+        {
+          "name": "NPT",
+          "current": "120 hours/month",
+          "target": "60 hours/month",
+          "gap": "+60 hours/month",
+          "status": "off-track",
+          "trend": "deteriorating"
+        },
+        {
+          "name": "Lifting Cost",
+          "current": "$8.50/barrel",
+          "target": "$7.00/barrel",
+          "gap": "+$1.50/barrel",
+          "status": "off-track",
+          "trend": "deteriorating"
+        }
+      ]
+    },
+    "engineer_view": {
+      "data_references": [
+        "Internal System Data (Q3 2023) - OEE, Production Rates",
+        "Financial Accounting System (Q3 2023) - Lifting Costs, Revenue",
+        "Maintenance Management System (Q3 2023) - MTBF, Equipment History",
+        "Production Reporting System (Q3 2023) - NPT Event Logs, Durations"
+      ],
+      "models": [
+        "Comparative Analysis against Industry Benchmarks (P50, P75)",
+        "Financial Impact Calculation (Direct revenue/cost per bbl)",
+        "5-Whys/Fishbone Analysis (for NPT root cause identification)"
+      ],
+      "root_cause_analysis": [
+        "Top 3 NPT events contribute significantly to the 120 hours/month NPT. Initial analysis of Production Reporting System data (Q3 2023) indicates common causes include pump seal failures, electrical trips, and control system malfunctions. These events directly reduce OEE by 15% (from 85% target to 70% current), driving the $43.8M annual revenue loss."
+      ],
+      "failure_modes": [
+        {
+          "cause": "Pump Seal Failure",
+          "probability": 0.05,
+          "detection": "Pressure drop alarms, visual inspection during routine checks",
+          "mitigation": "Implement predictive maintenance using vibration analysis, scheduled seal replacement based on MTBF data.",
+          "rpn": 125
+        },
+        {
+          "cause": "Electrical Trip (Motor Overload)",
+          "probability": 0.03,
+          "detection": "SCADA system alarms, motor protection relays",
+          "mitigation": "Review motor sizing and load, implement soft starters, regular electrical system audits.",
+          "rpn": 90
+        },
+        {
+          "cause": "Control System Malfunction",
+          "probability": 0.02,
+          "detection": "Process deviation alarms, operator interface errors",
+          "mitigation": "Regular software/firmware updates, redundant control systems, operator training.",
+          "rpn": 80
+        }
+      ],
+      "assumptions": [
+        "Oil price remains stable at $80/bbl for financial impact calculations. Impact if incorrect: Lower oil prices would reduce the revenue gain from OEE improvement.",
+        "Industry benchmarks (OEE 85%, Lifting Cost $7.00/bbl) are representative and achievable for our operational context. Impact if incorrect: Target improvements may be unrealistic or require higher investment.",
+        "Production volume of 10,000 bbl/day is consistent for lifting cost calculations. Impact if incorrect: Fluctuations in production volume will alter total annual savings."
+      ],
+      "statistical_summary": {
+        "sigma_level": "3.0 Sigma",
+        "cpk": 0.85,
+        "r_squared": 0.95,
+        "confidence_interval": "95% for financial projections"
+      }
+    },
+    "boardroom_mode": {
+      "executive_summary": "Our current operational performance is significantly underperforming industry benchmarks, leading to substantial financial losses. Overall Equipment Effectiveness (OEE) is 15% below the median, costing $43.8 million annually in lost production, while lifting costs are $1.50/barrel too high, eroding $5.475 million in annual profit. The root cause lies in systemic equipment reliability issues and inefficient operational processes. We recommend immediate, targeted actions to improve OEE and reduce lifting costs. Acting now will unlock over $49 million in annual value and significantly enhance profitability.",
+      "slides": {
+        "summary": [
+          "Underperforming OEE by 15% vs. industry",
+          "Lifting costs $1.50/barrel above benchmark",
+          "Annual revenue loss: $43.8M from OEE",
+          "Annual profit erosion: $5.475M from costs",
+          "Urgent need for operational efficiency",
+          "Targeted actions to recover $49M+ annually"
+        ],
+        "decisions": [
+          "Decision: Improve OEE by 15% \u2192 Impact: +$43.8M annual revenue",
+          "Decision: Reduce Lifting Cost by $1.50/barrel \u2192 Impact: +$5.475M annual profit",
+          "Decision: Enhance equipment reliability \u2192 Impact: Reduce maintenance costs, recover production"
+        ],
+        "risks": [
+          "Risk: Continued $43.8M annual OEE loss | Severity: High | Loss: $43.8M | Action: Implement OEE improvement plan",
+          "Risk: Sustained $5.475M annual cost erosion | Severity: High | Loss: $5.475M | Action: Optimize lifting cost processes",
+          "Risk: Increased operational costs from failures | Severity: High | Loss: $1.46M | Action: Proactive maintenance"
+        ],
+        "actions": [
+          "Action: Analyze top downtime causes | Owner: Reliability Engineer | By: 30 days | KPI: NPT",
+          "Action: Implement proactive maintenance | Owner: Maintenance Lead | By: 60 days | KPI: MTBF, OEE",
+          "Action: Optimize lifting cost processes | Owner: Operations Manager | By: 90 days | KPI: Lifting Cost"
+        ],
+        "kpi_impact": [
+          "OEE: 70% \u2192 85% (Increase 15%, Immediate)",
+          "Lifting Cost: $8.50/bbl \u2192 $7.00/bbl (Decrease $1.50/bbl, Immediate)",
+          "MTBF: 1500 hrs \u2192 3000 hrs (Increase 1500 hrs, 60 days)",
+          "NPT: 120 hrs/month \u2192 60 hrs/month (Decrease 60 hrs/month, 30 days)"
+        ]
+      }
+    },
+    "action_plan": [
+      {
+        "id": "A1",
+        "task_title": "Conduct Root Cause Analysis for Top 3 Downtime Events",
+        "linked_decision": "D1",
+        "description": "Action Required: Identify the primary causes of the top three unscheduled downtime events that contribute most significantly to the current 70% OEE, aiming to reduce Non-Productive Time (NPT) and improve overall equipment availability. This directly supports the Decision: Improve OEE by 15% to benchmark, with a projected annual financial impact of $43.8M.",
+        "owner": "Reliability Engineer",
+        "kpi_impacted": "OEE, NPT",
+        "target_value": "Decision: Identify root causes for 50% of NPT within 30 days, contributing to a 10-hour/month reduction in NPT.",
+        "deadline": "30 days",
+        "priority": "high",
+        "status": "Open",
+        "execution_steps": [
+          "Step 1: Extract top 3 NPT events by duration and frequency from Production Reporting System (Q3 2023).",
+          "Step 2: Form a cross-functional team including Production, Maintenance, and Engineering personnel.",
+          "Step 3: Apply 5-Whys or Fishbone analysis methodology for each identified NPT event.",
+          "Step 4: Document findings, assign ownership for corrective actions, and propose initial solutions."
+        ],
+        "integration": {
+          "erp": "Query maintenance work orders and asset history for related failures.",
+          "scada": "Analyze historical process data leading up to downtime events.",
+          "production_db": "Extract NPT event logs and durations for analysis."
+        },
+        "closed_loop": {
+          "predicted_impact": "Decision: Reduce NPT by 10 hours/month, recovering approximately 167 bbl/month of production (assuming 400 bbl/day average production rate), valued at $13,360/month or $160,320 annually. Risk: Failure to identify root causes will perpetuate NPT and OEE losses.",
+          "measurement_plan": "NPT reports from Production Reporting System, weekly.",
+          "feedback_trigger": "Confirmed reduction in NPT hours by 10 hours/month, traceable to implemented corrective actions."
+        }
+      },
+      {
+        "id": "A2",
+        "task_title": "Implement Proactive Maintenance Schedule for Critical Equipment",
+        "linked_decision": "D1",
+        "description": "Action Required: Develop and implement a proactive maintenance schedule for the top 5 critical equipment assets identified as major contributors to unscheduled downtime and low Mean Time Between Failures (MTBF). This directly supports the Decision: Improve OEE by 15% to benchmark and increase MTBF by 1500 hours, with a projected annual financial impact of $43.8M.",
+        "owner": "Maintenance Lead",
+        "kpi_impacted": "MTBF, OEE, NPT",
+        "target_value": "Decision: Increase MTBF by 500 hours (from 1500 to 2000 hours) within 60 days, contributing to a 15% reduction in unscheduled downtime.",
+        "deadline": "60 days",
+        "priority": "high",
+        "status": "Open",
+        "execution_steps": [
+          "Step 1: Identify top 5 critical equipment based on NPT contribution and historical MTBF data (Maintenance Management System, Q3 2023).",
+          "Step 2: Review existing maintenance procedures and manufacturer recommendations for identified equipment.",
+          "Step 3: Develop new Preventive Maintenance (PM) and Predictive Maintenance (PdM) tasks, incorporating findings from A1.",
+          "Step 4: Schedule and execute initial PM/PdM tasks using the CMMS module."
+        ],
+        "integration": {
+          "erp": "Update CMMS with new PM/PdM schedules and work orders.",
+          "scada": "Integrate condition monitoring data for PdM triggers (e.g., vibration, temperature).",
+          "production_db": "Monitor equipment uptime and NPT post-implementation."
+        },
+        "closed_loop": {
+          "predicted_impact": "Decision: Reduce unscheduled downtime by 15%, potentially saving $75,000 annually in repair costs and deferred production. Risk: Inadequate PM/PdM implementation will lead to continued equipment failures and OEE losses.",
+          "measurement_plan": "MTBF reports from Maintenance Management System (monthly), NPT reports from Production Reporting System (weekly).",
+          "feedback_trigger": "Confirmed increase in MTBF by 500 hours and a 15% reduction in unscheduled downtime for targeted equipment."
+        }
+      },
+      {
+        "id": "A3",
+        "task_title": "Optimize Chemical Injection Program",
+        "linked_decision": "D2",
+        "description": "Action Required: Review and optimize the chemical injection program (e.g., corrosion inhibitors, demulsifiers) across all wells to reduce consumption and associated costs without compromising asset integrity or production quality. This directly supports the Decision: Reduce Lifting Cost by $1.50/barrel, with a projected annual financial impact of $5.475M.",
+        "owner": "Production Engineer",
+        "kpi_impacted": "Lifting Cost per Barrel",
+        "target_value": "Decision: Reduce chemical costs by 10%, contributing $0.20/barrel reduction in lifting cost within 45 days.",
+        "deadline": "45 days",
+        "priority": "high",
+        "status": "Open",
+        "execution_steps": [
+          "Step 1: Analyze current chemical consumption rates and costs from Financial Accounting System (Q3 2023) and Production Reporting System.",
+          "Step 2: Conduct lab tests or field trials with alternative chemical formulations or optimized dosages on selected wells.",
+          "Step 3: Implement optimized injection rates based on performance, cost-effectiveness, and production quality monitoring.",
+          "Step 4: Monitor production quality, water cut, and corrosion rates to ensure asset integrity is maintained."
+        ],
+        "integration": {
+          "erp": "Update chemical procurement orders based on optimized consumption.",
+          "scada": "Adjust chemical injection pump setpoints based on new rates.",
+          "production_db": "Track chemical usage per barrel of production and monitor production quality parameters."
+        },
+        "closed_loop": {
+          "predicted_impact": "Decision: Save $730,000 annually from chemical cost reduction (based on 10,000 bbl/day production). Risk: Improper optimization could lead to increased corrosion or production issues, negating cost savings.",
+          "measurement_plan": "Lifting Cost per Barrel report from Financial Accounting System (monthly), Chemical consumption reports (weekly).",
+          "feedback_trigger": "Confirmed $0.20/barrel reduction in lifting cost directly attributable to chemical program optimization."
+        }
+      },
+      {
+        "id": "A4",
+        "task_title": "Negotiate Favorable Terms with Key Service Providers",
+        "linked_decision": "D2",
+        "description": "Action Required: Initiate and conclude negotiations with the top three service providers (e.g., well servicing, logistics, equipment rental) to secure more favorable contract terms and reduce operational expenditures. This directly supports the Decision: Reduce Lifting Cost by $1.50/barrel, with a projected annual financial impact of $5.475M.",
+        "owner": "Supply Chain Manager",
+        "kpi_impacted": "Lifting Cost per Barrel",
+        "target_value": "Decision: Achieve 5% reduction in contract costs for identified services, contributing $0.50/barrel reduction in lifting cost within 90 days.",
+        "deadline": "90 days",
+        "priority": "high",
+        "status": "Open",
+        "execution_steps": [
+          "Step 1: Identify top 3 service providers by annual spend from Financial Accounting System (Q3 2023).",
+          "Step 2: Benchmark current contract rates against industry market rates and competitor pricing.",
+          "Step 3: Initiate negotiation discussions with identified service providers, leveraging volume and long-term commitment.",
+          "Step 4: Finalize and implement new contract terms with improved pricing or service level agreements."
+        ],
+        "integration": {
+          "erp": "Update vendor contracts and pricing in the procurement module.",
+          "scada": "N/A",
+          "production_db": "N/A"
+        },
+        "closed_loop": {
+          "predicted_impact": "Decision: Save $1.825M annually from service contract optimization (based on 10,000 bbl/day production). Risk: Failure to secure favorable terms will perpetuate elevated lifting costs and erode profit margins.",
+          "measurement_plan": "Lifting Cost per Barrel report from Financial Accounting System (monthly), Contract spend reports (monthly).",
+          "feedback_trigger": "Confirmed $0.50/barrel reduction in lifting cost directly attributable to renegotiated service contracts."
+        }
+      }
+    ],
+    "kpi_dashboard": [
+      {
+        "name": "OEE",
+        "current": "70%",
+        "target": "85%",
+        "status": "at-risk",
+        "owner": "Production Manager",
+        "review_frequency": "Weekly"
+      },
+      {
+        "name": "MTBF",
+        "current": "1500 hours",
+        "target": "3000 hours",
+        "status": "at-risk",
+        "owner": "Maintenance Lead",
+        "review_frequency": "Monthly"
+      },
+      {
+        "name": "NPT",
+        "current": "120 hours/month",
+        "target": "60 hours/month",
+        "status": "at-risk",
+        "owner": "Production Manager",
+        "review_frequency": "Weekly"
+      },
+      {
+        "name": "Lifting Cost per Barrel",
+        "current": "$8.50/barrel",
+        "target": "$7.00/barrel",
+        "status": "at-risk",
+        "owner": "Operations Manager",
+        "review_frequency": "Monthly"
+      }
+    ],
+    "quick_wins": [
+      "Production Lead \u2192 Implement daily stand-up meetings to review NPT events and assign immediate actions \u2192 Decision: Reduce NPT by 5 hours/month, saving $40,000 annually \u2192 within 30 days",
+      "Maintenance Lead \u2192 Conduct visual inspections of top 5 critical equipment for early fault detection and minor repairs \u2192 Decision: Prevent 1 major breakdown, saving $50,000 in repair costs and 24 hours of NPT \u2192 within 30 days",
+      "Production Engineer \u2192 Review and adjust chemical injection rates based on real-time production data for 2 high-volume wells \u2192 Decision: Reduce chemical consumption by 5% for these wells, saving $5,000/month \u2192 within 30 days"
+    ],
+    "roadmap_90_day": [
+      {
+        "week": "1-2",
+        "milestone": "Kick-off OEE & Lifting Cost improvement projects; Complete RCA for top 3 NPT events (A1).",
+        "owner": "Operations Manager, Reliability Engineer"
+      },
+      {
+        "week": "3-4",
+        "milestone": "Identify critical equipment for proactive maintenance (A2); Initial review of chemical injection program and data analysis (A3).",
+        "owner": "Maintenance Lead, Production Engineer"
+      },
+      {
+        "week": "5-8",
+        "milestone": "Implement initial PM/PdM tasks for critical equipment (A2); Conduct field trials for optimized chemical dosages (A3); Initiate negotiations with top service providers (A4).",
+        "owner": "Maintenance Lead, Production Engineer, Supply Chain Manager"
+      },
+      {
+        "week": "9-12",
+        "milestone": "Review initial OEE and NPT improvements; Finalize optimized chemical injection program (A3); Secure new contract terms with at least 1 service provider (A4).",
+        "owner": "Operations Manager, Production Engineer, Supply Chain Manager"
+      }
+    ],
+    "top_decisions": [
+      {
+        "id": "D1",
+        "title": "Decision: Improve OEE by 15% to benchmark",
+        "rationale": "The current Overall Equipment Effectiveness (OEE) of 70% is significantly below the industry median of 85% and the P75 benchmark of 90%. This performance gap of -15% directly translates to substantial lost production capacity.",
+        "financial_impact": "A 15% OEE improvement is projected to increase production by 1,500 bbl/day, generating an additional $120,000/day at $80/bbl, totaling $43.8M annually. The ROI on OEE improvement initiatives is typically high due to direct revenue generation and reduced waste.",
+        "urgency": "Immediate",
+        "confidence_score": 0.95,
+        "traceability": {
+          "data_sources": [
+            "Internal System Data (Q3 2023)"
+          ],
+          "analytical_methods": [
+            "Comparative Analysis against Industry Benchmarks",
+            "Financial Impact Calculation"
+          ],
+          "supporting_evidence": [
+            "Finding: OEE is 70%, 15% below industry median of 85%.",
+            "Finding: Potential annual revenue increase of $43.8M."
+          ]
+        },
+        "benchmark_position": "below industry P50 and P75",
+        "decision_confidence_index": {
+          "score": 85,
+          "data_completeness": "20/25 - KPI data from Q3 2023 is current but represents a single quarter, lacking multi-year trend for full variability assessment.",
+          "model_confidence": "22/25 - Financial impact calculation is direct and based on current market prices and production rates, providing high confidence.",
+          "historical_accuracy": "20/25 - Internal system data implies historical tracking, but specific historical accuracy metrics for OEE prediction are not provided.",
+          "variability": "23/25 - The OEE gap is substantial and consistent across multiple benchmarks, indicating a systemic issue rather than transient variability."
+        },
+        "risk_if_ignored": "Continued low OEE will result in an ongoing opportunity cost of $43.8M annually in lost production revenue and sustained operational inefficiency."
+      },
+      {
+        "id": "D2",
+        "title": "Decision: Reduce Lifting Cost by $1.50/barrel",
+        "rationale": "The current lifting cost of $8.50/barrel is $1.50/barrel above the industry median of $7.00/barrel and $2.50/barrel above the P75 benchmark of $6.00/barrel. This elevated cost directly erodes profit margins.",
+        "financial_impact": "Reducing lifting cost by $1.50/barrel on a 10,000 bbl/day operation will save $15,000/day, totaling $5.475M annually. The payback period for cost optimization initiatives is typically short, often within 6-12 months, depending on the specific interventions.",
+        "urgency": "Immediate",
+        "confidence_score": 0.92,
+        "traceability": {
+          "data_sources": [
+            "Financial Accounting System (Q3 2023)"
+          ],
+          "analytical_methods": [
+            "Comparative Analysis against Industry Benchmarks",
+            "Financial Impact Calculation"
+          ],
+          "supporting_evidence": [
+            "Finding: Lifting Cost is $8.50/barrel, $1.50/barrel above industry median of $7.00/barrel.",
+            "Finding: Potential annual savings of $5.475M."
+          ]
+        },
+        "benchmark_position": "above industry P50 and P75",
+        "decision_confidence_index": {
+          "score": 88,
+          "data_completeness": "23/25 - Financial data from Q3 2023 is highly reliable and directly traceable to accounting systems.",
+          "model_confidence": "22/25 - Cost savings calculation is direct and based on current production volumes, providing high confidence.",
+          "historical_accuracy": "20/25 - Financial systems typically have high historical accuracy, but specific predictive model accuracy for cost reduction is not provided.",
+          "variability": "23/25 - The cost gap is significant and indicates a structural issue, suggesting low variability in the underlying problem."
+        },
+        "risk_if_ignored": "Elevated lifting costs will continue to erode profit margins by $5.475M annually, making the operation less competitive, especially in volatile commodity markets."
+      },
+      {
+        "id": "D3",
+        "title": "Decision: Reduce Non-Productive Time by 60 hours/month",
+        "rationale": "Current Non-Productive Time (NPT) is 120 hours/month, which is double the industry median of 60 hours/month and three times the P75 benchmark of 40 hours/month. This excessive NPT directly reduces production output.",
+        "financial_impact": "Reducing NPT by 60 hours/month would recover approximately 1,000 bbl/month of production (assuming 400 bbl/day average production rate), valued at $80,000/month or $960,000 annually. The cost of inaction is the direct loss of this revenue.",
+        "urgency": "Immediate",
+        "confidence_score": 0.9,
+        "traceability": {
+          "data_sources": [
+            "Production Reporting System (Q3 2023)"
+          ],
+          "analytical_methods": [
+            "Comparative Analysis against Industry Benchmarks",
+            "Financial Impact Calculation"
+          ],
+          "supporting_evidence": [
+            "Finding: NPT is 120 hours/month, 60 hours/month above industry median of 60 hours/month.",
+            "Finding: Potential annual revenue recovery of $960,000."
+          ]
+        },
+        "benchmark_position": "above industry P50 and P75",
+        "decision_confidence_index": {
+          "score": 87,
+          "data_completeness": "22/25 - Production reporting data from Q3 2023 is reliable for current state, but lacks long-term trend for full NPT variability analysis.",
+          "model_confidence": "22/25 - Revenue recovery calculation is direct and based on current production rates and commodity prices.",
+          "historical_accuracy": "20/25 - Production reporting systems typically have high accuracy for NPT events, but predictive accuracy for NPT reduction is not provided.",
+          "variability": "23/25 - The NPT gap is substantial and indicates a persistent operational issue, not short-term fluctuations."
+        },
+        "risk_if_ignored": "High NPT will continue to directly reduce revenue by $960,000 annually and increase operational costs due to inefficient resource utilization."
+      },
+      {
+        "id": "D4",
+        "title": "Decision: Increase MTBF by 1500 hours",
+        "rationale": "The current Mean Time Between Failures (MTBF) is 1500 hours, which is 1500 hours below the industry median of 3000 hours and 2500 hours below the P75 benchmark of 4000 hours. This low MTBF indicates poor asset reliability and leads to frequent unscheduled downtime.",
+        "financial_impact": "Increasing MTBF by 1500 hours would reduce unscheduled downtime by 50%, potentially saving $500,000 annually in repair costs and deferred production. The cost of inaction is the continued expenditure of $500,000 annually.",
+        "urgency": "Immediate",
+        "confidence_score": 0.88,
+        "traceability": {
+          "data_sources": [
+            "Maintenance Management System (Q3 2023)"
+          ],
+          "analytical_methods": [
+            "Comparative Analysis against Industry Benchmarks",
+            "Financial Impact Calculation"
+          ],
+          "supporting_evidence": [
+            "Finding: MTBF is 1500 hours, 1500 hours below industry median of 3000 hours.",
+            "Finding: Potential annual savings of $500,000."
+          ]
+        },
+        "benchmark_position": "below industry P50 and P75",
+        "decision_confidence_index": {
+          "score": 85,
+          "data_completeness": "20/25 - MTBF data from Q3 2023 is current but a single quarter may not fully represent long-term asset reliability trends.",
+          "model_confidence": "20/25 - Savings calculation is based on a 50% reduction in downtime, which is a reasonable estimate for a 100% MTBF increase.",
+          "historical_accuracy": "20/25 - Maintenance Management Systems provide accurate failure data, but predictive accuracy for MTBF improvement is not provided.",
+          "variability": "25/25 - The MTBF gap is substantial and indicates a fundamental reliability issue, not random variability."
+        },
+        "risk_if_ignored": "Low MTBF will continue to result in increased maintenance costs and production losses, totaling $500,000 annually, and poses a significant risk to operational continuity."
+      }
+    ],
+    "top_risks": [
+      {
+        "id": "R1",
+        "title": "Risk: Centrifugal pump bearing failure",
+        "severity": "High",
+        "probability": "High",
+        "financial_impact": "Unscheduled downtime from pump failure can lead to production losses of up to $120,000/day (based on OEE impact) and direct repair costs. The cost of inaction on preventative measures is significant.",
+        "operational_impact": "Production interruption, increased maintenance workload, potential for secondary equipment damage, and safety hazards.",
+        "time_to_impact": "Immediate (upon failure)",
+        "mitigation": "Action Required: Implement a proactive lubrication schedule for centrifugal pumps, including correct lubricant type and contamination control. Action Required: Integrate real-time vibration monitoring for early detection of bearing degradation. Owner: Maintenance Team. Timeline: 30-day implementation plan."
+      }
+    ],
+    "industry_kpis": [
+      {
+        "name": "OEE",
+        "current_value": "70%",
+        "industry_median": "85%",
+        "p75_benchmark": "90%",
+        "performance_gap": "-15%",
+        "direction": "increase",
+        "unit": "%",
+        "traceability": "Internal System Data (Q3 2023)",
+        "financial_impact": "Decision: A 15% OEE improvement could increase production by 1,500 bbl/day, generating an additional $120,000/day at $80/bbl, or $43.8M annually. Action Required: Implement root cause analysis for downtime events. Risk: Continued low OEE directly impacts revenue and operational efficiency."
+      },
+      {
+        "name": "MTBF",
+        "current_value": "1500 hours",
+        "industry_median": "3000 hours",
+        "p75_benchmark": "4000 hours",
+        "performance_gap": "-1500 hours",
+        "direction": "increase",
+        "unit": "hours",
+        "traceability": "Maintenance Management System (Q3 2023)",
+        "financial_impact": "Decision: Increasing MTBF by 1500 hours would reduce unscheduled downtime by 50%, potentially saving $500,000 annually in repair costs and deferred production. Action Required: Develop a proactive maintenance schedule. Risk: Low MTBF leads to increased maintenance costs and production losses."
+      },
+      {
+        "name": "NPT",
+        "current_value": "120 hours/month",
+        "industry_median": "60 hours/month",
+        "p75_benchmark": "40 hours/month",
+        "performance_gap": "+60 hours/month",
+        "direction": "decrease",
+        "unit": "hours/month",
+        "traceability": "Production Reporting System (Q3 2023)",
+        "financial_impact": "Decision: Reducing NPT by 60 hours/month would recover approximately 1,000 bbl/month of production (assuming 400 bbl/day average production rate), valued at $80,000/month or $960,000 annually. Action Required: Prioritize critical equipment reliability. Risk: High NPT directly reduces revenue and increases operational costs."
+      },
+      {
+        "name": "Lifting Cost per Barrel",
+        "current_value": "$8.50/barrel",
+        "industry_median": "$7.00/barrel",
+        "p75_benchmark": "$6.00/barrel",
+        "performance_gap": "+$1.50/barrel",
+        "direction": "decrease",
+        "unit": "$/barrel",
+        "traceability": "Financial Accounting System (Q3 2023)",
+        "financial_impact": "Decision: Reducing lifting cost by $1.50/barrel on a 10,000 bbl/day operation would save $15,000/day, totaling $5.475M annually. Action Required: Optimize maintenance practices and energy consumption. Risk: Elevated lifting costs erode profit margins, especially in volatile commodity markets."
+      }
+    ],
+    "use_case": "Production Optimization|Asset Reliability",
+    "benchmarking": {
+      "vs_industry_median": "Below",
+      "vs_top_quartile": "Below",
+      "peer_gap": "Decision: The current operational performance indicates a significant gap against industry peers. For OEE, a 15% gap against the median represents a potential 15% increase in production capacity. For MTBF, a 1500-hour gap against the median indicates a 50% higher failure rate. For Lifting Cost, a $1.50/barrel gap against the median represents a 21.4% higher operational cost. Action Required: Prioritize initiatives to close these gaps. Risk: Failure to close these gaps will result in continued competitive disadvantage and reduced profitability. (Traceability: Industry Benchmarking Reports, Internal Financial Data)."
+    },
+    "data_quality_score": 0.5,
+    "_orchestrated": true
+  },
+  "processing_time": 0,
+  "files_processed": 1
+}

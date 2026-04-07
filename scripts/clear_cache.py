@@ -1,0 +1,1 @@
+import sqlite3; conn = sqlite3.connect("cache_storage.db"); cur = conn.cursor(); cur.execute("DELETE FROM cache WHERE key LIKE chr(100)||chr(97)||chr(115)||chr(104)||chr(98)||chr(111)||chr(97)||chr(114)||chr(100)||chr(58)||chr(37)"); conn.commit(); print("done")

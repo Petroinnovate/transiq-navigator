@@ -1,0 +1,709 @@
+{
+  "meta": {
+    "reportId": "5d6ed060-946f-429a-9665-dced22036ee6",
+    "ingestedAt": "2026-03-20T22:17:41.663035Z",
+    "sourceType": "PDF",
+    "confidenceOverall": 1.0,
+    "decisionReadinessScore": 0.95,
+    "sectionsAnalyzed": 1,
+    "totalPages": 6,
+    "tiersUsed": {
+      "tiertier1": 1,
+      "tiertier2": 0,
+      "tiertier3": 0
+    },
+    "estimatedCost": {
+      "total_input_tokens": 12037,
+      "total_output_tokens": 10300,
+      "estimated_cost_usd": 0.008,
+      "tier_breakdown": {
+        "tier1": 1,
+        "tier2": 0,
+        "tier3": 0
+      },
+      "phase_calls": 5,
+      "executive_call": 1,
+      "pageindex_tokens": 1200
+    },
+    "modelUsage": {
+      "cheap": 0,
+      "balanced": 1,
+      "powerful": 1
+    },
+    "reprocessed": 0,
+    "crossPhaseInsights": [],
+    "phaseSyntheses": {
+      "control": {
+        "phase": "control",
+        "controlPlan": [
+          {
+            "what": "Tool Wear",
+            "how": "Digital tool life tracking system",
+            "frequency": "Continuous monitoring per tool cycle"
+          },
+          {
+            "what": "Material Variation",
+            "how": "Incoming material inspection (e.g., hardness, dimensions)",
+            "frequency": "Per batch/shipment"
+          },
+          {
+            "what": "Operator Technique",
+            "how": "Adherence to standardized clamping procedures",
+            "frequency": "Continuous, audited periodically"
+          },
+          {
+            "what": "Process Stability",
+            "how": "Statistical Process Control (SPC) charts for defect rate",
+            "frequency": "Daily/Shiftly"
+          },
+          {
+            "what": "Out-of-Control Conditions",
+            "how": "Automated alerts for process deviations",
+            "frequency": "Real-time"
+          }
+        ],
+        "monitoringKPIs": [
+          {
+            "kpi": "Defect Rate",
+            "target": "<= 1.8%",
+            "alertThreshold": "> 1.8% or sustained upward trend"
+          },
+          {
+            "kpi": "Sigma Level",
+            "target": ">= 3.6",
+            "alertThreshold": "< 3.6 or significant downward trend"
+          },
+          {
+            "kpi": "First Pass Yield",
+            "target": ">= 98.2%",
+            "alertThreshold": "< 98.2% or sustained downward trend"
+          }
+        ],
+        "sustainmentPlan": [
+          "Regular review and maintenance of the robust control plan.",
+          "Periodic operator re-certification on standardized procedures.",
+          "Ongoing enforcement of digital tool life tracking and incoming material inspection protocols."
+        ],
+        "trainingNeeds": [
+          "Operator re-certification on standardized clamping procedures.",
+          "Training on SPC chart interpretation and response protocols for supervisors/operators.",
+          "Refresher training on digital tool life tracking system usage and data entry."
+        ],
+        "confidence": 1.0
+      }
+    }
+  },
+  "autoClassification": {
+    "reportType": [
+      "operations",
+      "quality",
+      "finance"
+    ],
+    "assetScope": "plant",
+    "timeHorizon": "operational",
+    "decisionLevel": "board",
+    "confidence": 1.0
+  },
+  "dashboard": {
+    "title": "Executive Six Sigma Dashboard: Widget Defect Reduction Project",
+    "description": "Comprehensive overview of a successful DMAIC project that significantly reduced widget defect rates, improved process capability, and generated substantial annual savings, now in the Control phase.",
+    "sections": [
+      {
+        "sectionId": "sec_001",
+        "title": "Full Document",
+        "pageRange": "Pages 1-6",
+        "tier": 1,
+        "dmaicPhase": "control",
+        "modelUsed": "powerful",
+        "summary": "This Six Sigma DMAIC project successfully reduced the widget defect rate from 8.2% to 1.8%, achieving a 0.7 sigma level improvement from 2.9 to 3.6. Key improvements included digital tool tracking, material inspection, and standardized operator procedures, resulting in $1.52 million in annual savings and a rapid 16-day payback period.",
+        "keyFindings": [
+          {
+            "finding": "The baseline defect rate of 8.2% was significantly above the industry standard of 2%, leading to an estimated annual Cost of Poor Quality (COPQ) of $1.8 million.",
+            "impact": "high",
+            "confidence": 1.0
+          },
+          {
+            "finding": "Root cause analysis identified tool wear (42%), material variation (21%), and operator technique (15%) as the top three causes, accounting for 78% of defects.",
+            "impact": "high",
+            "confidence": 1.0
+          },
+          {
+            "finding": "Implementation of digital tool life tracking, incoming material inspection, and standardized clamping procedures reduced the defect rate from 8.2% to 1.8%.",
+            "impact": "high",
+            "confidence": 1.0
+          },
+          {
+            "finding": "The project achieved significant financial benefits, including $1.52 million in projected annual savings, a 2,338% ROI in year one, and a 16-day payback period.",
+            "impact": "high",
+            "confidence": 1.0
+          },
+          {
+            "finding": "A robust control plan, incorporating SPC charts, automated alerts, and operator re-certification, has been implemented and verified stable for 8 weeks to sustain improvements.",
+            "impact": "high",
+            "confidence": 1.0
+          }
+        ],
+        "kpis": [
+          {
+            "id": "defectRate",
+            "title": "Defect Rate",
+            "value": 1.8,
+            "unit": "%",
+            "target": 2.0,
+            "trend": "improving",
+            "confidence": 1.0
+          },
+          {
+            "id": "sigmaLevel",
+            "title": "Sigma Level",
+            "value": 3.6,
+            "unit": "count",
+            "target": null,
+            "trend": "improving",
+            "confidence": 1.0
+          },
+          {
+            "id": "firstPassYield",
+            "title": "First Pass Yield",
+            "value": 98.2,
+            "unit": "%",
+            "target": 98.0,
+            "trend": "improving",
+            "confidence": 1.0
+          },
+          {
+            "id": "annualSavings",
+            "title": "Annual Savings",
+            "value": 1520000,
+            "unit": "$",
+            "target": null,
+            "trend": "improving",
+            "confidence": 1.0
+          },
+          {
+            "id": "copqBaseline",
+            "title": "Baseline COPQ",
+            "value": 1800000,
+            "unit": "$",
+            "target": null,
+            "trend": "improving",
+            "confidence": 1.0
+          }
+        ],
+        "risks": [
+          {
+            "risk": "Inconsistent tool replacement schedule leading to tool wear defects.",
+            "severity": "high",
+            "probability": "high"
+          },
+          {
+            "risk": "Variation in incoming steel hardness causing dimensional inaccuracies.",
+            "severity": "high",
+            "probability": "high"
+          },
+          {
+            "risk": "Inconsistent operator technique in fixture clamping force.",
+            "severity": "medium",
+            "probability": "high"
+          }
+        ],
+        "recommendations": [
+          "Continuously monitor SPC charts for critical dimensions and defect rate, responding promptly to any out-of-control signals.",
+          "Ensure strict adherence to the new digital tool life monitoring and 100% incoming material hardness testing procedures.",
+          "Maintain the quarterly operator re-certification program for clamping procedures to sustain standardized techniques across all shifts.",
+          "Conduct annual process audits by the Quality team to verify the ongoing effectiveness of the control plan and identify any drift.",
+          "Document and disseminate lessons learned from this successful project to other production lines or similar processes within the organization."
+        ],
+        "financialImpact": {
+          "identified": true,
+          "items": [
+            {
+              "description": "Estimated annual Cost of Poor Quality (COPQ) before project",
+              "amount": 1800000,
+              "unit": "$",
+              "type": "cost"
+            },
+            {
+              "description": "Total project investment for improvement solutions",
+              "amount": 65000,
+              "unit": "$",
+              "type": "cost"
+            },
+            {
+              "description": "Projected annual savings after improvements",
+              "amount": 1520000,
+              "unit": "$",
+              "type": "saving"
+            }
+          ]
+        },
+        "charts": [
+          {
+            "id": "paretoCauses",
+            "type": "BarChart",
+            "title": "Top 3 Root Causes of Defects",
+            "size": "half",
+            "data": [
+              {
+                "name": "Tool wear",
+                "value": 42
+              },
+              {
+                "name": "Material variation",
+                "value": 21
+              },
+              {
+                "name": "Operator technique",
+                "value": 15
+              },
+              {
+                "name": "Other causes",
+                "value": 22
+              }
+            ]
+          },
+          {
+            "id": "defectRateImprovement",
+            "type": "BarChart",
+            "title": "Defect Rate Before and After Improvement",
+            "size": "half",
+            "data": [
+              {
+                "name": "Baseline (8.2%)",
+                "value": 8.2
+              },
+              {
+                "name": "After Improvement (1.8%)",
+                "value": 1.8
+              }
+            ]
+          }
+        ],
+        "confidence": 1.0
+      }
+    ],
+    "sixSigma": {
+      "methodology": "DMAIC",
+      "dmaic": {
+        "define": {
+          "problemStatement": "Baseline widget defect rate of 8.2% significantly exceeded industry standards, leading to an estimated annual Cost of Poor Quality (COPQ) of $1.8 million.",
+          "ctqs": [
+            "Defect Rate < 2.0%",
+            "First Pass Yield > 98.0%",
+            "Consistent Product Quality",
+            "Reduced Rework Costs"
+          ],
+          "financialExposure": {
+            "value": 1800000,
+            "unit": "$"
+          }
+        },
+        "measure": {
+          "baselineMetrics": [
+            "Defect Rate: 8.2%",
+            "Sigma Level: 2.9",
+            "Annual COPQ: $1.8M"
+          ],
+          "dataConfidence": 1.0
+        },
+        "analyze": {
+          "rootCauses": [
+            {
+              "cause": "Tool wear (42% of defects)",
+              "confidence": 1.0
+            },
+            {
+              "cause": "Material variation (21% of defects)",
+              "confidence": 1.0
+            },
+            {
+              "cause": "Operator technique (15% of defects)",
+              "confidence": 1.0
+            }
+          ],
+          "correlations": [
+            "Tool wear, material variation, and operator technique are directly correlated with the majority (78%) of widget defects."
+          ]
+        },
+        "improve": {
+          "recommendedActions": [
+            "Implemented digital tool life tracking",
+            "Established incoming material inspection",
+            "Standardized operator clamping procedures"
+          ],
+          "expectedSigmaLift": "0.7 sigma level improvement (from 2.9 to 3.6)"
+        },
+        "control": {
+          "controlPlan": [
+            "Digital tool life tracking system for continuous monitoring of tool wear.",
+            "Incoming material inspection (e.g., hardness, dimensions) per batch/shipment to control material variation.",
+            "Adherence to standardized clamping procedures with continuous monitoring and periodic audits.",
+            "Statistical Process Control (SPC) charts for daily/shiftly defect rate monitoring.",
+            "Automated alerts for real-time process deviation detection."
+          ],
+          "monitoringKPIs": [
+            "Defect Rate (Target <= 1.8%, Alert > 1.8% or sustained upward trend)",
+            "Sigma Level (Target >= 3.6, Alert < 3.6 or significant downward trend)",
+            "First Pass Yield (Target >= 98.2%, Alert < 98.2% or sustained downward trend)"
+          ]
+        }
+      },
+      "sigmaLevel": "3.6",
+      "defectRate": "1.8%",
+      "processCapability": "Medium",
+      "statisticalValidity": true
+    },
+    "kpis": [
+      {
+        "id": "defectRate",
+        "title": "Defect Rate",
+        "value": 1.8,
+        "unit": "%",
+        "target": 2.0,
+        "trend": "improving",
+        "change": "-6.4 pp",
+        "changeType": "positive",
+        "confidence": 1.0,
+        "owner": "Quality",
+        "sourceSection": "Full Document",
+        "icon": "activity",
+        "color": "green",
+        "priority": "tier1"
+      },
+      {
+        "id": "sigmaLevel",
+        "title": "Sigma Level",
+        "value": 3.6,
+        "unit": "count",
+        "target": 4.0,
+        "trend": "improving",
+        "change": "+0.7",
+        "changeType": "positive",
+        "confidence": 1.0,
+        "owner": "Operations",
+        "sourceSection": "Full Document",
+        "icon": "chart",
+        "color": "green",
+        "priority": "tier1"
+      },
+      {
+        "id": "firstPassYield",
+        "title": "First Pass Yield",
+        "value": 98.2,
+        "unit": "%",
+        "target": 98.0,
+        "trend": "improving",
+        "change": "+6.4 pp",
+        "changeType": "positive",
+        "confidence": 1.0,
+        "owner": "Operations",
+        "sourceSection": "Full Document",
+        "icon": "trending",
+        "color": "green",
+        "priority": "tier2"
+      },
+      {
+        "id": "annualSavings",
+        "title": "Annual Savings",
+        "value": 1520000,
+        "unit": "$",
+        "target": null,
+        "trend": "improving",
+        "change": "+$1.52M",
+        "changeType": "positive",
+        "confidence": 1.0,
+        "owner": "Finance",
+        "sourceSection": "Full Document",
+        "icon": "dollar",
+        "color": "green",
+        "priority": "tier1"
+      },
+      {
+        "id": "copqBaseline",
+        "title": "Baseline COPQ",
+        "value": 1800000,
+        "unit": "$",
+        "target": 280000,
+        "trend": "improving",
+        "change": "-$1.52M",
+        "changeType": "positive",
+        "confidence": 1.0,
+        "owner": "Finance",
+        "sourceSection": "Full Document",
+        "icon": "dollar",
+        "color": "purple",
+        "priority": "tier2"
+      },
+      {
+        "id": "roiYear1",
+        "title": "Year 1 ROI",
+        "value": 2338,
+        "unit": "%",
+        "target": null,
+        "trend": "improving",
+        "change": "N/A",
+        "changeType": "positive",
+        "confidence": 1.0,
+        "owner": "Finance",
+        "sourceSection": "Full Document",
+        "icon": "chart",
+        "color": "green",
+        "priority": "tier2"
+      },
+      {
+        "id": "paybackPeriod",
+        "title": "Payback Period",
+        "value": 16,
+        "unit": "days",
+        "target": 30,
+        "trend": "improving",
+        "change": "N/A",
+        "changeType": "positive",
+        "confidence": 1.0,
+        "owner": "Finance",
+        "sourceSection": "Full Document",
+        "icon": "activity",
+        "color": "blue",
+        "priority": "tier3"
+      },
+      {
+        "id": "projectInvestment",
+        "title": "Project Investment",
+        "value": 65000,
+        "unit": "$",
+        "target": null,
+        "trend": "stable",
+        "change": "N/A",
+        "changeType": "neutral",
+        "confidence": 1.0,
+        "owner": "Finance",
+        "sourceSection": "Full Document",
+        "icon": "dollar",
+        "color": "yellow",
+        "priority": "tier4"
+      }
+    ],
+    "charts": [
+      {
+        "id": "paretoCauses",
+        "type": "BarChart",
+        "title": "Top 3 Root Causes of Defects",
+        "size": "half",
+        "data": [
+          {
+            "name": "Tool wear",
+            "value": 42
+          },
+          {
+            "name": "Material variation",
+            "value": 21
+          },
+          {
+            "name": "Operator technique",
+            "value": 15
+          },
+          {
+            "name": "Other causes",
+            "value": 22
+          }
+        ]
+      },
+      {
+        "id": "defectRateImprovement",
+        "type": "BarChart",
+        "title": "Defect Rate Before and After Improvement",
+        "size": "half",
+        "data": [
+          {
+            "name": "Baseline (8.2%)",
+            "value": 8.2
+          },
+          {
+            "name": "After Improvement (1.8%)",
+            "value": 1.8
+          }
+        ]
+      }
+    ],
+    "tables": [
+      {
+        "id": "controlPlanSummary",
+        "title": "Control Plan Summary",
+        "columns": [
+          {
+            "id": "what",
+            "name": "Control Point"
+          },
+          {
+            "id": "how",
+            "name": "Method"
+          },
+          {
+            "id": "frequency",
+            "name": "Frequency"
+          }
+        ],
+        "data": [
+          {
+            "what": "Tool Wear",
+            "how": "Digital tool life tracking system",
+            "frequency": "Continuous monitoring per tool cycle"
+          },
+          {
+            "what": "Material Variation",
+            "how": "Incoming material inspection (e.g., hardness, dimensions)",
+            "frequency": "Per batch/shipment"
+          },
+          {
+            "what": "Operator Technique",
+            "how": "Adherence to standardized clamping procedures",
+            "frequency": "Continuous, audited periodically"
+          },
+          {
+            "what": "Process Stability",
+            "how": "Statistical Process Control (SPC) charts for defect rate",
+            "frequency": "Daily/Shiftly"
+          },
+          {
+            "what": "Out-of-Control Conditions",
+            "how": "Automated alerts for process deviations",
+            "frequency": "Real-time"
+          }
+        ],
+        "pagination": false,
+        "sortable": false
+      }
+    ],
+    "optimizationSuggestions": [
+      {
+        "id": "sustainControlPlan",
+        "title": "Sustain Control Plan Adherence",
+        "category": "quality",
+        "impact": "high",
+        "roi": null,
+        "savings": {
+          "value": 1520000,
+          "unit": "$",
+          "timeframe": "annually"
+        },
+        "description": "Ensure strict adherence to the implemented control plan, including digital tool life tracking, material inspection, and operator re-certification, to sustain the $1.52M annual savings.",
+        "priority": "high",
+        "confidence": 1.0,
+        "sourceSection": "Full Document"
+      },
+      {
+        "id": "replicateSuccess",
+        "title": "Replicate Project Success",
+        "category": "efficiency",
+        "impact": "medium",
+        "roi": null,
+        "savings": {
+          "value": null,
+          "unit": "$",
+          "timeframe": "annually"
+        },
+        "description": "Document and disseminate lessons learned from this successful project to other production lines or similar processes within the organization to achieve further quality and cost improvements.",
+        "priority": "medium",
+        "confidence": 1.0,
+        "sourceSection": "Full Document"
+      },
+      {
+        "id": "annualProcessAudits",
+        "title": "Conduct Annual Process Audits",
+        "category": "risk",
+        "impact": "medium",
+        "roi": null,
+        "savings": {
+          "value": null,
+          "unit": "$",
+          "timeframe": "annually"
+        },
+        "description": "Implement annual process audits by the Quality team to verify the ongoing effectiveness of the control plan and proactively identify any process drift or new defect sources.",
+        "priority": "medium",
+        "confidence": 1.0,
+        "sourceSection": "Full Document"
+      }
+    ],
+    "predictive": {
+      "forecast": [
+        {
+          "metric": "Defect Rate",
+          "risk": "low",
+          "timeframe": "90d",
+          "confidence": 0.9,
+          "trend": "Stable at 1.8%"
+        },
+        {
+          "metric": "Annual Savings",
+          "risk": "low",
+          "timeframe": "1y",
+          "confidence": 0.9,
+          "trend": "Consistent $1.52M"
+        }
+      ],
+      "whatIfScenarios": [
+        {
+          "action": "Failure to adhere to digital tool tracking",
+          "impact": "Potential increase in defect rate by 2-3 percentage points, leading to an estimated loss of $300,000 in annual savings.",
+          "financialDelta": -300000
+        },
+        {
+          "action": "Relaxation of incoming material inspection",
+          "impact": "Increased risk of quality excursions and dimensional inaccuracies, potentially increasing defect rate by 1 percentage point, reducing annual savings by $150,000.",
+          "financialDelta": -150000
+        }
+      ]
+    },
+    "insights": {
+      "summary": "The Six Sigma DMAIC project successfully reduced the widget defect rate from 8.2% to 1.8%, achieving a 0.7 sigma level improvement (2.9 to 3.6). This led to significant annual savings of $1.52 million and a rapid 16-day payback period. Key interventions included digital tool tracking, enhanced material inspection, and standardized operator procedures, all now sustained by a robust control plan.",
+      "crossSectionCorrelations": [],
+      "crossPhaseInsights": [],
+      "trends": [
+        "Significant improvement in product quality and process efficiency, exceeding initial targets.",
+        "Strong financial returns from quality improvement initiatives, demonstrating high ROI and rapid payback.",
+        "Sustained performance through robust control mechanisms, verified stable for 8 weeks."
+      ],
+      "alerts": [
+        {
+          "type": "warning",
+          "message": "Potential for process drift if control plan adherence weakens, risking a return to higher defect rates.",
+          "severity": "medium",
+          "action": "Reinforce control plan training and audit frequency."
+        },
+        {
+          "type": "info",
+          "message": "Continuous vigilance on tool wear and material quality is critical to maintain current performance levels.",
+          "severity": "medium",
+          "action": "Ensure automated alerts are functional and response protocols are followed."
+        }
+      ],
+      "recommendations": [
+        "Continuously monitor SPC charts for critical dimensions and defect rate, responding promptly to any out-of-control signals.",
+        "Ensure strict adherence to the new digital tool life monitoring and 100% incoming material hardness testing procedures.",
+        "Maintain the quarterly operator re-certification program for clamping procedures to sustain standardized techniques across all shifts.",
+        "Conduct annual process audits by the Quality team to verify the ongoing effectiveness of the control plan and identify any drift.",
+        "Document and disseminate lessons learned from this successful project to other production lines or similar processes within the organization."
+      ]
+    },
+    "explainability": {
+      "whyThisConclusion": [
+        "Conclusions are based on a data-driven Six Sigma DMAIC methodology, utilizing baseline and post-improvement metrics, root cause analysis, and verified financial impact.",
+        "The project's success is evidenced by a significant reduction in defect rate, an increase in sigma level, and substantial annual savings with a rapid payback period."
+      ],
+      "dataUsed": [
+        "Comprehensive PDF document analysis, including defect rates, sigma levels, financial figures (COPQ, savings, investment), root cause breakdowns, and process control details."
+      ],
+      "assumptions": [
+        "All reported data and project outcomes are accurate and representative of the widget manufacturing process.",
+        "The 8-week stability of the control plan is indicative of long-term sustainment potential."
+      ],
+      "limitations": [
+        "Analysis is confined to the information provided within the single source document.",
+        "Future external factors not covered in the report could impact sustained performance."
+      ],
+      "sectionsCovered": 1,
+      "totalPages": 6,
+      "analysisApproach": "Centralized DocumentBrain with tiered model routing and DMAIC-aware synthesis"
+    }
+  }
+}

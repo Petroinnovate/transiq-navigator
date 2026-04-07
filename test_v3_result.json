@@ -1,0 +1,271 @@
+{
+  "meta": {
+    "reportId": "af42b606-8d86-45e0-bc41-06ee24692caa",
+    "ingestedAt": "2026-04-04T01:47:04.573978Z",
+    "sourceType": "PDF",
+    "confidenceOverall": 0.3,
+    "confidenceOverallLevel": "LOW",
+    "decisionReadinessScore": 0.4,
+    "sectionsAnalyzed": 1,
+    "totalPages": 6,
+    "tiersUsed": {
+      "tier1": 1,
+      "tier2": 0,
+      "tier3": 0
+    },
+    "estimatedCost": {
+      "total_input_tokens": 12037,
+      "total_output_tokens": 10100,
+      "estimated_cost_usd": 0.0079,
+      "tier_breakdown": {
+        "tier1": 1,
+        "tier2": 0,
+        "tier3": 0
+      },
+      "phase_calls": 5,
+      "executive_call": 1,
+      "pageindex_tokens": 1200
+    },
+    "modelUsage": {
+      "cheap": 0,
+      "balanced": 0,
+      "powerful": 1
+    }
+  },
+  "dashboard": {
+    "title": "Report Analysis Dashboard (Fallback)",
+    "description": "Analysis of 1 sections",
+    "sections": [
+      {
+        "sectionId": "sec_001",
+        "title": "Full Document",
+        "pageRange": "Pages 1-6",
+        "tier": 1,
+        "dmaicPhase": "unassigned",
+        "modelUsed": "powerful",
+        "summary": "No extractable content.",
+        "keyFindings": [],
+        "kpis": [],
+        "risks": [],
+        "recommendations": [],
+        "financialImpact": {
+          "identified": false,
+          "items": []
+        },
+        "charts": [],
+        "confidence": 0.3,
+        "confidence_level": "LOW",
+        "confidence_breakdown": {
+          "support_score": 0.0,
+          "density_score": 0.0,
+          "coverage_score": 1.0,
+          "support_count": 0,
+          "kpis_with_values": 0,
+          "financial_with_amounts": 0,
+          "pages_covered": 6,
+          "total_pages_in_section": 6
+        }
+      }
+    ],
+    "kpis": [],
+    "tables": [],
+    "optimizationSuggestions": [],
+    "insights": {
+      "summary": "Analyzed 1 sections with 0 findings.",
+      "trends": [],
+      "alerts": [],
+      "recommendations": []
+    },
+    "charts": [
+      {
+        "id": "auto_section_confidence",
+        "type": "BarChart",
+        "title": "Section Analysis Confidence",
+        "size": "full",
+        "data": [
+          {
+            "name": "Full Document",
+            "confidence": 30
+          }
+        ],
+        "chartConfig": {
+          "xAxis": {
+            "dataKey": "name",
+            "label": "Section",
+            "type": "category"
+          },
+          "series": [
+            {
+              "dataKey": "confidence",
+              "name": "Confidence %",
+              "type": "bar",
+              "color": "#10b981"
+            }
+          ]
+        }
+      }
+    ],
+    "dmaicReport": {
+      "define": {
+        "problem_statement": "",
+        "business_context": "",
+        "project_scope": "",
+        "voc": []
+      },
+      "measure": {
+        "baseline_kpis": [],
+        "data_collection": "",
+        "process_capability": [],
+        "data_issues": []
+      },
+      "analyze": {
+        "root_causes": [],
+        "validated_causes": [],
+        "key_drivers": [],
+        "evidence": []
+      },
+      "improve": {
+        "solutions": [],
+        "impact_estimation": [],
+        "cost_benefit": [],
+        "risks": []
+      },
+      "control": {
+        "control_plan": [],
+        "monitoring_kpis": [],
+        "standardization": [],
+        "risks": []
+      },
+      "executive_summary": {
+        "summary": "",
+        "financial_impact": [],
+        "key_kpis": [],
+        "top_risks": [],
+        "recommendations": []
+      },
+      "gaps": [],
+      "compilation_confidence": 0.0,
+      "compilation_confidence_level": "LOW",
+      "compilation_confidence_breakdown": {
+        "support_score": 0.0,
+        "density_score": 0.0,
+        "coverage_score": 0.0,
+        "support_count": 0,
+        "kpis_with_values": 0,
+        "financial_with_amounts": 0,
+        "pages_covered": 0,
+        "total_pages_in_section": 1
+      },
+      "signal_flags": {
+        "has_financials": true,
+        "has_kpis": true,
+        "has_control_data": false,
+        "has_analyze_data": false
+      },
+      "doc_type": "PDF"
+    },
+    "qualityScore": {
+      "overall_score": 15.3,
+      "rule_score": 15.3,
+      "rating": "Weak Analysis",
+      "rating_color": "red",
+      "breakdown": {
+        "define": 0.0,
+        "measure": 0.0,
+        "analyze": 0.0,
+        "improve": 0.0,
+        "control": 0.0,
+        "data_strength": 1.9,
+        "financial_impact": 0.0,
+        "consistency": 5.0,
+        "traceability": 0.0
+      },
+      "gaps": [
+        "Problem statement is missing",
+        "Project scope not defined",
+        "Business context missing",
+        "No baseline KPIs \u2014 measurement phase is empty",
+        "Data collection method not described",
+        "Process capability not assessed",
+        "No root causes identified \u2014 ANALYZE phase is empty",
+        "No solutions proposed"
+      ],
+      "llm_feedback": "",
+      "reprocess_phases": [
+        "analyze",
+        "control",
+        "measure"
+      ],
+      "max_score": 45
+    },
+    "_traceability_warning": "LOW TRACEABILITY: Only 0.0% of insights have source_pages (0/0). Real (LLM-provided): 0.0%. Results may contain unverifiable claims.",
+    "_coverage_warning": "LOW COVERAGE: Only 0.0% of document pages (0/6) contributed to this report. Results may not represent the full document.",
+    "_traceability_index": {},
+    "_group_summaries": {},
+    "_aggregation_metrics": {
+      "total_chunks": 6,
+      "total_sections": 1,
+      "sections_processed": 1,
+      "group_summaries": 0,
+      "compression_ratio": "6 \u2192 1 \u2192 1 \u2192 1",
+      "section_coverage_pct": 100.0,
+      "dmaic_phases_populated": [],
+      "pipeline_stages": 15,
+      "tier_breakdown": {
+        "tier1": 1,
+        "tier2": 0,
+        "tier3": 0,
+        "total_uniform": 1
+      },
+      "tier3_pct": 0.0,
+      "traceability": {
+        "total_items": 0,
+        "with_source_pages": 0,
+        "with_real_source_pages": 0,
+        "with_fallback_source_pages": 0,
+        "missing_source_pages": 0,
+        "traceability_pct": 0.0,
+        "real_traceability_pct": 0.0,
+        "gate_threshold": 90.0,
+        "gate_status": "FAIL"
+      },
+      "confidence": {
+        "avg_evidence_confidence": 0.3,
+        "avg_llm_confidence": 0.1,
+        "evidence_vs_llm_delta": 0.2,
+        "tier_distribution": {
+          "HIGH": 0,
+          "MEDIUM": 0,
+          "LOW": 1
+        },
+        "high_pct": 0.0,
+        "sections_measured": 1
+      },
+      "group_stats": {},
+      "document_coverage": {
+        "total_pages": 6,
+        "used_pages": 0,
+        "page_coverage_pct": 0.0,
+        "coverage_status": "BAD",
+        "unused_page_ranges": [
+          "Pages 1-6"
+        ],
+        "per_section_coverage": [
+          {
+            "section_id": "S000",
+            "title": "Full Document",
+            "pages_in_range": 6,
+            "pages_used": 0,
+            "coverage_pct": 0.0
+          }
+        ]
+      },
+      "guardrails": {
+        "total_chunks_ingested": 6,
+        "total_sections": 1,
+        "sections_with_results": 1,
+        "coverage_pct": 100.0
+      }
+    }
+  }
+}

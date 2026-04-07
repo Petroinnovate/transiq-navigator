@@ -1,0 +1,98 @@
+{
+  "doc_id": null,
+  "task_id": null,
+  "status": "completed",
+  "message": "Document processed successfully (cached)",
+  "dashboard": {
+    "meta": {
+      "reportId": "7b5cbb2b-b140-4997-93a8-9a9b9ba965e2",
+      "ingestedAt": "2026-03-16T10:10:45.440813Z",
+      "sourceType": "PDF",
+      "confidenceOverall": 0.1,
+      "decisionReadinessScore": 0.0
+    },
+    "autoClassification": {
+      "reportType": [
+        "unknown"
+      ],
+      "assetScope": "unknown",
+      "timeHorizon": "unknown",
+      "decisionLevel": "unknown",
+      "confidence": 0.0
+    },
+    "dashboard": {
+      "title": "Data Analysis Dashboard",
+      "description": "Analysis of 1 file(s) - AI service error",
+      "sixSigma": {
+        "dmaic": {
+          "define": {
+            "problemStatement": "Error calling AI service - please try again",
+            "ctqs": [],
+            "financialExposure": {
+              "value": 0,
+              "unit": "$"
+            }
+          },
+          "measure": {
+            "baselineMetrics": [],
+            "dataConfidence": 0.0
+          },
+          "analyze": {
+            "rootCauses": [
+              {
+                "cause": "AI service temporarily unavailable",
+                "confidence": 0.0
+              }
+            ],
+            "correlations": []
+          },
+          "improve": {
+            "recommendedActions": [],
+            "expectedSigmaLift": "N/A"
+          },
+          "control": {
+            "controlPlan": [],
+            "monitoringKPIs": []
+          }
+        },
+        "sigmaLevel": "N/A",
+        "defectRate": "N/A",
+        "processCapability": "Unknown",
+        "statisticalValidity": false
+      },
+      "kpis": [],
+      "charts": [],
+      "tables": [],
+      "optimizationSuggestions": [],
+      "predictive": {
+        "forecast": [],
+        "whatIfScenarios": []
+      },
+      "insights": {
+        "summary": "AI service error occurred",
+        "trends": [],
+        "alerts": [
+          {
+            "type": "error",
+            "message": "AI service temporarily unavailable",
+            "severity": "high",
+            "action": "Please try again"
+          }
+        ],
+        "recommendations": []
+      },
+      "explainability": {
+        "whyThisConclusion": [
+          "AI service error prevented analysis"
+        ],
+        "dataUsed": [],
+        "assumptions": [],
+        "limitations": [
+          "AI service unavailable"
+        ]
+      }
+    }
+  },
+  "processing_time": 0,
+  "files_processed": 1
+}

@@ -1,0 +1,136 @@
+{
+  "dashboard": {
+    "title": "Six Sigma Data Analysis Report",
+    "description": "Comprehensive DMAIC analysis based on provided document chunks.",
+    "sixSigma": {
+      "dmaic": {
+        "define": "Problem definition based on expert Six Sigma Black Belt analysis.",
+        "measure": "Quantified metrics to establish baselines and process performance.",
+        "analyze": "Identification of key drivers, root causes, and process bottlenecks.",
+        "improve": "Recommended actions for process optimization and performance enhancement.",
+        "control": "Suggested monitoring and governance strategies for sustained improvements."
+      },
+      "sigmaLevel": "Placeholder",
+      "defectRate": "Placeholder DPMO",
+      "processCapability": "Placeholder",
+      "rootCauses": [
+        "Placeholder Cause 1",
+        "Placeholder Cause 2"
+      ]
+    },
+    "kpis": [
+      {
+        "id": "kpi1",
+        "title": "Placeholder KPI",
+        "value": 0,
+        "unit": "",
+        "change": "",
+        "changeType": "",
+        "icon": "",
+        "color": ""
+      }
+    ],
+    "charts": [
+      {
+        "id": "chart1",
+        "type": "LineChart",
+        "title": "Placeholder Trend Chart",
+        "size": "full",
+        "chartConfig": {},
+        "data": []
+      },
+      {
+        "id": "chart2",
+        "type": "PieChart",
+        "title": "Placeholder Category Distribution",
+        "size": "half",
+        "chartConfig": {},
+        "data": []
+      },
+      {
+        "id": "chart3",
+        "type": "BarChart",
+        "title": "Placeholder Comparison Chart",
+        "size": "half",
+        "chartConfig": {},
+        "data": []
+      },
+      {
+        "id": "chart4",
+        "type": "SankeyChart",
+        "title": "Placeholder Flow Chart",
+        "size": "full",
+        "chartConfig": {},
+        "data": {
+          "nodes": [
+            {
+              "name": "Node 1"
+            },
+            {
+              "name": "Node 2"
+            }
+          ],
+          "links": [
+            {
+              "source": 0,
+              "target": 1,
+              "value": 0
+            }
+          ]
+        }
+      },
+      {
+        "id": "chart5",
+        "type": "AreaChart",
+        "title": "Placeholder Area Chart",
+        "size": "full",
+        "chartConfig": {},
+        "data": []
+      }
+    ],
+    "tables": [
+      {
+        "id": "table1",
+        "title": "Placeholder Data Table",
+        "columns": [],
+        "data": [],
+        "pagination": true,
+        "sortable": true
+      }
+    ],
+    "optimizationSuggestions": [
+      {
+        "id": "suggestion1",
+        "title": "Placeholder Optimization Opportunity",
+        "category": "placeholder",
+        "impact": "placeholder",
+        "savings": {
+          "value": 0,
+          "unit": "",
+          "percentage": "",
+          "timeframe": ""
+        },
+        "description": "Placeholder Explanation",
+        "implementation": "Placeholder Steps",
+        "metrics": [],
+        "priority": "placeholder",
+        "confidence": "placeholder",
+        "tags": [],
+        "actionable": true
+      }
+    ],
+    "insights": {
+      "summary": "Placeholder High-level insights",
+      "trends": [],
+      "alerts": [
+        {
+          "type": "placeholder",
+          "message": "Placeholder Alert Message",
+          "severity": "placeholder",
+          "action": "placeholder"
+        }
+      ],
+      "recommendations": []
+    }
+  }
+}

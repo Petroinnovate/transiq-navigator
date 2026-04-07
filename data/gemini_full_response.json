@@ -1,0 +1,1466 @@
+{
+  "meta": {
+    "reportId": "WEC-ES-2013-001",
+    "ingestedAt": "2024-07-30T12:00:00Z",
+    "sourceType": "PDF",
+    "confidenceOverall": 0.85,
+    "decisionReadinessScore": 0.9
+  },
+  "autoClassification": {
+    "reportType": [
+      "strategy"
+    ],
+    "assetScope": "enterprise",
+    "timeHorizon": "strategic",
+    "decisionLevel": "board",
+    "confidence": 1.0
+  },
+  "dashboard": {
+    "title": "World Energy Scenarios to 2050: Decision Intelligence",
+    "description": "Decision intelligence derived from the World Energy Council's 'Composing Energy Futures to 2050' executive summary, highlighting key trends, financial implications, and strategic choices for the global energy sector.",
+    "sixSigma": {
+      "dmaic": {
+        "define": {
+          "problemStatement": "Balancing the 'energy trilemma' (environmental sustainability, energy security, and energy equity) amidst increasing global energy demand and system complexity by 2050, considering divergent policy pathways (market-driven 'Jazz' vs. internationally coordinated 'Symphony').",
+          "ctqs": [
+            "Achieving environmental sustainability (e.g., CO2 emission reduction, low-carbon energy mix)",
+            "Ensuring energy security (e.g., reliable supply, diverse energy mix, regional integration)",
+            "Promoting energy equity (e.g., access to affordable energy, reduced energy poverty)"
+          ],
+          "financialExposure": {
+            "value": 25720000000000,
+            "unit": "$"
+          }
+        },
+        "measure": {
+          "baselineMetrics": [
+            "Total Primary Energy Supply (2010): 546 EJ/y",
+            "Global Electricity Generation (2010): 21.5 billion MWh/y",
+            "CO2 Emissions (2010): 30.5 GtCO2/y",
+            "Primary Energy Intensity (2010): 8.6 MJ/USD2010 MER",
+            "Population without electricity (2010): 1.267 billion",
+            "Share of fossil fuels in primary energy mix (2010): 79%",
+            "Share of renewables in electricity generation (2010): ~20%"
+          ],
+          "dataConfidence": 0.9
+        },
+        "analyze": {
+          "rootCauses": [
+            {
+              "cause": "Divergent policy approaches (market-driven vs. internationally coordinated) leading to different energy mixes and climate outcomes.",
+              "confidence": 0.9
+            },
+            {
+              "cause": "Lack of global consensus on climate action, resulting in varied regional initiatives and carbon pricing.",
+              "confidence": 0.85
+            },
+            {
+              "cause": "Technological uncertainties in Carbon Capture, Utilisation and Storage (CC(U)S), solar energy, and energy storage.",
+              "confidence": 0.9
+            },
+            {
+              "cause": "Consumer/voter behavior and priorities influencing energy demand and policy choices.",
+              "confidence": 0.8
+            },
+            {
+              "cause": "Regional economic growth patterns and resource availability driving localized energy solutions.",
+              "confidence": 0.85
+            }
+          ],
+          "correlations": [
+            "Higher GDP growth (Jazz) correlates with higher energy demand and higher CO2 emissions.",
+            "Stronger climate policy (Symphony) correlates with lower CO2 emissions, higher renewable share, and higher investment in low-carbon technologies.",
+            "Energy efficiency improvements are crucial in both scenarios to manage demand outstripping supply.",
+            "Investment in specific technologies (e.g., solar, CC(U)S) is directly linked to policy support and carbon pricing."
+          ]
+        },
+        "improve": {
+          "recommendedActions": [
+            "Foster international cooperation for harmonized climate policies and global treaties.",
+            "Implement clear and stable legislative frameworks to ensure financial predictability for energy markets and carbon pricing.",
+            "Increase R&D investment in key uncertain technologies like CC(U)S, advanced solar, and energy storage.",
+            "Promote energy efficiency and conservation through policy incentives and consumer awareness campaigns.",
+            "Facilitate regional energy market integration and cross-border investment to enhance energy security and equity.",
+            "Develop robust carbon markets with adequate price signals to incentivize CO2 reduction."
+          ],
+          "expectedSigmaLift": "Improved balance across the energy trilemma, leading to more sustainable, secure, and equitable energy futures, with a potential reduction in CO2 emissions by up to 37% compared to 2010 levels (Symphony scenario)."
+        },
+        "control": {
+          "controlPlan": [
+            "Establish a global monitoring framework for energy KPIs, including CO2 emissions, energy mix, and access rates.",
+            "Conduct periodic reviews of energy policies and market mechanisms to ensure alignment with trilemma goals.",
+            "Continuously assess technological advancements and their commercial viability to inform investment strategies.",
+            "Engage diverse stakeholders (governments, industry, consumers) to ensure sustained commitment to energy transition goals."
+          ],
+          "monitoringKPIs": [
+            "CO2 emissions trajectory (GtCO2/y)",
+            "Share of low-carbon sources in primary energy and electricity mix (%)",
+            "Energy intensity (MJ/USD2010 MER)",
+            "Cumulative investment in electricity generation (billion US$2010)",
+            "Population without access to electricity (millions)",
+            "Carbon market prices (US$2010/tCO2)"
+          ]
+        }
+      },
+      "sigmaLevel": "N/A (Strategic Scenario Planning)",
+      "defectRate": "N/A (Strategic Scenario Planning)",
+      "processCapability": "N/A (Strategic Scenario Planning)",
+      "statisticalValidity": false
+    },
+    "kpis": [
+      {
+        "id": "kpi_total_primary_energy_supply_jazz",
+        "title": "Total Primary Energy Supply (Jazz 2050)",
+        "value": 879,
+        "unit": "EJ/y",
+        "target": 696,
+        "trend": "deteriorating",
+        "change": "+61% from 2010",
+        "changeType": "positive",
+        "confidence": 0.9,
+        "owner": "Strategy",
+        "linkedCTQ": "Energy Security",
+        "icon": "activity",
+        "color": "red"
+      },
+      {
+        "id": "kpi_total_primary_energy_supply_symphony",
+        "title": "Total Primary Energy Supply (Symphony 2050)",
+        "value": 696,
+        "unit": "EJ/y",
+        "target": 696,
+        "trend": "stable",
+        "change": "+27% from 2010",
+        "changeType": "positive",
+        "confidence": 0.9,
+        "owner": "Strategy",
+        "linkedCTQ": "Energy Security",
+        "icon": "activity",
+        "color": "blue"
+      },
+      {
+        "id": "kpi_global_electricity_generation_jazz",
+        "title": "Global Electricity Generation (Jazz 2050)",
+        "value": 53646,
+        "unit": "TWh/y",
+        "target": 47917,
+        "trend": "deteriorating",
+        "change": "+150% from 2010",
+        "changeType": "positive",
+        "confidence": 0.9,
+        "owner": "Strategy",
+        "linkedCTQ": "Energy Security",
+        "icon": "activity",
+        "color": "red"
+      },
+      {
+        "id": "kpi_global_electricity_generation_symphony",
+        "title": "Global Electricity Generation (Symphony 2050)",
+        "value": 47917,
+        "unit": "TWh/y",
+        "target": 47917,
+        "trend": "stable",
+        "change": "+123% from 2010",
+        "changeType": "positive",
+        "confidence": 0.9,
+        "owner": "Strategy",
+        "linkedCTQ": "Energy Security",
+        "icon": "activity",
+        "color": "blue"
+      },
+      {
+        "id": "kpi_co2_emissions_jazz",
+        "title": "CO2 Emissions (Jazz 2050)",
+        "value": 44.0,
+        "unit": "GtCO2/y",
+        "target": 19.1,
+        "trend": "deteriorating",
+        "change": "+45% from 2010",
+        "changeType": "negative",
+        "confidence": 0.9,
+        "owner": "HSE",
+        "linkedCTQ": "Environmental Sustainability",
+        "icon": "trending",
+        "color": "red"
+      },
+      {
+        "id": "kpi_co2_emissions_symphony",
+        "title": "CO2 Emissions (Symphony 2050)",
+        "value": 19.1,
+        "unit": "GtCO2/y",
+        "target": 19.1,
+        "trend": "improving",
+        "change": "-37% from 2010",
+        "changeType": "positive",
+        "confidence": 0.9,
+        "owner": "HSE",
+        "linkedCTQ": "Environmental Sustainability",
+        "icon": "trending",
+        "color": "green"
+      },
+      {
+        "id": "kpi_energy_intensity_jazz",
+        "title": "Primary Energy Intensity (Jazz 2050)",
+        "value": 4.4,
+        "unit": "MJ/USD2010 MER",
+        "target": 4.1,
+        "trend": "improving",
+        "change": "-50% from 2010",
+        "changeType": "positive",
+        "confidence": 0.85,
+        "owner": "Operations",
+        "linkedCTQ": "Environmental Sustainability",
+        "icon": "chart",
+        "color": "green"
+      },
+      {
+        "id": "kpi_energy_intensity_symphony",
+        "title": "Primary Energy Intensity (Symphony 2050)",
+        "value": 4.1,
+        "unit": "MJ/USD2010 MER",
+        "target": 4.1,
+        "trend": "improving",
+        "change": "-53% from 2010",
+        "changeType": "positive",
+        "confidence": 0.85,
+        "owner": "Operations",
+        "linkedCTQ": "Environmental Sustainability",
+        "icon": "chart",
+        "color": "green"
+      },
+      {
+        "id": "kpi_population_no_electricity_jazz",
+        "title": "Population without Electricity (Jazz 2050)",
+        "value": 319,
+        "unit": "millions",
+        "target": 319,
+        "trend": "improving",
+        "change": "-75% from 2010",
+        "changeType": "positive",
+        "confidence": 0.9,
+        "owner": "Strategy",
+        "linkedCTQ": "Energy Equity",
+        "icon": "users",
+        "color": "green"
+      },
+      {
+        "id": "kpi_population_no_electricity_symphony",
+        "title": "Population without Electricity (Symphony 2050)",
+        "value": 530,
+        "unit": "millions",
+        "target": 319,
+        "trend": "improving",
+        "change": "-58% from 2010",
+        "changeType": "positive",
+        "confidence": 0.9,
+        "owner": "Strategy",
+        "linkedCTQ": "Energy Equity",
+        "icon": "users",
+        "color": "yellow"
+      },
+      {
+        "id": "kpi_fossil_share_primary_jazz",
+        "title": "Fossil Share in Primary Energy (Jazz 2050)",
+        "value": 77,
+        "unit": "%",
+        "target": 59,
+        "trend": "deteriorating",
+        "change": "-2% points from 2010",
+        "changeType": "negative",
+        "confidence": 0.9,
+        "owner": "Strategy",
+        "linkedCTQ": "Environmental Sustainability",
+        "icon": "chart",
+        "color": "red"
+      },
+      {
+        "id": "kpi_fossil_share_primary_symphony",
+        "title": "Fossil Share in Primary Energy (Symphony 2050)",
+        "value": 59,
+        "unit": "%",
+        "target": 59,
+        "trend": "improving",
+        "change": "-20% points from 2010",
+        "changeType": "positive",
+        "confidence": 0.9,
+        "owner": "Strategy",
+        "linkedCTQ": "Environmental Sustainability",
+        "icon": "chart",
+        "color": "green"
+      },
+      {
+        "id": "kpi_renewables_share_electricity_jazz",
+        "title": "Renewables Share in Electricity (Jazz 2050)",
+        "value": 31.11,
+        "unit": "%",
+        "target": 47.61,
+        "trend": "improving",
+        "change": "+11.14% points from 2010",
+        "changeType": "positive",
+        "confidence": 0.85,
+        "owner": "Strategy",
+        "linkedCTQ": "Environmental Sustainability",
+        "icon": "chart",
+        "color": "yellow"
+      },
+      {
+        "id": "kpi_renewables_share_electricity_symphony",
+        "title": "Renewables Share in Electricity (Symphony 2050)",
+        "value": 47.61,
+        "unit": "%",
+        "target": 47.61,
+        "trend": "improving",
+        "change": "+27.64% points from 2010",
+        "changeType": "positive",
+        "confidence": 0.85,
+        "owner": "Strategy",
+        "linkedCTQ": "Environmental Sustainability",
+        "icon": "chart",
+        "color": "green"
+      }
+    ],
+    "charts": [
+      {
+        "id": "chart_total_primary_energy_supply_trend",
+        "type": "LineChart",
+        "title": "Total Primary Energy Supply (2010-2050)",
+        "size": "full",
+        "chartConfig": {
+          "xAxis": {
+            "type": "category",
+            "dataKey": "year"
+          },
+          "yAxis": {
+            "name": "EJ/y"
+          },
+          "series": [
+            {
+              "name": "Jazz Scenario",
+              "type": "line",
+              "dataKey": "Jazz"
+            },
+            {
+              "name": "Symphony Scenario",
+              "type": "line",
+              "dataKey": "Symphony"
+            }
+          ]
+        },
+        "data": [
+          {
+            "year": 2010,
+            "Jazz": 546,
+            "Symphony": 546
+          },
+          {
+            "year": 2020,
+            "Jazz": 644,
+            "Symphony": 592
+          },
+          {
+            "year": 2030,
+            "Jazz": 741,
+            "Symphony": 630
+          },
+          {
+            "year": 2040,
+            "Jazz": 825,
+            "Symphony": 654
+          },
+          {
+            "year": 2050,
+            "Jazz": 879,
+            "Symphony": 697
+          }
+        ]
+      },
+      {
+        "id": "chart_global_electricity_generation_trend",
+        "type": "LineChart",
+        "title": "Global Electricity Generation (2010-2050)",
+        "size": "full",
+        "chartConfig": {
+          "xAxis": {
+            "type": "category",
+            "dataKey": "year"
+          },
+          "yAxis": {
+            "name": "TWh/y"
+          },
+          "series": [
+            {
+              "name": "Jazz Scenario",
+              "type": "line",
+              "dataKey": "Jazz"
+            },
+            {
+              "name": "Symphony Scenario",
+              "type": "line",
+              "dataKey": "Symphony"
+            }
+          ]
+        },
+        "data": [
+          {
+            "year": 2010,
+            "Jazz": 21477,
+            "Symphony": 21477
+          },
+          {
+            "year": 2020,
+            "Jazz": 27960,
+            "Symphony": 26316
+          },
+          {
+            "year": 2030,
+            "Jazz": 35198,
+            "Symphony": 31896
+          },
+          {
+            "year": 2040,
+            "Jazz": 44454,
+            "Symphony": 39599
+          },
+          {
+            "year": 2050,
+            "Jazz": 53646,
+            "Symphony": 47918
+          }
+        ]
+      },
+      {
+        "id": "chart_primary_energy_mix",
+        "type": "BarChart",
+        "title": "Primary Energy Mix by Fuel Type (2010 vs 2050 Scenarios)",
+        "size": "full",
+        "chartConfig": {
+          "xAxis": {
+            "type": "category",
+            "dataKey": "scenario"
+          },
+          "yAxis": {
+            "name": "EJ/y"
+          },
+          "series": [
+            {
+              "name": "Coal",
+              "type": "bar",
+              "stackId": "a",
+              "dataKey": "Coal"
+            },
+            {
+              "name": "Oil",
+              "type": "bar",
+              "stackId": "a",
+              "dataKey": "Oil"
+            },
+            {
+              "name": "Gas",
+              "type": "bar",
+              "stackId": "a",
+              "dataKey": "Gas"
+            },
+            {
+              "name": "Nuclear",
+              "type": "bar",
+              "stackId": "a",
+              "dataKey": "Nuclear"
+            },
+            {
+              "name": "Biomass",
+              "type": "bar",
+              "stackId": "a",
+              "dataKey": "Biomass"
+            },
+            {
+              "name": "Hydro",
+              "type": "bar",
+              "stackId": "a",
+              "dataKey": "Hydro"
+            },
+            {
+              "name": "Other Renewables",
+              "type": "bar",
+              "stackId": "a",
+              "dataKey": "Renewables"
+            }
+          ]
+        },
+        "data": [
+          {
+            "scenario": "2010 Baseline",
+            "Coal": 148,
+            "Oil": 172,
+            "Gas": 114,
+            "Nuclear": 30,
+            "Biomass": 66,
+            "Hydro": 13,
+            "Renewables": 2
+          },
+          {
+            "scenario": "Jazz 2050",
+            "Coal": 223,
+            "Oil": 216,
+            "Gas": 234,
+            "Nuclear": 37,
+            "Biomass": 97,
+            "Hydro": 21,
+            "Renewables": 51
+          },
+          {
+            "scenario": "Symphony 2050",
+            "Coal": 106,
+            "Oil": 141,
+            "Gas": 166,
+            "Nuclear": 79,
+            "Biomass": 111,
+            "Hydro": 28,
+            "Renewables": 65
+          }
+        ]
+      },
+      {
+        "id": "chart_electricity_generation_mix",
+        "type": "BarChart",
+        "title": "Electricity Generation Mix by Fuel Type (2010 vs 2050 Scenarios)",
+        "size": "full",
+        "chartConfig": {
+          "xAxis": {
+            "type": "category",
+            "dataKey": "scenario"
+          },
+          "yAxis": {
+            "name": "TWh/y"
+          },
+          "series": [
+            {
+              "name": "Coal (incl. CCS)",
+              "type": "bar",
+              "stackId": "a",
+              "dataKey": "Coal"
+            },
+            {
+              "name": "Oil",
+              "type": "bar",
+              "stackId": "a",
+              "dataKey": "Oil"
+            },
+            {
+              "name": "Gas (incl. CCS)",
+              "type": "bar",
+              "stackId": "a",
+              "dataKey": "Gas"
+            },
+            {
+              "name": "Nuclear",
+              "type": "bar",
+              "stackId": "a",
+              "dataKey": "Nuclear"
+            },
+            {
+              "name": "Hydro",
+              "type": "bar",
+              "stackId": "a",
+              "dataKey": "Hydro"
+            },
+            {
+              "name": "Biomass (incl. CCS)",
+              "type": "bar",
+              "stackId": "a",
+              "dataKey": "Biomass"
+            },
+            {
+              "name": "Wind",
+              "type": "bar",
+              "stackId": "a",
+              "dataKey": "Wind"
+            },
+            {
+              "name": "Solar",
+              "type": "bar",
+              "stackId": "a",
+              "dataKey": "Solar"
+            },
+            {
+              "name": "Geothermal",
+              "type": "bar",
+              "stackId": "a",
+              "dataKey": "Geothermal"
+            },
+            {
+              "name": "Hydrogen",
+              "type": "bar",
+              "stackId": "a",
+              "dataKey": "Hydrogen"
+            }
+          ]
+        },
+        "data": [
+          {
+            "scenario": "2010 Baseline",
+            "Coal": 8666,
+            "Oil": 980,
+            "Gas": 4777,
+            "Nuclear": 2763,
+            "Hydro": 3491,
+            "Biomass": 337,
+            "Wind": 358,
+            "Solar": 34,
+            "Geothermal": 69,
+            "Hydrogen": 0
+          },
+          {
+            "scenario": "Jazz 2050",
+            "Coal": 19272 + 1007,
+            "Oil": 0,
+            "Gas": 12869 + 558,
+            "Nuclear": 3279,
+            "Hydro": 5789,
+            "Biomass": 1923 + 441,
+            "Wind": 4513,
+            "Solar": 2979,
+            "Geothermal": 949,
+            "Hydrogen": 69
+          },
+          {
+            "scenario": "Symphony 2050",
+            "Coal": 1383 + 7100,
+            "Oil": 0,
+            "Gas": 7012 + 2505,
+            "Nuclear": 6950,
+            "Hydro": 7701,
+            "Biomass": 1913 + 800,
+            "Wind": 4003,
+            "Solar": 7741,
+            "Geothermal": 654,
+            "Hydrogen": 155
+          }
+        ]
+      },
+      {
+        "id": "chart_co2_emissions_by_region",
+        "type": "BarChart",
+        "title": "CO2 Emissions by Region (2010 vs Jazz 2050 vs Symphony 2050)",
+        "size": "full",
+        "chartConfig": {
+          "xAxis": {
+            "type": "category",
+            "dataKey": "region"
+          },
+          "yAxis": {
+            "name": "GtCO2/y"
+          },
+          "series": [
+            {
+              "name": "2010 Baseline",
+              "type": "bar",
+              "dataKey": "2010"
+            },
+            {
+              "name": "Jazz 2050",
+              "type": "bar",
+              "dataKey": "Jazz_2050"
+            },
+            {
+              "name": "Symphony 2050",
+              "type": "bar",
+              "dataKey": "Symphony_2050"
+            }
+          ]
+        },
+        "data": [
+          {
+            "region": "Sub-Saharan Africa",
+            "2010": 0.7,
+            "Jazz_2050": 1.7,
+            "Symphony_2050": 0.9
+          },
+          {
+            "region": "Southeast Asia, Pacific",
+            "2010": 1.7,
+            "Jazz_2050": 3.7,
+            "Symphony_2050": 1.7
+          },
+          {
+            "region": "North America",
+            "2010": 6.5,
+            "Jazz_2050": 6.7,
+            "Symphony_2050": 3.1
+          },
+          {
+            "region": "Middle East and North Africa",
+            "2010": 2.1,
+            "Jazz_2050": 3.5,
+            "Symphony_2050": 2.3
+          },
+          {
+            "region": "Latin America and The Caribbean",
+            "2010": 1.2,
+            "Jazz_2050": 2.1,
+            "Symphony_2050": 0.8
+          },
+          {
+            "region": "Europe",
+            "2010": 6.2,
+            "Jazz_2050": 5.6,
+            "Symphony_2050": 2.5
+          },
+          {
+            "region": "East Asia",
+            "2010": 9.8,
+            "Jazz_2050": 12.3,
+            "Symphony_2050": 5.1
+          },
+          {
+            "region": "South and Central Asia",
+            "2010": 2.3,
+            "Jazz_2050": 8.4,
+            "Symphony_2050": 2.7
+          }
+        ]
+      },
+      {
+        "id": "chart_investment_electricity_generation",
+        "type": "BarChart",
+        "title": "Cumulative Investment in Electricity Generation by Fuel Type (2010-2050)",
+        "size": "full",
+        "chartConfig": {
+          "xAxis": {
+            "type": "category",
+            "dataKey": "fuelType"
+          },
+          "yAxis": {
+            "name": "Billion US$2010"
+          },
+          "series": [
+            {
+              "name": "Jazz Scenario",
+              "type": "bar",
+              "dataKey": "Jazz"
+            },
+            {
+              "name": "Symphony Scenario",
+              "type": "bar",
+              "dataKey": "Symphony"
+            }
+          ]
+        },
+        "data": [
+          {
+            "fuelType": "Coal (with CCS)",
+            "Jazz": 200,
+            "Symphony": 1620
+          },
+          {
+            "fuelType": "Coal",
+            "Jazz": 6950,
+            "Symphony": 1660
+          },
+          {
+            "fuelType": "Oil",
+            "Jazz": 90,
+            "Symphony": 90
+          },
+          {
+            "fuelType": "Gas (with CCS)",
+            "Jazz": 140,
+            "Symphony": 490
+          },
+          {
+            "fuelType": "Gas",
+            "Jazz": 2050,
+            "Symphony": 1980
+          },
+          {
+            "fuelType": "Nuclear",
+            "Jazz": 1010,
+            "Symphony": 2020
+          },
+          {
+            "fuelType": "Hydrogen",
+            "Jazz": 30,
+            "Symphony": 100
+          },
+          {
+            "fuelType": "Hydropower",
+            "Jazz": 1950,
+            "Symphony": 3520
+          },
+          {
+            "fuelType": "Biomass",
+            "Jazz": 260,
+            "Symphony": 340
+          },
+          {
+            "fuelType": "Biomass (with CCS)",
+            "Jazz": 240,
+            "Symphony": 440
+          },
+          {
+            "fuelType": "Wind",
+            "Jazz": 2720,
+            "Symphony": 3280
+          },
+          {
+            "fuelType": "Solar",
+            "Jazz": 2950,
+            "Symphony": 9660
+          },
+          {
+            "fuelType": "Geothermal",
+            "Jazz": 720,
+            "Symphony": 520
+          }
+        ]
+      },
+      {
+        "id": "chart_population_without_electricity_access",
+        "type": "BarChart",
+        "title": "Population Without Access to Electricity by Region (2010 vs 2050 Scenarios)",
+        "size": "full",
+        "chartConfig": {
+          "xAxis": {
+            "type": "category",
+            "dataKey": "region"
+          },
+          "yAxis": {
+            "name": "Millions"
+          },
+          "series": [
+            {
+              "name": "2010 Baseline",
+              "type": "bar",
+              "dataKey": "2010"
+            },
+            {
+              "name": "Jazz 2050",
+              "type": "bar",
+              "dataKey": "Jazz_2050"
+            },
+            {
+              "name": "Symphony 2050",
+              "type": "bar",
+              "dataKey": "Symphony_2050"
+            }
+          ]
+        },
+        "data": [
+          {
+            "region": "East Asia",
+            "2010": 22,
+            "Jazz_2050": 0,
+            "Symphony_2050": 0
+          },
+          {
+            "region": "Latin America & The Caribbean",
+            "2010": 20,
+            "Jazz_2050": 0,
+            "Symphony_2050": 0
+          },
+          {
+            "region": "Middle East & North Africa",
+            "2010": 135,
+            "Jazz_2050": 8,
+            "Symphony_2050": 26
+          },
+          {
+            "region": "Southeast Asia & Pacific",
+            "2010": 589,
+            "Jazz_2050": 266,
+            "Symphony_2050": 402
+          },
+          {
+            "region": "Sub-Saharan Africa",
+            "2010": 471,
+            "Jazz_2050": 45,
+            "Symphony_2050": 102
+          },
+          {
+            "region": "South & Central Asia",
+            "2010": 29,
+            "Jazz_2050": 0,
+            "Symphony_2050": 0
+          }
+        ]
+      }
+    ],
+    "tables": [
+      {
+        "id": "table_primary_energy_supply_by_fuel",
+        "title": "Total Primary Energy Supply by Fuel Type (EJ/y)",
+        "columns": [
+          {
+            "header": "Fuel Type",
+            "accessor": "fuel"
+          },
+          {
+            "header": "2010",
+            "accessor": "y2010"
+          },
+          {
+            "header": "Jazz 2020",
+            "accessor": "jazz2020"
+          },
+          {
+            "header": "Jazz 2030",
+            "accessor": "jazz2030"
+          },
+          {
+            "header": "Jazz 2040",
+            "accessor": "jazz2040"
+          },
+          {
+            "header": "Jazz 2050",
+            "accessor": "jazz2050"
+          },
+          {
+            "header": "Symphony 2020",
+            "accessor": "symphony2020"
+          },
+          {
+            "header": "Symphony 2030",
+            "accessor": "symphony2030"
+          },
+          {
+            "header": "Symphony 2040",
+            "accessor": "symphony2040"
+          },
+          {
+            "header": "Symphony 2050",
+            "accessor": "symphony2050"
+          }
+        ],
+        "data": [
+          {
+            "fuel": "Coal",
+            "y2010": 148,
+            "jazz2020": 181,
+            "jazz2030": 200,
+            "jazz2040": 224,
+            "jazz2050": 223,
+            "symphony2020": 146,
+            "symphony2030": 125,
+            "symphony2040": 101,
+            "symphony2050": 106
+          },
+          {
+            "fuel": "Oil",
+            "y2010": 172,
+            "jazz2020": 193,
+            "jazz2030": 225,
+            "jazz2040": 231,
+            "jazz2050": 216,
+            "symphony2020": 177,
+            "symphony2030": 185,
+            "symphony2040": 170,
+            "symphony2050": 141
+          },
+          {
+            "fuel": "Gas",
+            "y2010": 114,
+            "jazz2020": 151,
+            "jazz2030": 189,
+            "jazz2040": 216,
+            "jazz2050": 234,
+            "symphony2020": 141,
+            "symphony2030": 160,
+            "symphony2040": 170,
+            "symphony2050": 166
+          },
+          {
+            "fuel": "Nuclear",
+            "y2010": 30,
+            "jazz2020": 36,
+            "jazz2030": 37,
+            "jazz2040": 37,
+            "jazz2050": 37,
+            "symphony2020": 40,
+            "symphony2030": 52,
+            "symphony2040": 66,
+            "symphony2050": 79
+          },
+          {
+            "fuel": "Biomass",
+            "y2010": 66,
+            "jazz2020": 60,
+            "jazz2030": 59,
+            "jazz2040": 71,
+            "jazz2050": 97,
+            "symphony2020": 62,
+            "symphony2030": 66,
+            "symphony2040": 79,
+            "symphony2050": 111
+          },
+          {
+            "fuel": "Hydro",
+            "y2010": 13,
+            "jazz2020": 14,
+            "jazz2030": 16,
+            "jazz2040": 19,
+            "jazz2050": 21,
+            "symphony2020": 16,
+            "symphony2030": 19,
+            "symphony2040": 24,
+            "symphony2050": 28
+          },
+          {
+            "fuel": "Renewables",
+            "y2010": 2,
+            "jazz2020": 7,
+            "jazz2030": 14,
+            "jazz2040": 28,
+            "jazz2050": 51,
+            "symphony2020": 10,
+            "symphony2030": 23,
+            "symphony2040": 45,
+            "symphony2050": 65
+          },
+          {
+            "fuel": "Total",
+            "y2010": 545,
+            "jazz2020": 642,
+            "jazz2030": 740,
+            "jazz2040": 826,
+            "jazz2050": 879,
+            "symphony2020": 592,
+            "symphony2030": 630,
+            "symphony2040": 655,
+            "symphony2050": 696
+          }
+        ],
+        "pagination": true,
+        "sortable": true
+      },
+      {
+        "id": "table_global_electricity_generation_by_fuel",
+        "title": "Global Electricity Production by Fuel Type (TWh/y)",
+        "columns": [
+          {
+            "header": "Fuel Type",
+            "accessor": "fuel"
+          },
+          {
+            "header": "2010",
+            "accessor": "y2010"
+          },
+          {
+            "header": "Jazz 2020",
+            "accessor": "jazz2020"
+          },
+          {
+            "header": "Jazz 2030",
+            "accessor": "jazz2030"
+          },
+          {
+            "header": "Jazz 2040",
+            "accessor": "jazz2040"
+          },
+          {
+            "header": "Jazz 2050",
+            "accessor": "jazz2050"
+          },
+          {
+            "header": "Symphony 2020",
+            "accessor": "symphony2020"
+          },
+          {
+            "header": "Symphony 2030",
+            "accessor": "symphony2030"
+          },
+          {
+            "header": "Symphony 2040",
+            "accessor": "symphony2040"
+          },
+          {
+            "header": "Symphony 2050",
+            "accessor": "symphony2050"
+          }
+        ],
+        "data": [
+          {
+            "fuel": "Coal (with CCS)",
+            "y2010": 0,
+            "jazz2020": 10,
+            "jazz2030": 87,
+            "jazz2040": 346,
+            "jazz2050": 1007,
+            "symphony2020": 41,
+            "symphony2030": 301,
+            "symphony2040": 1587,
+            "symphony2050": 7100
+          },
+          {
+            "fuel": "Coal",
+            "y2010": 8666,
+            "jazz2020": 11920,
+            "jazz2030": 14792,
+            "jazz2040": 18565,
+            "jazz2050": 19272,
+            "symphony2020": 9289,
+            "symphony2030": 7949,
+            "symphony2040": 5280,
+            "symphony2050": 1383
+          },
+          {
+            "fuel": "Oil",
+            "y2010": 980,
+            "jazz2020": 0,
+            "jazz2030": 0,
+            "jazz2040": 0,
+            "jazz2050": 0,
+            "symphony2020": 0,
+            "symphony2030": 0,
+            "symphony2040": 0,
+            "symphony2050": 0
+          },
+          {
+            "fuel": "Gas (with CCS)",
+            "y2010": 0,
+            "jazz2020": 2,
+            "jazz2030": 31,
+            "jazz2040": 140,
+            "jazz2050": 558,
+            "symphony2020": 11,
+            "symphony2030": 113,
+            "symphony2040": 789,
+            "symphony2050": 2505
+          },
+          {
+            "fuel": "Gas",
+            "y2010": 4777,
+            "jazz2020": 7232,
+            "jazz2030": 9734,
+            "jazz2040": 11427,
+            "jazz2050": 12869,
+            "symphony2020": 6609,
+            "symphony2030": 8127,
+            "symphony2040": 9049,
+            "symphony2050": 7012
+          },
+          {
+            "fuel": "Nuclear",
+            "y2010": 2763,
+            "jazz2020": 3255,
+            "jazz2030": 3430,
+            "jazz2040": 3395,
+            "jazz2050": 3279,
+            "symphony2020": 3651,
+            "symphony2030": 4706,
+            "symphony2040": 5888,
+            "symphony2050": 6950
+          },
+          {
+            "fuel": "Hydrogen",
+            "y2010": 0,
+            "jazz2020": 0,
+            "jazz2030": 2,
+            "jazz2040": 12,
+            "jazz2050": 69,
+            "symphony2020": 0,
+            "symphony2030": 5,
+            "symphony2040": 32,
+            "symphony2050": 155
+          },
+          {
+            "fuel": "Hydro",
+            "y2010": 3491,
+            "jazz2020": 4003,
+            "jazz2030": 4550,
+            "jazz2040": 5146,
+            "jazz2050": 5789,
+            "symphony2020": 4337,
+            "symphony2030": 5408,
+            "symphony2040": 6530,
+            "symphony2050": 7701
+          },
+          {
+            "fuel": "Biomass",
+            "y2010": 337,
+            "jazz2020": 287,
+            "jazz2030": 390,
+            "jazz2040": 884,
+            "jazz2050": 1923,
+            "symphony2020": 362,
+            "symphony2030": 535,
+            "symphony2040": 1056,
+            "symphony2050": 1913
+          },
+          {
+            "fuel": "Biomass (with CCS)",
+            "y2010": 0,
+            "jazz2020": 8,
+            "jazz2030": 28,
+            "jazz2040": 160,
+            "jazz2050": 441,
+            "symphony2020": 16,
+            "symphony2030": 100,
+            "symphony2040": 295,
+            "symphony2050": 800
+          },
+          {
+            "fuel": "Wind",
+            "y2010": 358,
+            "jazz2020": 818,
+            "jazz2030": 1435,
+            "jazz2040": 3142,
+            "jazz2050": 4513,
+            "symphony2020": 1386,
+            "symphony2030": 2418,
+            "symphony2040": 2994,
+            "symphony2050": 4003
+          },
+          {
+            "fuel": "Solar",
+            "y2010": 34,
+            "jazz2020": 302,
+            "jazz2030": 462,
+            "jazz2040": 732,
+            "jazz2050": 2979,
+            "symphony2020": 519,
+            "symphony2030": 2054,
+            "symphony2040": 5752,
+            "symphony2050": 7741
+          },
+          {
+            "fuel": "Geothermal",
+            "y2010": 69,
+            "jazz2020": 125,
+            "jazz2030": 257,
+            "jazz2040": 504,
+            "jazz2050": 949,
+            "symphony2020": 94,
+            "symphony2030": 182,
+            "symphony2040": 346,
+            "symphony2050": 654
+          },
+          {
+            "fuel": "Total",
+            "y2010": 21475,
+            "jazz2020": 27962,
+            "jazz2030": 35198,
+            "jazz2040": 44453,
+            "jazz2050": 53648,
+            "symphony2020": 26315,
+            "symphony2030": 31898,
+            "symphony2040": 39598,
+            "symphony2050": 47917
+          }
+        ],
+        "pagination": true,
+        "sortable": true
+      }
+    ],
+    "optimizationSuggestions": [
+      {
+        "id": "opt_international_cooperation",
+        "title": "Enhance International Cooperation for Climate Policy",
+        "category": "risk",
+        "impact": "high",
+        "roi": 0,
+        "paybackPeriod": "long-term",
+        "riskIfIgnored": "Failure to meet global climate targets (e.g., 450ppm), leading to severe environmental and economic consequences, and increased adaptation costs.",
+        "savings": {
+          "value": 0,
+          "unit": "$",
+          "percentage": "N/A",
+          "timeframe": "annually"
+        },
+        "description": "Promote global treaties and harmonized policies to drive CO2 emission reductions and accelerate the energy transition, as demonstrated by the Symphony scenario's outcomes.",
+        "implementation": "Diplomatic efforts, participation in international climate forums, development of common carbon market frameworks.",
+        "metrics": [
+          "Global CO2 emissions (GtCO2/y)",
+          "Carbon market price convergence",
+          "Share of low-carbon energy in global mix"
+        ],
+        "priority": "high",
+        "confidence": 0.9,
+        "tags": [
+          "policy",
+          "climate",
+          "governance"
+        ],
+        "actionable": true,
+        "approvalStatus": "proposed"
+      },
+      {
+        "id": "opt_rd_investment_key_technologies",
+        "title": "Increase R&D Investment in Key Energy Technologies",
+        "category": "performance",
+        "impact": "high",
+        "roi": 0,
+        "paybackPeriod": "long-term",
+        "riskIfIgnored": "Stagnation in decarbonization efforts, continued reliance on fossil fuels, and failure to address intermittency issues of renewables.",
+        "savings": {
+          "value": 0,
+          "unit": "$",
+          "percentage": "N/A",
+          "timeframe": "annually"
+        },
+        "description": "Focus R&D on CC(U)S, advanced solar technologies (PV), and energy storage solutions (batteries, hydrogen, power-to-gas) to overcome current uncertainties and achieve commercial viability.",
+        "implementation": "Government grants, public-private partnerships, tax incentives for R&D, establishment of innovation hubs.",
+        "metrics": [
+          "R&D spending on target technologies",
+          "Technology cost reduction curves",
+          "Deployment rates of new technologies"
+        ],
+        "priority": "high",
+        "confidence": 0.9,
+        "tags": [
+          "technology",
+          "innovation",
+          "decarbonization"
+        ],
+        "actionable": true,
+        "approvalStatus": "proposed"
+      },
+      {
+        "id": "opt_energy_efficiency_programs",
+        "title": "Expand Energy Efficiency and Conservation Programs",
+        "category": "efficiency",
+        "impact": "medium",
+        "roi": 0,
+        "paybackPeriod": "medium-term",
+        "riskIfIgnored": "Increased energy demand outstripping supply, higher energy costs, and greater environmental impact.",
+        "savings": {
+          "value": 0,
+          "unit": "$",
+          "percentage": "N/A",
+          "timeframe": "annually"
+        },
+        "description": "Implement policies and incentives to significantly improve primary energy intensity across all sectors, requiring changes in consumer priorities and initial capital investments.",
+        "implementation": "Building codes, appliance standards, industrial efficiency mandates, public awareness campaigns, financial incentives for energy-efficient upgrades.",
+        "metrics": [
+          "Primary energy intensity (MJ/USD2010 MER)",
+          "Energy consumption per capita",
+          "Investment in energy efficiency measures"
+        ],
+        "priority": "high",
+        "confidence": 0.85,
+        "tags": [
+          "efficiency",
+          "demand-side",
+          "sustainability"
+        ],
+        "actionable": true,
+        "approvalStatus": "proposed"
+      }
+    ],
+    "predictive": {
+      "forecast": [
+        {
+          "metric": "Global CO2 Emissions (Jazz Scenario)",
+          "risk": "high",
+          "timeframe": "2050",
+          "confidence": 0.9
+        },
+        {
+          "metric": "Global CO2 Emissions (Symphony Scenario)",
+          "risk": "low",
+          "timeframe": "2050",
+          "confidence": 0.9
+        },
+        {
+          "metric": "Share of Fossil Fuels in Primary Energy Supply (Jazz Scenario)",
+          "risk": "high",
+          "timeframe": "2050",
+          "confidence": 0.9
+        },
+        {
+          "metric": "Share of Fossil Fuels in Primary Energy Supply (Symphony Scenario)",
+          "risk": "low",
+          "timeframe": "2050",
+          "confidence": 0.9
+        },
+        {
+          "metric": "Population without Electricity Access (Jazz Scenario)",
+          "risk": "low",
+          "timeframe": "2050",
+          "confidence": 0.9
+        },
+        {
+          "metric": "Population without Electricity Access (Symphony Scenario)",
+          "risk": "medium",
+          "timeframe": "2050",
+          "confidence": 0.9
+        }
+      ],
+      "whatIfScenarios": [
+        {
+          "action": "Adopt 'Jazz' scenario policies (consumer-driven, market selection, limited environmental constraints)",
+          "impact": "Higher GDP growth, higher total primary energy supply, mainly fossil-based energy mix, CO2 emissions increase by 45% by 2050, lower investment in renewables, faster reduction in population without electricity access.",
+          "financialDelta": -6410000000000
+        },
+        {
+          "action": "Adopt 'Symphony' scenario policies (voter-driven, internationally coordinated, environmental sustainability focus)",
+          "impact": "Lower GDP growth, lower total primary energy supply, significant shift to renewables (59% fossil share), CO2 emissions decrease by 37% by 2050, higher investment in renewables and CC(U)S, slower reduction in population without electricity access due to policy interventions.",
+          "financialDelta": 6410000000000
+        }
+      ]
+    },
+    "insights": {
+      "summary": "The World Energy Council's scenarios to 2050 highlight a critical juncture for global energy policy. The 'Jazz' scenario, driven by market forces and consumer choice, projects higher economic growth and energy demand, but with a predominantly fossil-based energy mix and significantly higher CO2 emissions. In contrast, the 'Symphony' scenario, characterized by internationally coordinated policies and a focus on environmental sustainability, achieves substantial CO2 reductions and a higher share of renewables, albeit with potentially lower GDP growth and higher investment costs. Both scenarios emphasize the crucial role of energy efficiency and the challenges of balancing the energy trilemma. Key uncertainties remain around CC(U)S, solar, and energy storage technologies.",
+      "trends": [
+        "Global energy demand will continue to increase significantly by 2050 in both scenarios.",
+        "Energy efficiency improvements are projected to be substantial, reducing energy intensity by 50-53% by 2050.",
+        "Fossil fuels will remain dominant in the primary energy mix by 2050, especially in the Jazz scenario.",
+        "Renewable energy sources will see the highest growth rates, particularly solar PV, hydro, and wind.",
+        "CO2 emissions trajectories diverge sharply: Jazz sees a 45% increase by 2050, while Symphony achieves a 37% decrease.",
+        "Significant investment (US$19-26 trillion) is required for electricity generation by 2050, with a higher share directed to renewables in the Symphony scenario.",
+        "Access to electricity will improve globally, but Sub-Saharan Africa and Southeast Asia/Pacific will still face significant challenges, particularly in the Symphony scenario.",
+        "Economic growth will shift towards Asia, which will become the center of future energy demand."
+      ],
+      "alerts": [
+        {
+          "type": "warning",
+          "message": "The global economy is not on track to meet the 450ppm CO2 target without unacceptable carbon prices, particularly under the Jazz scenario.",
+          "severity": "high",
+          "action": "Re-evaluate climate policy frameworks and carbon market mechanisms."
+        },
+        {
+          "type": "warning",
+          "message": "The energy mix in 2050 will mainly be fossil-based, posing a significant challenge to environmental sustainability goals.",
+          "severity": "medium",
+          "action": "Accelerate investment and deployment of low-carbon technologies and energy efficiency measures."
+        },
+        {
+          "type": "info",
+          "message": "CC(U)S technology, solar energy, and energy storage are identified as key uncertainties that will shape the energy landscape to 2050.",
+          "severity": "medium",
+          "action": "Prioritize R&D and policy support for these critical technologies."
+        }
+      ],
+      "recommendations": [
+        "Decision-makers should prioritize international collaboration to establish clear and stable legislative frameworks that incentivize low-carbon investments and effective carbon markets.",
+        "Strategic investments in R&D for CC(U)S, advanced solar, and energy storage are crucial to de-risk future energy pathways and ensure grid stability with high renewable penetration.",
+        "Policy efforts must be intensified to promote energy efficiency and conservation, requiring both technological solutions and shifts in consumer behavior.",
+        "Regional integration of energy markets should be pursued to enhance energy security and deliver benefits to all consumers, especially in rapidly growing demand centers like Asia."
+      ]
+    },
+    "explainability": {
+      "whyThisConclusion": [
+        "Conclusions are drawn directly from the World Energy Council's 'World Energy Scenarios Composing energy futures to 2050' executive summary, specifically its key messages, scenario descriptions (Jazz and Symphony), and data annex.",
+        "Six Sigma principles are applied to structure the problem definition (energy trilemma), identify critical-to-quality factors, analyze root causes of divergence, and propose actionable improvements and controls based on the report's findings.",
+        "Financial quantification is based on the stated investment needs for electricity generation and implied costs/benefits of different CO2 emission trajectories.",
+        "KPIs are calculated from the provided data tables and narrative, comparing 2010 baselines with 2050 projections under both scenarios."
+      ],
+      "dataUsed": [
+        "World Energy Scenarios: Composing energy futures to 2050 - Executive Summary (2013)",
+        "Tables from 'Data annex' including Total Primary Energy Supply by Fuel Type, Total Electricity Generation, CO2 Emissions by Region, Cumulative Investment in Electricity Generation, and Population without access to electricity.",
+        "Key messages and scenario descriptions (Jazz and Symphony) for qualitative insights and policy implications."
+      ],
+      "assumptions": [
+        "The WEC's scenarios (Jazz and Symphony) represent plausible, albeit generalized, future pathways for global energy development.",
+        "The MARKAL (GMM) model used by WEC provides a robust, cost-optimization framework for quantifying scenario stories.",
+        "Financial figures (e.g., investment needs) are presented in 2010 US$ and are undiscounted, as stated in the report.",
+        "The 'energy trilemma' (environmental sustainability, energy security, energy equity) is the central framework for evaluating scenario outcomes, as defined by the WEC."
+      ],
+      "limitations": [
+        "The report is an executive summary, providing high-level data and conclusions; granular details for specific regions or technologies may be limited.",
+        "Six Sigma quantitative metrics (e.g., sigma level, defect rate) are not directly applicable to a strategic scenario planning document, which explores futures rather than measures current process performance. Therefore, these are marked as 'N/A' or 'false' for statistical validity.",
+        "The scenarios are exploratory, not predictive forecasts, and the 'reality will lie somewhere between' or even beyond them.",
+        "The report dates from 2013; some technological advancements or geopolitical shifts since then are not captured.",
+        "Financial exposure is primarily framed as investment needs rather than direct operational losses, reflecting the strategic nature of the report."
+      ]
+    }
+  }
+}
