@@ -5,8 +5,8 @@ import sys
 import argparse
 from pathlib import Path
 from tabulate import tabulate
-from pipelines.prompts.loader import PromptLoader, get_loader
-from pipelines.prompts.prompt_logger import PromptLogger, get_prompt_logger
+from services.llm.prompts.loader import PromptLoader, get_loader
+from services.llm.prompts.prompt_logger import PromptLogger, get_prompt_logger
 from core.logging.logger import get_logger
 
 logger = get_logger(__name__)

@@ -3,14 +3,22 @@ Training Pipeline Orchestrator
 ==============================
 End-to-end flow: data → features → train → evaluate → register model.
 
-This is a deterministic pipeline (no LLM). Agents should NOT be called here.
+This is a **deterministic pipeline** (no LLM). Agents should NOT be called here.
+Agents may request retraining or modify hyperparams via the orchestration layer,
+but this pipeline itself is fully automated.
+
+Feature dependencies (from features/):
+  - features.kpi: KPI scoring and normalization
+  - features.risk: Risk factor computation
+  - features.predictive: Forecasting features
+  - features.six_sigma: Process capability metrics
 """
 from __future__ import annotations
 
 import logging
 import time
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional
 
 from models.registry import get_model_registry
 
@@ -108,8 +116,27 @@ class TrainingPipeline:
         return result
 
     def _extract_features(self, data: Any, params: Optional[Dict] = None) -> Any:
-        """Override in subclass for domain-specific feature engineering."""
-        return data
+        """
+        Feature engineering using the features/ layer.
+
+        Override in subclass for custom feature pipelines.
+        Default implementation wires into TransIQ feature modules.
+        """
+        features = {"raw": data}
+        try:
+            from features.kpi.kpi_engine import process_kpis
+            if isinstance(data, list) and data and isinstance(data[0], dict):
+                features["kpi_scores"] = process_kpis(data)
+        except Exception as e:
+            logger.debug("[training] KPI features skipped: %s", e)
+
+        try:
+            from features.risk.risk_engine import detect_risk
+            features["risk_detection"] = detect_risk
+        except Exception as e:
+            logger.debug("[training] Risk features skipped: %s", e)
+
+        return features
 
     def _train(self, features: Any, params: Optional[Dict] = None) -> Any:
         """Override in subclass for actual model training."""
@@ -118,6 +145,13 @@ class TrainingPipeline:
     def _evaluate(self, model_artifact: Any, eval_data: Any) -> Dict[str, float]:
         """Override in subclass for real evaluation."""
         return {"accuracy": 0.0, "f1_score": 0.0}
+
+    def _meets_thresholds(self, metrics: Dict[str, float]) -> bool:
+        """Check if metrics exceed promotion thresholds."""
+        return all(
+            metrics.get(k, 0) >= v
+            for k, v in self.promote_thresholds.items()
+        )
 
     def _meets_thresholds(self, metrics: Dict[str, float]) -> bool:
         return all(

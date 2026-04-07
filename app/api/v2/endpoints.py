@@ -10,7 +10,7 @@ import json
 from pathlib import Path
 from pydantic import BaseModel, Field
 
-from pipelines.workers.tasks import enqueue_document
+from services.workers.tasks import enqueue_document
 from services.storage.local import LocalStorage
 from services.vector_store.embeddings.embedding_model import EmbeddingModel
 from services.vector_store.hybrid.hybrid_search import HybridSearch, ReRanker
@@ -103,7 +103,7 @@ async def health_check():
     
     # 5. Check Celery Workers (optional, non-blocking)
     try:
-        from pipelines.workers.processor import celery, CELERY_AVAILABLE
+        from services.workers.processor import celery, CELERY_AVAILABLE
         if CELERY_AVAILABLE and celery:
             import asyncio
             try:

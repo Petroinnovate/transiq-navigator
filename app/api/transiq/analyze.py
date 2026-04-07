@@ -310,7 +310,7 @@ def _try_persist(request: Request, result: dict) -> None:
     if db is None:
         return
     try:
-        from domain.transiq.api.models import SavedAnalysis
+        from app.api.transiq.models import SavedAnalysis
 
         row = SavedAnalysis(
             api_key_hash=_api_key_prefix(request),
@@ -351,7 +351,7 @@ class HistoryItem(BaseModel):
 def history(limit: int = Query(20, ge=1, le=100)) -> List[HistoryItem]:
     try:
         from services.db.session import SessionLocal
-        from domain.transiq.api.models import SavedAnalysis
+        from app.api.transiq.models import SavedAnalysis
 
         if SessionLocal is None:
             return []

@@ -328,7 +328,7 @@ Return relationships as JSON array."""
             Task ID (if async) or None (if sync)
         """
         try:
-            from pipelines.workers.graph_processing import enqueue_graph_building
+            from services.workers.graph_processing import enqueue_graph_building
             
             task_id = enqueue_graph_building(doc_id, facts, user_id)
             
@@ -371,7 +371,7 @@ Return relationships as JSON array."""
         else:
             # Synchronous processing
             try:
-                from pipelines.workers.graph_processing import build_knowledge_graph_sync
+                from services.workers.graph_processing import build_knowledge_graph_sync
                 result = build_knowledge_graph_sync(doc_id, facts, user_id)
                 return {
                     "status": "complete",

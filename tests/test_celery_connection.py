@@ -32,7 +32,7 @@ def test_celery_import():
     """Test if Celery app and tasks can be imported"""
     print("\n=== Testing Celery Imports ===")
     try:
-        from pipelines.workers.processor import celery, process_document
+        from services.workers.processor import celery, process_document
         print("✅ Successfully imported Celery app")
         print(f"   Broker: {celery.conf.broker_url}")
         print(f"   Backend: {celery.conf.result_backend}")
@@ -74,7 +74,7 @@ def test_enqueue_function():
     """Test the enqueue_document function directly"""
     print("\n=== Testing enqueue_document Function ===")
     try:
-        from pipelines.workers.tasks import enqueue_document
+        from services.workers.tasks import enqueue_document
         print("✅ Successfully imported enqueue_document")
         
         # Test enqueueing

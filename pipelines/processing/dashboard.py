@@ -9,7 +9,7 @@ from typing import List, Dict, Any, Optional
 from services.llm.factory import LLMFactory
 from core.config.settings import settings
 from core.logging.logger import get_logger
-from pipelines.prompts import load_prompt, log_prompt_execution
+from services.llm.prompts import load_prompt, log_prompt_execution
 
 logger = get_logger(__name__)
 

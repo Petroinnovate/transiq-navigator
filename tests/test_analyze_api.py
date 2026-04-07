@@ -1,7 +1,7 @@
 """Tests for POST /api/v2/six-sigma/analyze — locked contract."""
 import pytest
 from fastapi.testclient import TestClient
-from domain.transiq.api.analyze import router
+from app.api.transiq.analyze import router
 from fastapi import FastAPI
 
 app = FastAPI()

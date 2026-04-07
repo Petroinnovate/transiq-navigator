@@ -4,14 +4,23 @@ Inference Pipeline Orchestrator
 End-to-end flow: document → process → retrieve → infer → enrich → respond.
 
 Composes processing, retrieval, and intelligence pipelines into a single flow.
-Agents are invoked ONLY for decision-making, not data flow.
+
+BOUNDARY RULE:
+  - This pipeline handles **deterministic system flow** (data movement, steps)
+  - Agents handle **adaptive AI decision flow** (reasoning, judgment)
+  - Pipeline is the DEFAULT path; agents OVERRIDE specific steps when enabled
+  - Example: pipeline runs normally → agent modifies scoring behavior
+
+Feature dependencies (from features/):
+  - features.kpi: KPI enrichment of inference results
+  - features.risk: Risk tagging of detected issues
 """
 from __future__ import annotations
 
 import logging
 import time
 from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
+from typing import Any, Callable, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -41,9 +50,15 @@ class InferencePipeline:
         result = pipeline.run(doc_id="abc", raw_text="...", query="Analyze KPIs")
     """
 
-    def __init__(self, use_agents: bool = True, enable_diagnostics: bool = False):
+    def __init__(
+        self,
+        use_agents: bool = True,
+        enable_diagnostics: bool = False,
+        agent_override: Optional[Callable] = None,
+    ):
         self.use_agents = use_agents
         self.enable_diagnostics = enable_diagnostics
+        self._agent_override = agent_override  # agents can override inference step
 
     def run(
         self,
@@ -98,9 +113,40 @@ class InferencePipeline:
         return {"doc_id": doc_id, "query": query, "chunks": []}
 
     def _infer(self, context: Dict, query: Optional[str], metadata: Optional[Dict] = None) -> Dict[str, Any]:
-        """Run intelligence/agent pipeline. Override to plug in real logic."""
+        """
+        Run intelligence pipeline.
+
+        Default: deterministic pipeline path.
+        If agent_override is set, agents modify the inference behavior.
+        """
+        # Agent override hook: agents can replace or augment inference
+        if self._agent_override and self.use_agents:
+            return self._agent_override(context, query, metadata)
+
         return {"analysis": {}, "confidence": 0.0}
 
     def _validate(self, output: Dict[str, Any]) -> Dict[str, Any]:
-        """Post-process: deduplicate, score, validate. Override to customize."""
+        """
+        Post-process: deduplicate, score, validate, and enrich with features.
+
+        Explicitly wires into features/ layer for KPI and risk enrichment.
+        """
+        # Feature enrichment: KPI scoring
+        try:
+            from features.kpi.kpi_engine import process_kpis
+            kpis = output.get("kpis")
+            if isinstance(kpis, list):
+                output["kpis"] = process_kpis(kpis)
+        except Exception:
+            pass  # Features are optional enrichment
+
+        # Feature enrichment: Risk tagging
+        try:
+            from features.risk.risk_engine import enrich_kpi_with_predictions
+            kpis = output.get("kpis")
+            if isinstance(kpis, list):
+                output["kpis"] = [enrich_kpi_with_predictions(k, {}) for k in kpis]
+        except Exception:
+            pass
+
         return output

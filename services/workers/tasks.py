@@ -1,7 +1,7 @@
 """
 Task enqueueing functions
 """
-from pipelines.workers.processor import celery, process_document_sync, CELERY_AVAILABLE
+from services.workers.processor import celery, process_document_sync, CELERY_AVAILABLE
 from core.logging.logger import get_logger
 import uuid
 import threading
@@ -45,7 +45,7 @@ def enqueue_document(
     # Try Celery first if available
     if CELERY_AVAILABLE and _is_redis_available():
         try:
-            from pipelines.workers.processor import process_document
+            from services.workers.processor import process_document
             from services.storage.local import LocalStorage
             
             # Dispatch Celery task

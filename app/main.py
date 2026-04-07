@@ -16,7 +16,7 @@ from app.api.ddr import fleet_endpoints as fleet_endpoints
 from app.api.ddr import rig_endpoints as rig_endpoints
 from app.api.ddr import audit_endpoints as audit_endpoints
 from app.api.ddr import trend_endpoints as trend_endpoints
-from domain.transiq.api import analyze as sixsigma_analyze
+from app.api.transiq import analyze as sixsigma_analyze
 from app.middleware.auth import APIKeyMiddleware
 from services.db import init_db, close_db
 from core.logging.logger import setup_logging, get_logger
