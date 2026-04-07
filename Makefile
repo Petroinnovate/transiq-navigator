@@ -17,6 +17,12 @@ test:
 test-quick:
 	python -m pytest tests/ -x -q
 
+test-system:
+	python test_system.py
+
+test-system-section:
+	python test_system.py --section $(SECTION)
+
 test-cov:
 	python -m pytest tests/ --cov=app --cov=core --cov=services --cov=pipelines --cov=agents --cov=domain -v
 

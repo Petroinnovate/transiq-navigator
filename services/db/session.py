@@ -64,9 +64,7 @@ def init_db():
     # Create tables (only if they don't exist)
     try:
         # Import all models so Base.metadata knows about them
-        import app.db.models  # noqa: F401  — core TransIQ models
-        import app.ddr.models  # noqa: F401  — DDR domain models
-        import transiq.api.models  # noqa: F401  — Six Sigma analysis persistence
+        import services.db.models  # noqa: F401  — core TransIQ models
         Base.metadata.create_all(bind=engine)
         logger.info("Database tables created/verified")
     except Exception as e:

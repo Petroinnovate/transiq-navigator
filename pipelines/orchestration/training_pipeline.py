@@ -152,9 +152,3 @@ class TrainingPipeline:
             metrics.get(k, 0) >= v
             for k, v in self.promote_thresholds.items()
         )
-
-    def _meets_thresholds(self, metrics: Dict[str, float]) -> bool:
-        return all(
-            metrics.get(k, 0) >= v
-            for k, v in self.promote_thresholds.items()
-        )
