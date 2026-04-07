@@ -3,8 +3,8 @@ Hybrid search combining semantic (FAISS) and keyword (BM25) search
 """
 from typing import List, Dict, Any, Tuple, Optional
 import numpy as np
-from services.vector_store.faiss_index import FaissIndex
-from services.vector_store.bm25 import BM25Wrapper
+from services.vector_store.indexing.faiss_index import FaissIndex
+from services.vector_store.indexing.bm25 import BM25Wrapper
 from core.config.settings import settings
 from core.logging.logger import get_logger
 

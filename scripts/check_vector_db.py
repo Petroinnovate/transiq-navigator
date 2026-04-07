@@ -157,7 +157,7 @@ print()
 print("[EMBEDDINGS] Embedding Model Status:")
 print("-" * 60)
 try:
-    from services.vector_store.embedding_model import EmbeddingModel
+    from services.vector_store.embeddings.embedding_model import EmbeddingModel
     from core.config.settings import settings
     
     emb_model = EmbeddingModel()

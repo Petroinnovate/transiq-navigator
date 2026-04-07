@@ -826,7 +826,7 @@ def run_pipeline(
 
     # Apply KPI engine ranking
     try:
-        from pipelines.feature_engineering import process_kpis
+        from features import process_kpis
         enriched_kpis = process_kpis(enriched_kpis)
     except Exception as e:
         logger.warning("KPI engine scoring skipped: %s", e)
@@ -942,7 +942,7 @@ def run_pipeline(
     # ── Six Sigma Engine (deterministic — replaces LLM-generated sixSigma) ─
     logger.info("Post-processing: Six Sigma deterministic engine")
     try:
-        from pipelines.evaluation.six_sigma import run_six_sigma
+        from features.six_sigma import run_six_sigma
         six_sigma_result = run_six_sigma(enriched_kpis)
         logger.info(
             "Six Sigma engine: sigma=%s, %d CTQs, %d root causes",

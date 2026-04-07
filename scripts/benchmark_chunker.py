@@ -14,7 +14,7 @@ t1 = time.time()
 chunks_data = chunker.chunk_with_metadata(text)
 print(f'chunking:  {time.time()-t1:.3f}s  ({len(chunks_data)} chunks)')
 
-from services.vector_store.embedding_model import EmbeddingModel
+from services.vector_store.embeddings.embedding_model import EmbeddingModel
 chunks = [c['text'] for c in chunks_data]
 emb = EmbeddingModel()
 t2 = time.time()

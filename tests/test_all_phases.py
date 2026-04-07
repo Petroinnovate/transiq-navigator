@@ -60,7 +60,7 @@ p0_pass += check("P0-1: Core dependencies installed", test_p0_deps)
 
 # P0-2: Predictive engine
 def test_p0_predictive():
-    from pipelines.feature_engineering.predictive_engine import forecast_kpi
+    from features.predictive.predictive_engine import forecast_kpi
     assert callable(forecast_kpi)
 p0_pass += check("P0-2: Predictive engine hardened", test_p0_predictive)
 
@@ -165,7 +165,7 @@ p1_pass += check("P1-5: Report Type Detector", test_p1_detector)
 
 # P1-6: Anthropic LLM Provider
 def test_p1_anthropic():
-    from app.llm.providers.anthropic import AnthropicProvider
+    from services.llm.providers.anthropic import AnthropicProvider
     assert AnthropicProvider is not None
     assert hasattr(AnthropicProvider, 'generate') or hasattr(AnthropicProvider, 'generate_json')
 p1_pass += check("P1-6: Anthropic LLM Provider", test_p1_anthropic)
@@ -247,7 +247,7 @@ p3_pass += check("P3-1: LLM provider fallback chain", test_p3_fallback)
 
 # P3-2: What-If Drilling Levers
 def test_p3_whatif():
-    from pipelines.feature_engineering.whatif_engine import KPI_RELATIONSHIPS, LEVER_RANGES, run_scenario
+    from features.predictive.whatif_engine import KPI_RELATIONSHIPS, LEVER_RANGES, run_scenario
     levers = ["mud_weight_change", "wob_adjustment", "rpm_change", "rop_target", "bop_test_interval"]
     for lev in levers:
         assert lev in KPI_RELATIONSHIPS, f"Missing lever: {lev}"
@@ -325,7 +325,7 @@ p3_pass += check("P3-5: Semantic dedup in validation", test_p3_dedup)
 
 # P3-6: Pre-indexed Embeddings
 def test_p3_preindex():
-    from services.vector_store.preindex import get_preindex_service, PreIndexService
+    from services.vector_store.embeddings.preindex import get_preindex_service, PreIndexService
     svc = get_preindex_service()
     assert isinstance(svc, PreIndexService)
     stats = svc.index_stats()
@@ -368,7 +368,7 @@ p3_pass += check("P3-8: Multi-report trend endpoints (6 routes)", test_p3_trends
 
 # P3-9: Widget Mapper DDR
 def test_p3_widgets():
-    from pipelines.feature_engineering.widget_mapper import map_kpis_to_widgets
+    from features.kpi.widget_mapper import map_kpis_to_widgets
     kpis = [
         {"title": "NPT Stuck Pipe", "value": 12, "status": "critical", "category": "npt",
          "visibility": "primary", "priorityScore": 90},
@@ -428,7 +428,7 @@ int_pass += check("Integration: App starts, all routes registered", test_integra
 
 # Financial engine + whatif interplay
 def test_integration_financial_whatif():
-    from pipelines.feature_engineering.whatif_engine import run_scenario, FINANCIAL_MULTIPLIERS
+    from features.predictive.whatif_engine import run_scenario, FINANCIAL_MULTIPLIERS
     from pipelines.inference.financial_engine import compute_financial_impact
     # What-if produces simulatedKpis (dict of kpi_name -> {base, simulated, delta, unit})
     kpis = [{"title": "ROP", "value": 40, "target": 50, "unit": "ft/hr", "category": "drilling"}]
@@ -450,7 +450,7 @@ int_pass += check("Integration: WhatIf -> Financial engine", test_integration_fi
 # Validation + widget mapper pipeline
 def test_integration_validation_widgets():
     from pipelines.inference.validation import validate_kpis
-    from pipelines.feature_engineering.widget_mapper import map_kpis_to_widgets
+    from features.kpi.widget_mapper import map_kpis_to_widgets
     raw = [
         {"title": "NPT Stuck Pipe", "value": 12, "confidence": 0.9, "status": "critical",
          "category": "npt", "visibility": "primary", "priorityScore": 90},

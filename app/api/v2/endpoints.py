@@ -12,8 +12,8 @@ from pydantic import BaseModel, Field
 
 from pipelines.workers.tasks import enqueue_document
 from services.storage.local import LocalStorage
-from services.vector_store.embedding_model import EmbeddingModel
-from services.vector_store.hybrid_search import HybridSearch, ReRanker
+from services.vector_store.embeddings.embedding_model import EmbeddingModel
+from services.vector_store.hybrid.hybrid_search import HybridSearch, ReRanker
 from core.config.settings import settings
 from core.config.schemas import ProcessingRequest, SearchRequest
 from core.logging.logger import get_logger
@@ -67,7 +67,7 @@ async def health_check():
     
     # 2. Check Qdrant
     try:
-        from services.vector_store.vector_storage import VectorStorageService
+        from services.vector_store.indexing.vector_storage import VectorStorageService
         vs = VectorStorageService()
         # If initialization succeeds, Qdrant is accessible
         status["services"]["qdrant"] = "ok" if vs._client else "down"
@@ -141,7 +141,7 @@ def _enrich_kpis_with_intelligence(kpis: list) -> Tuple[list, dict]:
     Falls back gracefully if kpi_engine is unavailable.
     """
     try:
-        from pipelines.feature_engineering import process_kpis, map_kpis_to_widgets
+        from features import process_kpis, map_kpis_to_widgets
         enriched = process_kpis(kpis)
         widgets = map_kpis_to_widgets(enriched)
         return enriched, widgets
@@ -157,7 +157,7 @@ def _build_predictive_block(kpis: list) -> dict:
     Falls back gracefully.
     """
     try:
-        from pipelines.feature_engineering import forecast_kpi, enrich_kpi_with_predictions, compare_scenarios, PRESET_SCENARIOS
+        from features import forecast_kpi, enrich_kpi_with_predictions, compare_scenarios, PRESET_SCENARIOS
 
         forecasts = []
         enriched_for_scenarios = []
@@ -964,7 +964,7 @@ async def search(request: SearchRequest):
 async def run_agent(request: AgentRunRequest):
     """Run the lightweight GodMode-style agent against a high-level goal."""
     try:
-        from agents.godmode_agent import GodModeAgent
+        from agents.orchestrators.godmode_agent import GodModeAgent
 
         agent = GodModeAgent()
         result = agent.run(goal=request.goal, context=request.context)

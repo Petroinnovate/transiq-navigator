@@ -160,7 +160,7 @@ class HybridRetrieval:
 
     def _get_qdrant(self):
         if self._qdrant is None:
-            from services.vector_store.vector_storage import get_vector_service
+            from services.vector_store.indexing.vector_storage import get_vector_service
             self._qdrant = get_vector_service()
         return self._qdrant
 

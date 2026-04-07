@@ -21,12 +21,12 @@ from typing import Any, Callable, Dict, List, Optional
 import json
 
 from pipelines.processing.validated_extractor import ValidatedDDRExtractor
-from .data_driven_dmaic_agent import DataDrivenDMAICAgent
-from .domain_agent import DomainIntelligenceAgent
-from .decision_agent import DecisionIntelligenceAgent
-from .operationalization_agent import OperationalizationAgent
-from .outcome_agent import OutcomeIntelligenceAgent
-from .ux_agent import UXSimplificationAgent
+from agents.decision_agents.data_driven_dmaic_agent import DataDrivenDMAICAgent
+from agents.decision_agents.domain_agent import DomainIntelligenceAgent
+from agents.decision_agents.decision_agent import DecisionIntelligenceAgent
+from agents.decision_agents.operationalization_agent import OperationalizationAgent
+from agents.decision_agents.outcome_agent import OutcomeIntelligenceAgent
+from agents.decision_agents.ux_agent import UXSimplificationAgent
 
 logger = logging.getLogger(__name__)
 

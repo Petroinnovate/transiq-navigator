@@ -10,7 +10,7 @@ import logging
 import math
 from typing import Any, Dict, List, Optional
 
-from app.six_sigma.spc_wrapper import compute_capability as _spc_compute
+from features.six_sigma.spc_wrapper import compute_capability as _spc_compute
 
 # Use transiq for deterministic statistical computations
 from domain.transiq.process_capability import (

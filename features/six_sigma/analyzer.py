@@ -6,7 +6,7 @@ DMAIC assembly into a single structured output that replaces LLM-generated
 Six Sigma text.
 
 Usage:
-    from pipelines.evaluation.six_sigma import run_six_sigma
+    from features.six_sigma import run_six_sigma
     result = run_six_sigma(enriched_kpis)
     dashboard["sixSigma"] = result
 """
@@ -15,11 +15,11 @@ from __future__ import annotations
 import logging
 from typing import Any, Dict, List, Optional
 
-from app.six_sigma.ctq_mapper import extract_ctqs
-from app.six_sigma.capability import assess_capability, aggregate_capability
-from app.six_sigma.root_cause import identify_root_causes, try_graph_root_causes
-from app.six_sigma.msa import assess_data_quality
-from app.six_sigma.insights import build_dmaic_from_analysis
+from features.six_sigma.ctq_mapper import extract_ctqs
+from features.six_sigma.capability import assess_capability, aggregate_capability
+from features.six_sigma.root_cause import identify_root_causes, try_graph_root_causes
+from features.six_sigma.msa import assess_data_quality
+from features.six_sigma.insights import build_dmaic_from_analysis
 
 logger = logging.getLogger(__name__)
 

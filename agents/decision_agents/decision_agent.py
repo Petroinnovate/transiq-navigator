@@ -5,7 +5,7 @@ Uses DCI scoring, traceability chains, and decision-centric language.
 """
 import json
 from typing import Any, Dict
-from .base_agent import BaseAgent
+from agents.base_agent import BaseAgent
 
 
 class DecisionIntelligenceAgent(BaseAgent):

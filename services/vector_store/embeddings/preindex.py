@@ -54,7 +54,7 @@ class PreIndexService:
     def _init_backends(self):
         # Embedding model (singleton via EmbeddingModel wrapper)
         try:
-            from services.vector_store.embedding_model import EmbeddingModel
+            from services.vector_store.embeddings.embedding_model import EmbeddingModel
             self._embedding_model = EmbeddingModel()
             logger.info("PreIndexService: embedding model ready")
         except Exception as e:
@@ -62,7 +62,7 @@ class PreIndexService:
 
         # FAISS
         try:
-            from services.vector_store.faiss_index import FaissIndex
+            from services.vector_store.indexing.faiss_index import FaissIndex
             self._faiss_index = FaissIndex()
             logger.info("PreIndexService: FAISS backend ready (%d vectors)", self._faiss_index.index.ntotal)
         except Exception as e:
@@ -70,7 +70,7 @@ class PreIndexService:
 
         # Qdrant
         try:
-            from services.vector_store.vector_storage import VectorStorageService
+            from services.vector_store.indexing.vector_storage import VectorStorageService
             self._qdrant = VectorStorageService()
             logger.info("PreIndexService: Qdrant backend ready")
         except Exception as e:

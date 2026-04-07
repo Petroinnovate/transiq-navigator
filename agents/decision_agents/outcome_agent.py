@@ -15,7 +15,7 @@ This agent answers ALL 5 executive questions:
 """
 import json
 from typing import Any, Dict
-from .base_agent import BaseAgent
+from agents.base_agent import BaseAgent
 
 
 class OutcomeIntelligenceAgent(BaseAgent):

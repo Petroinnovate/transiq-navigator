@@ -385,3 +385,25 @@ class GraphPath(Base):
     
     def __repr__(self):
         return f"<GraphPath(id={self.id}, {self.source_entity_id} → {self.target_entity_id}, length={self.path_length})>"
+
+
+# ============================================================================
+# Six Sigma Analysis Persistence
+# ============================================================================
+
+class SavedAnalysis(Base):
+    """Persisted Six Sigma analysis (moved from domain for purity)."""
+
+    __tablename__ = "saved_analyses"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    created_at = Column(
+        DateTime, default=lambda: datetime.now(timezone.utc), nullable=False
+    )
+    api_key_hash = Column(String(16), nullable=True, index=True)
+    analysis_type = Column(String(50), default="process_capability", nullable=False)
+    inputs = Column(JSON, nullable=False)
+    metrics = Column(JSON, nullable=False)
+    chart_data = Column(JSON, nullable=False)
+    warnings = Column(JSON, nullable=False, default=list)
+    recommendations = Column(JSON, nullable=False, default=list)

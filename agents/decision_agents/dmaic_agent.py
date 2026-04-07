@@ -4,7 +4,7 @@ Applies Six Sigma reasoning to produce DMAIC phases, sigma level, root causes.
 """
 import json
 from typing import Any, Dict
-from .base_agent import BaseAgent
+from agents.base_agent import BaseAgent
 
 
 class DMAICAgent(BaseAgent):

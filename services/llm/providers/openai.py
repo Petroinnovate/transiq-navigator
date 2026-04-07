@@ -10,7 +10,7 @@ try:
 except ImportError:
     OPENAI_AVAILABLE = False
 
-from app.llm.providers.base import LLMProvider
+from services.llm.providers.base import LLMProvider
 from core.errors import LLMProviderError
 from core.logging.logger import get_logger
 

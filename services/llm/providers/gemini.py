@@ -17,7 +17,7 @@ from typing import Optional, Dict, Any, List, Tuple
 from google import genai
 from google.genai.types import Content, Part, GenerateContentConfig
 from core.config.settings import settings
-from app.llm.providers.base import LLMProvider
+from services.llm.providers.base import LLMProvider
 from core.errors import LLMProviderError
 from core.logging.logger import get_logger
 

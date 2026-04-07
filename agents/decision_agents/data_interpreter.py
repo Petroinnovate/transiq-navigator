@@ -4,7 +4,7 @@ Cleans raw document chunks → structured metrics, trends, data quality score.
 """
 import json
 from typing import Any, Dict
-from .base_agent import BaseAgent
+from agents.base_agent import BaseAgent
 
 
 class DataInterpreterAgent(BaseAgent):

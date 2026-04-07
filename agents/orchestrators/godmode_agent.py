@@ -10,13 +10,13 @@ import json
 import logging
 from typing import Any, Callable, Dict, List, Optional
 
-from agents.decision_agent import DecisionIntelligenceAgent
-from agents.dmaic_agent import DMAICAgent
-from agents.outcome_agent import OutcomeIntelligenceAgent
+from agents.decision_agents.decision_agent import DecisionIntelligenceAgent
+from agents.decision_agents.dmaic_agent import DMAICAgent
+from agents.decision_agents.outcome_agent import OutcomeIntelligenceAgent
 from core.config.settings import settings
 from pipelines.inference.intelligence_pipeline import run_pipeline
-from pipelines.feature_engineering.kpi_engine import process_kpis
-from pipelines.feature_engineering.whatif_engine import compare_scenarios, run_scenario
+from features.kpi.kpi_engine import process_kpis
+from features.predictive.whatif_engine import compare_scenarios, run_scenario
 from services.llm.factory import LLMFactory
 
 logger = logging.getLogger(__name__)

@@ -4,7 +4,7 @@ Injects industry expertise: KPI mapping, failure modes, use-case classification.
 """
 import json
 from typing import Any, Dict
-from .base_agent import BaseAgent
+from agents.base_agent import BaseAgent
 
 
 class DomainIntelligenceAgent(BaseAgent):

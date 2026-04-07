@@ -4,7 +4,7 @@ Converts decisions → execution: tasks, owners, KPIs, deadlines, integration ho
 """
 import json
 from typing import Any, Dict
-from .base_agent import BaseAgent
+from agents.base_agent import BaseAgent
 
 
 class OperationalizationAgent(BaseAgent):

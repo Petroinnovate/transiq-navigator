@@ -12,7 +12,7 @@ import jwt
 import time
 
 from services.supabase.supabase_service import supabase_service
-from services.vector_store.vector_storage import get_vector_service
+from services.vector_store.indexing.vector_storage import get_vector_service
 
 # Security
 security = HTTPBearer()

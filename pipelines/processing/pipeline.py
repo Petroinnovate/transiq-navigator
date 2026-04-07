@@ -44,7 +44,7 @@ class ChunkingPipeline:
         embedding_count = 0
         t2 = time.time()
         try:
-            from services.vector_store.vector_storage import VectorStorageService
+            from services.vector_store.indexing.vector_storage import VectorStorageService
             vs = VectorStorageService()
             embedding_count = vs.upsert_chunks(embed_texts, doc_id)
             logger.info(f"Indexed {embedding_count} embeddings for {doc_id}")

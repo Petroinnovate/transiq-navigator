@@ -173,7 +173,7 @@ class DashboardGenerator:
                     dashboard_data["optimizationSuggestions"] = []
                 # Run deterministic Six Sigma engine on KPIs
                 try:
-                    from pipelines.evaluation.six_sigma import run_six_sigma
+                    from features.six_sigma import run_six_sigma
                     kpis_for_sigma = dashboard_data.get("kpis", [])
                     if kpis_for_sigma:
                         dashboard_data["sixSigma"] = run_six_sigma(kpis_for_sigma)

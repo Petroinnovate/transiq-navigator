@@ -31,7 +31,7 @@ dev = ["pytest>=7.0", "flake8", "mypy"]
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["app*", "core*", "domain*", "services*", "pipelines*", "agents*", "models*", "scripts*"]
+include = ["app*", "core*", "domain*", "services*", "pipelines*", "agents*", "models*", "features*", "scripts*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

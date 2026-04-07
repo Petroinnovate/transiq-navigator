@@ -80,7 +80,7 @@ def main():
     print_section("3. Vector Storage Service")
     
     try:
-        from services.vector_store.vector_storage import get_vector_service
+        from services.vector_store.indexing.vector_storage import get_vector_service
         service = get_vector_service()
         print(f"  {check_mark(True)} Vector service initialized")
         print(f"    Model: {service.model_name}")

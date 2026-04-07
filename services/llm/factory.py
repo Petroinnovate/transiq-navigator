@@ -4,11 +4,11 @@ LLM Provider Factory — with multi-provider fallback and retry logic
 import time
 from typing import Any, Dict, List, Optional
 
-from app.llm.providers.base import LLMProvider
-from app.llm.providers.gemini import GeminiProvider
-from app.llm.providers.openai import OpenAIProvider
-from app.llm.providers.grok import GrokProvider
-from app.llm.providers.anthropic import AnthropicProvider
+from services.llm.providers.base import LLMProvider
+from services.llm.providers.gemini import GeminiProvider
+from services.llm.providers.openai import OpenAIProvider
+from services.llm.providers.grok import GrokProvider
+from services.llm.providers.anthropic import AnthropicProvider
 from core.config.settings import settings
 from core.errors import LLMProviderError
 from core.logging.logger import get_logger

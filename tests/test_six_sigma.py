@@ -1,6 +1,6 @@
 """Quick test of the Six Sigma engine."""
 import json
-from pipelines.evaluation.six_sigma import run_six_sigma
+from features.six_sigma import run_six_sigma
 
 test_kpis = [
     {"id": "kpi_001", "title": "ROP Average", "value": 45.2, "unit": "ft/hr", "target": 60.0,

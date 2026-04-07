@@ -5,7 +5,7 @@ Uses OpenAI-compatible API
 import json
 import re
 from typing import Dict, Any, Optional, List
-from app.llm.providers.base import LLMProvider
+from services.llm.providers.base import LLMProvider
 from core.config.settings import settings
 from core.logging.logger import get_logger
 from core.errors import LLMProviderError

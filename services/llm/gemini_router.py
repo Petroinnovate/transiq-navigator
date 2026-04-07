@@ -17,16 +17,16 @@ logger = logging.getLogger(__name__)
 
 # Multi-Agent Orchestrator (lazy import to avoid circular deps at module load)
 def _get_orchestrator(llm_client):
-    from agents.orchestrator import AgentOrchestrator
+    from agents.orchestrators.orchestrator import AgentOrchestrator
     return AgentOrchestrator(llm_client)
 
 import pipelines.processing.chunking.chunker as chunker
 from services.supabase.supabase_client import get_current_user_optional
 from services.supabase.supabase_service import supabase_service
-from services.vector_store.vector_storage import get_vector_service
+from services.vector_store.indexing.vector_storage import get_vector_service
 from services.cache.cache_service import get_cache_service
 from core.config.settings import settings
-from services.vector_store.hybrid_retrieval import get_hybrid_retrieval, HybridRetrieval, compress_chunks as _compress_chunks
+from services.vector_store.retrieval.hybrid_retrieval import get_hybrid_retrieval, HybridRetrieval, compress_chunks as _compress_chunks
 from pipelines.processing.section_analyzer import generate_full_report_analysis
 from pipelines.monitoring.pipeline_diagnostics import PipelineDiagnostics, DIAGNOSTICS_ENABLED
 from scripts.document_manifest import DocumentManifest
@@ -172,7 +172,7 @@ def generate_chart_response(content: List[str], num_files: int, source_type: str
             curated = select_smart_kpis(dashboard_kpis)
             if curated:
                 try:
-                    from pipelines.feature_engineering import process_kpis, map_kpis_to_widgets
+                    from features import process_kpis, map_kpis_to_widgets
                     scored = process_kpis(curated)
                     widgets = map_kpis_to_widgets(scored)
                     result["dashboard"]["kpis"] = scored
@@ -1493,7 +1493,7 @@ def fix_kpi_values(response: Dict[str, Any], file_locations: List[str], file_nam
        then apply the same pool → score → widget pipeline.
     """
     try:
-        from pipelines.feature_engineering import process_kpis, map_kpis_to_widgets
+        from features import process_kpis, map_kpis_to_widgets
     except ImportError:
         process_kpis = None
         map_kpis_to_widgets = None
