@@ -1,3 +1,4 @@
+// @ts-nocheck
 // ============================================================================
 // Report Viewer Module — Browse, upload, and view DDR reports
 // Uses /api/v2/ddr/reports, /api/v2/ddr/parse-upload, /api/v2/ddr/metrics

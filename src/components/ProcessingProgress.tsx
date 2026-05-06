@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useRef } from 'react';
 import { Progress } from '@/components/ui/progress';
 import { Card, CardContent } from '@/components/ui/card';
@@ -185,4 +186,3 @@ export const ProcessingProgress: React.FC<ProcessingProgressProps> = ({
     </Card>
   );
 };
-

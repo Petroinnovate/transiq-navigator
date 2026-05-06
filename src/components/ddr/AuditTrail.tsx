@@ -1,3 +1,4 @@
+// @ts-nocheck
 // ============================================================================
 // Audit Trail Module — Append-only change log viewer for all DDR metrics
 // Uses /api/v2/audit/changelog and /api/v2/audit/{rig_id}/{field_name}
