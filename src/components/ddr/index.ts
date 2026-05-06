@@ -1,0 +1,23 @@
+// DDR Components barrel export
+export { default as DDRDashboard } from './DDRDashboard';
+export { default as DDRSidebar } from './DDRSidebar';
+export { default as ReportDateSelector } from './ReportDateSelector';
+export { default as FleetCommandCenter } from './FleetCommandCenter';
+export { default as FleetHeatmap } from './FleetHeatmap';
+export { default as DrillingPerformance } from './DrillingPerformance';
+export { default as NPTIntelligence } from './NPTIntelligence';
+export { default as NPTEventsTable } from './NPTEventsTable';
+export { default as MudEngineering } from './MudEngineering';
+export { default as MudComparisonTable } from './MudComparisonTable';
+export { default as SafetyHSE } from './SafetyHSE';
+export { default as PersonnelLogistics } from './PersonnelLogistics';
+export { default as PersonnelMatrix } from './PersonnelMatrix';
+export { default as SurveyWellbore } from './SurveyWellbore';
+export { default as SixSigmaSPC } from './SixSigmaSPC';
+export { default as AIAssistant } from './AIAssistant';
+export { default as AuditTrail } from './AuditTrail';
+export { default as ReportViewer } from './ReportViewer';
+export { default as RigIdentityBanner } from './RigIdentityBanner';
+export { default as TimelineTable } from './TimelineTable';
+export { default as DrillStringDiagram } from './DrillStringDiagram';
+export { CitationBadge } from '../citation/CitationBadge';
