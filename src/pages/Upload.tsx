@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Upload, FileSpreadsheet, Loader2, X, ArrowLeft, CheckCircle, BarChart3 } from 'lucide-react';

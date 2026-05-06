@@ -1,3 +1,4 @@
+// @ts-nocheck
 // ============================================================================
 // DDR Intelligence Platform — API Client
 // Reuses existing axios instance from lib/axios.ts

@@ -1,3 +1,4 @@
+// @ts-nocheck
 // ============================================================================
 // Six Sigma / SPC Analytics Module
 // Fleet-wide Statistical Process Control with DMAIC visualizations

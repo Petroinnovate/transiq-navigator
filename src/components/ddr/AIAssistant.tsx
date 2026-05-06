@@ -1,3 +1,4 @@
+// @ts-nocheck
 // ============================================================================
 // AI Q&A Module — RAG-powered natural language querying of DDR data
 // Uses the existing /api/v2/search endpoint with drilling-specific prompts

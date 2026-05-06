@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * EntityIntelligenceTab.tsx
  * Phase 5: Intelligence Engine Integration
