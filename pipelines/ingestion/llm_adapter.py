@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 # Re-use the project-level Gemini client -----------------------------------------
 _GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or "AIzaSyCmr50T6O34LM_4WzbAdk554b8zeBbaSq4"
-_GEMINI_MODEL   = os.getenv("PAGEINDEX_MODEL", "gemini-2.0-flash")
+_GEMINI_MODEL   = os.getenv("PAGEINDEX_MODEL", "gemini-2.5-flash")
 _MAX_RETRIES    = 5
 
 

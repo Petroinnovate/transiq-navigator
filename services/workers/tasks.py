@@ -91,15 +91,16 @@ def enqueue_document(
             try:
                 from services.storage.local import LocalStorage
                 storage = LocalStorage()
+                pipeline_status = result.get('status', 'completed') if isinstance(result, dict) else 'completed'
                 if isinstance(result, dict) and result.get('dashboard_data'):
                     storage.update_document(doc_id, {
-                        'status': 'completed',
+                        'status': pipeline_status,
                         'dashboard_data': result['dashboard_data'],
                     })
                 else:
-                    storage.update_document(doc_id, {'status': 'completed'})
+                    storage.update_document(doc_id, {'status': pipeline_status})
                 # Also update task status for polling
-                storage.save_task_status(task_id, doc_id, status='completed', 
+                storage.save_task_status(task_id, doc_id, status=pipeline_status, 
                                         stage='completed', progress=100)
                 logger.info(f"Persisted results for document {doc_id}")
             except Exception as persist_err:

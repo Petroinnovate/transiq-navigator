@@ -117,7 +117,7 @@ def try_graph_root_causes(
     Attempt graph-analytics root-cause paths. Falls back gracefully.
     """
     try:
-        from app.processors.graph_rag.graph_analytics import find_paths
+        from pipelines.processing.graph_rag.graph_analytics import find_paths
     except ImportError:
         return []
 

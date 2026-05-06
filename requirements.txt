@@ -52,6 +52,7 @@ slowapi>=0.1.9  # FastAPI-compatible rate limiting middleware
 celery>=5.3.0  # Task queue
 redis>=5.0.0  # Redis client for Celery and caching
 flower>=2.0.0  # Celery monitoring dashboard (optional)
+gevent>=24.2.0  # Green threads for IO-bound worker pool (optional)
 
 # Auth and database related
 psycopg2-binary>=2.9.9  # PostgreSQL database adapter

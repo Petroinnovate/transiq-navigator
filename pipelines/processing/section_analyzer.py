@@ -65,7 +65,7 @@ def _get_client() -> genai.Client:
 
 MODELS = {
     "cheap": {
-        "name": "gemini-2.0-flash",
+        "name": "gemini-2.5-flash",
         "cost_per_1m_input": 0.10,
         "cost_per_1m_output": 0.40,
         "max_context": 1_000_000,

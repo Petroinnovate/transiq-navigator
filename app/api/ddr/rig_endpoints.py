@@ -40,6 +40,48 @@ router = APIRouter(prefix="/api/v2/rigs", tags=["Rig Analytics"])
 # Helpers
 # ---------------------------------------------------------------------------
 
+def _make_kpi(
+    value, unit: str = "", status: str = "normal",
+    confidence: float = 1.0, method: str = "pdfplumber",
+    page: int = 0, section: str = "", field: str = "",
+    citation: str = "", page_hash: str = "",
+    imputed: bool = False, is_derived: bool = False,
+) -> Dict[str, Any]:
+    """Build a KPIValue-compatible dict for rig-level values."""
+    return {
+        "value": value,
+        "unit": unit,
+        "status": status,
+        "is_derived": is_derived,
+        "confidence": confidence,
+        "extraction_method": method,
+        "source_page": page,
+        "source_section": section,
+        "source_field": field,
+        "source_citation": citation,
+        "page_hash": page_hash,
+        "imputed": imputed,
+        "under_review": False,
+    }
+
+
+def _metric_to_kpi(m, unit: str = "", field_override: str = "") -> Dict[str, Any]:
+    """Convert an ExtractedMetric row to a KPIValue-compatible dict."""
+    if m is None:
+        return _make_kpi(None, unit, field=field_override)
+    return _make_kpi(
+        value=m.numeric_value if m.numeric_value is not None else m.value,
+        unit=unit,
+        confidence=m.confidence_score or 1.0,
+        method=m.extraction_method or "pdfplumber",
+        page=m.page_number or 0,
+        field=field_override or m.field_name,
+        citation=m.citation or "",
+        page_hash=m.page_hash or "",
+        imputed=m.is_imputed or False,
+    )
+
+
 def _get_rig_or_404(db: Session, rig_id: str) -> DDRRig:
     rig = db.query(DDRRig).filter(DDRRig.id == rig_id).first()
     if not rig:
@@ -131,15 +173,51 @@ def list_rigs(
             .scalar()
         )
 
+        # Latest depth
+        latest_depth = None
+        if latest:
+            latest_depth = db.query(DepthSummary).filter(DepthSummary.report_id == latest.id).first()
+
+        # Personnel count for latest report
+        personnel_count = 0
+        if latest:
+            personnel_count = (
+                db.query(sa_func.sum(Personnel.count))
+                .filter(Personnel.report_id == latest.id)
+                .scalar()
+            ) or 0
+
+        npt_pct = round((total_npt / 24) * 100, 1) if total_npt else 0
+        rig_status = "critical" if npt_pct > 30 else ("warning" if npt_pct > 15 else "normal")
+
         result.append({
             "rig_id": rig.id,
+            "well_id": latest.well_name if latest else "",
+            "report_date": latest.report_date.isoformat() if latest and latest.report_date else None,
+            "objective": latest.field_name if latest else "",
+            "location": rig.location or "",
+            "status": rig_status,
+            "current_depth_ft": _make_kpi(
+                latest_depth.hole_depth if latest_depth else None, "ft", field="depth"
+            ),
+            "daily_footage_ft": _make_kpi(
+                latest_depth.hole_depth if latest_depth else None, "ft", field="footage", is_derived=True
+            ),
+            "rop_ft_hr": _make_kpi(
+                round(avg_rop_val, 2) if avg_rop_val else None, "ft/hr", field="rop"
+            ),
+            "npt_pct": _make_kpi(npt_pct, "%", field="npt_pct"),
+            "days_since_spud": _make_kpi(None, "days", field="days_since_spud"),
+            "mud_weight_pcf": _make_kpi(None, "pcf", field="mud_weight"),
+            "total_personnel": _make_kpi(personnel_count, "", field="personnel"),
+            "fuel_bbls": _make_kpi(None, "bbls", field="fuel"),
+            "foremen": "",
+            "engineer": "",
+            "manager": "",
+            # Keep legacy fields for backward compatibility
             "name": rig.rig_name,
             "rig_type": rig.rig_type,
             "contractor": rig.contractor,
-            "status": rig.status,
-            "avg_rop": round(avg_rop_val, 2) if avg_rop_val else None,
-            "total_npt": round(total_npt, 2),
-            "last_report_date": latest.report_date.isoformat() if latest and latest.report_date else None,
         })
 
     return {"total": total, "page": page, "page_size": page_size, "rigs": result}
@@ -160,8 +238,17 @@ def rig_detail(
 
     if not report:
         return {
-            "rig": {"id": rig.id, "name": rig.rig_name, "status": rig.status},
-            "report": None,
+            "rig_id": rig.id,
+            "well_id": "",
+            "report_date": None,
+            "status": "normal",
+            "identity": {
+                "rig_id": rig.id, "well_id": "", "report_date": None,
+                "shift_period": "", "objective": "", "charge_number": "",
+                "location": rig.location or "", "programme_name": "",
+                "programme_dates": "", "classification": "",
+                "foremen": "", "engineer": "", "manager": "", "thuraya": "",
+            },
             "message": "No report found for the specified date",
         }
 
@@ -176,43 +263,116 @@ def rig_detail(
         .filter(ExtractedMetric.report_id == report.id)
         .all()
     )
-    kpis = {}
-    for m in metrics:
-        kpis[m.field_name] = {
-            "value": m.value,
-            "numeric_value": m.numeric_value,
-            "confidence": m.confidence_score,
-            "extraction_method": m.extraction_method,
-            "citation": m.citation,
-            "is_imputed": m.is_imputed,
-        }
+    metrics_by_name = {m.field_name: m for m in metrics}
 
+    # Formation tops
+    formation_tops_rows = (
+        db.query(FormationTop)
+        .filter(FormationTop.report_id == report.id)
+        .all()
+    )
+
+    # Personnel for role extraction
+    personnel_rows = (
+        db.query(Personnel)
+        .filter(Personnel.report_id == report.id)
+        .all()
+    )
+    foremen = next((p.name for p in personnel_rows if p.role and "foreman" in p.role.lower()), "")
+    engineer = next((p.name for p in personnel_rows if p.role and "engineer" in p.role.lower()), "")
+    manager = next((p.name for p in personnel_rows if p.role and "manager" in p.role.lower()), "")
+    total_personnel = sum(p.count or 1 for p in personnel_rows)
+
+    # NPT for this report
+    report_npt = (
+        db.query(sa_func.sum(NPTEvent.duration_hours))
+        .filter(NPTEvent.report_id == report.id)
+        .scalar()
+    ) or 0
+    npt_pct = round((report_npt / 24) * 100, 1) if report_npt else 0
+    rig_status = "critical" if npt_pct > 30 else ("warning" if npt_pct > 15 else "normal")
+
+    report_date_str = report.report_date.isoformat() if report.report_date else None
+
+    # Build RigDetail-compatible response
     return {
-        "rig": {
-            "id": rig.id,
-            "name": rig.rig_name,
-            "rig_type": rig.rig_type,
-            "contractor": rig.contractor,
-            "location": rig.location,
-            "status": rig.status,
+        # RigSummary fields (flat)
+        "rig_id": rig.id,
+        "well_id": report.well_name or "",
+        "report_date": report_date_str,
+        "objective": report.field_name or "",
+        "location": rig.location or "",
+        "status": rig_status,
+        "current_depth_ft": _metric_to_kpi(None, "ft", "depth") if not depth else _make_kpi(
+            depth.hole_depth, "ft", field="depth"
+        ),
+        "daily_footage_ft": _make_kpi(
+            depth.hole_depth if depth else None, "ft", field="footage", is_derived=True
+        ),
+        "rop_ft_hr": _metric_to_kpi(metrics_by_name.get("rop"), "ft/hr", "rop"),
+        "npt_pct": _make_kpi(npt_pct, "%", field="npt_pct"),
+        "days_since_spud": _make_kpi(None, "days", field="days_since_spud"),
+        "mud_weight_pcf": _metric_to_kpi(metrics_by_name.get("mud_weight"), "pcf", "mud_weight"),
+        "total_personnel": _make_kpi(total_personnel, "", field="personnel"),
+        "fuel_bbls": _make_kpi(None, "bbls", field="fuel"),
+        "foremen": foremen,
+        "engineer": engineer,
+        "manager": manager,
+
+        # RigDetail extension fields
+        "identity": {
+            "rig_id": rig.id,
+            "well_id": report.well_name or "",
+            "report_date": report_date_str,
+            "shift_period": "",
+            "objective": report.field_name or "",
+            "charge_number": "",
+            "location": rig.location or "",
+            "programme_name": report.operator or "",
+            "programme_dates": "",
+            "classification": rig.rig_type or "",
+            "foremen": foremen,
+            "engineer": engineer,
+            "manager": manager,
+            "thuraya": "",
         },
-        "report": {
-            "id": report.id,
-            "report_date": report.report_date.isoformat() if report.report_date else None,
-            "report_number": report.report_number,
-            "well_name": report.well_name,
-            "field_name": report.field_name,
-            "operator": report.operator,
-            "total_pages": report.total_pages,
+        "depth_summary": {
+            "current_md_ft": _make_kpi(depth.depth_md if depth else None, "ft", field="md"),
+            "current_tvd_ft": _make_kpi(depth.depth_tvd if depth else None, "ft", field="tvd"),
+            "daily_footage_ft": _make_kpi(
+                depth.hole_depth if depth else None, "ft", field="footage", is_derived=True
+            ),
+            "days_since_spud": _make_kpi(None, "days", field="days_since_spud"),
+            "circ_pct": _make_kpi(None, "%", field="circ_pct"),
+            "target_td_ft": 0,
+            "progress_pct": 0,
         },
-        "depth": {
-            "md": depth.depth_md if depth else None,
-            "tvd": depth.depth_tvd if depth else None,
-            "hole_depth": depth.hole_depth if depth else None,
-            "casing_depth": depth.casing_depth if depth else None,
-            "unit": depth.unit if depth else "ft",
+        "formation_tops": [
+            {
+                "formation": ft.formation_name,
+                "top_depth_ft": ft.depth_md or 0,
+                "comments": ft.description or "",
+                "source_citation": "",
+            }
+            for ft in formation_tops_rows
+        ],
+        "well_design_milestones": [],
+        "current_operation": "",
+        "current_operation_citation": "",
+        "next_location": "",
+
+        # Legacy fields for backward compatibility
+        "kpis": {
+            m.field_name: {
+                "value": m.value,
+                "numeric_value": m.numeric_value,
+                "confidence": m.confidence_score,
+                "extraction_method": m.extraction_method,
+                "citation": m.citation,
+                "is_imputed": m.is_imputed,
+            }
+            for m in metrics
         },
-        "kpis": kpis,
         "citations": citations,
     }
 

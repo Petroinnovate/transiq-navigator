@@ -20,6 +20,79 @@ router = APIRouter(prefix="/api/v2/audit", tags=["DDR Audit"])
 
 
 # ============================================================================
+# 13b. GET /api/v2/audit/{rig_id}/all — All fields audit for a rig
+# ============================================================================
+
+@router.get(
+    "/{rig_id}/all",
+    summary="All-fields audit trail for a rig",
+)
+def all_fields_audit_trail(
+    rig_id: str,
+    page: int = Query(1, ge=1),
+    page_size: int = Query(100, ge=1, le=500),
+    db: Session = Depends(get_db),
+):
+    """
+    Return the full change history across ALL fields for a specific rig.
+    """
+    rig = db.query(DDRRig).filter(DDRRig.id == rig_id).first()
+    if not rig:
+        rig = db.query(DDRRig).filter(DDRRig.rig_name == rig_id).first()
+    if not rig:
+        raise HTTPException(status_code=404, detail=f"Rig '{rig_id}' not found")
+
+    report_ids = [
+        r.id
+        for r in db.query(DDRReport.id).filter(DDRReport.rig_id == rig.id).all()
+    ]
+
+    if not report_ids:
+        return {
+            "rig_id": rig.id,
+            "rig_name": rig.rig_name,
+            "total": 0,
+            "history": [],
+        }
+
+    query = (
+        db.query(KPIAudit)
+        .filter(KPIAudit.report_id.in_(report_ids))
+    )
+
+    total = query.count()
+    rows = (
+        query.order_by(desc(KPIAudit.timestamp))
+        .offset((page - 1) * page_size)
+        .limit(page_size)
+        .all()
+    )
+
+    history: List[Dict[str, Any]] = []
+    for row in rows:
+        history.append({
+            "id": row.id,
+            "field": row.field_name,
+            "value": row.new_value,
+            "old_value": row.old_value,
+            "timestamp": row.timestamp.isoformat() if row.timestamp else None,
+            "source": row.source_method,
+            "origin": row.origin,
+            "change_reason": row.change_reason,
+            "report_id": row.report_id,
+        })
+
+    return {
+        "rig_id": rig.id,
+        "rig_name": rig.rig_name,
+        "total": total,
+        "page": page,
+        "page_size": page_size,
+        "history": history,
+    }
+
+
+# ============================================================================
 # 14. GET /api/v2/audit/{rig_id}/{field_name}
 # ============================================================================
 

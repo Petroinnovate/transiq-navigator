@@ -9,6 +9,7 @@ from services.llm.providers.gemini import GeminiProvider
 from services.llm.providers.openai import OpenAIProvider
 from services.llm.providers.grok import GrokProvider
 from services.llm.providers.anthropic import AnthropicProvider
+from services.llm.providers.ling import LingProvider
 from core.config.settings import settings
 from core.errors import LLMProviderError
 from core.logging.logger import get_logger
@@ -24,6 +25,7 @@ class LLMFactory:
         "openai": OpenAIProvider,
         "grok": GrokProvider,
         "anthropic": AnthropicProvider,
+        "ling": LingProvider,
     }
     
     @classmethod
@@ -53,9 +55,11 @@ class LLMFactory:
                 name = "anthropic"
             elif settings.GEMINI_API_KEY:
                 name = "gemini"
+            elif settings.LING_API_KEY:
+                name = "ling"
             else:
                 raise LLMProviderError(
-                    "No LLM provider configured. Set GROK_API_KEY, GEMINI_API_KEY, or OPENAI_API_KEY",
+                    "No LLM provider configured. Set GROK_API_KEY, GEMINI_API_KEY, OPENAI_API_KEY, or LING_API_KEY",
                     provider="none"
                 )
         
@@ -88,6 +92,11 @@ class LLMFactory:
                 if not settings.ANTHROPIC_API_KEY:
                     raise LLMProviderError("ANTHROPIC_API_KEY not set", provider=name)
                 kwargs.setdefault("api_key", settings.ANTHROPIC_API_KEY)
+            elif name == "ling":
+                if not settings.LING_API_KEY:
+                    raise LLMProviderError("LING_API_KEY not set", provider=name)
+                kwargs.setdefault("api_key", settings.LING_API_KEY)
+                kwargs.setdefault("model", settings.LING_MODEL)
             
             provider = provider_class(**kwargs)
             logger.info(f"Created {name} provider instance")
@@ -123,7 +132,7 @@ class LLMFactory:
     # Provider priority chain (configurable)
     # ------------------------------------------------------------------
 
-    DEFAULT_PRIORITY: List[str] = ["gemini", "openai", "grok", "anthropic"]
+    DEFAULT_PRIORITY: List[str] = ["gemini", "openai", "grok", "anthropic", "ling"]
 
     @classmethod
     def _available_chain(cls, priority: Optional[List[str]] = None) -> List[str]:
@@ -134,6 +143,7 @@ class LLMFactory:
             "openai": settings.OPENAI_API_KEY,
             "grok": settings.GROK_API_KEY,
             "anthropic": settings.ANTHROPIC_API_KEY,
+            "ling": settings.LING_API_KEY,
         }
         return [p for p in order if key_map.get(p)]
 

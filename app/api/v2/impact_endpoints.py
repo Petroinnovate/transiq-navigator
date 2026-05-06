@@ -129,7 +129,7 @@ class EntityRelationshipResponse(BaseModel):
 # ============================================================================
 
 @router.post("/enrich-facts", response_model=EnrichFactsResponse)
-async def enrich_deduction_facts(request: EnrichFactsRequest):
+def enrich_deduction_facts(request: EnrichFactsRequest):
     """
     Enrich deduction facts with business entity classification and relationships.
     
@@ -189,7 +189,7 @@ async def enrich_deduction_facts(request: EnrichFactsRequest):
 
 
 @router.post("/analyze-kpi-impact")
-async def analyze_kpi_impact(request: KPIImpactRequest):
+def analyze_kpi_impact(request: KPIImpactRequest):
     """
     Analyze complete impact of a KPI change including cascading effects.
     

@@ -106,12 +106,70 @@ services:
       - USE_LOCAL_QDRANT=false
       - EMBEDDING_MODEL=all-MiniLM-L6-v2
       - ENABLE_SUPABASE=false
+      - WORKER_CONCURRENCY=4
+      - WORKER_PREFETCH_MULTIPLIER=1
+      - WORKER_MAX_TASKS_PER_CHILD=100
     env_file:
       - .env
-    command: celery -A app.workers.processor.celery worker --loglevel=info --concurrency=2
+    command: >-
+      celery -A services.workers.processor.celery worker
+      --loglevel=info
+      --concurrency=4
+      --prefetch-multiplier=1
+      --max-tasks-per-child=100
+      -Q documents,graphs,maintenance
+      -n worker1@%h
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+
+  # Celery Worker 2 (horizontal scaling)
+  worker2:
+    build: .
+    volumes:
+      - ./:/app
+      - ./storage:/app/storage
+      - ./qdrant_storage:/app/qdrant_storage
+      - ./local_file_storage:/app/local_file_storage
+    depends_on:
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+    restart: unless-stopped
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+      - DATABASE_URL=sqlite:///./storage/local_storage.db
+      - QDRANT_URL=http://qdrant:6333
+      - QDRANT_PATH=./qdrant_storage
+      - USE_LOCAL_QDRANT=false
+      - EMBEDDING_MODEL=all-MiniLM-L6-v2
+      - ENABLE_SUPABASE=false
+      - WORKER_CONCURRENCY=4
+      - WORKER_PREFETCH_MULTIPLIER=1
+      - WORKER_MAX_TASKS_PER_CHILD=100
+    env_file:
+      - .env
+    command: >-
+      celery -A services.workers.processor.celery worker
+      --loglevel=info
+      --concurrency=4
+      --prefetch-multiplier=1
+      --max-tasks-per-child=100
+      -Q documents,graphs,maintenance
+      -n worker2@%h
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+    profiles:
+      - scale  # Only starts with: docker-compose --profile scale up
 
   # ============================================
-  # Optional: Flower (Celery Monitoring UI)
+  # Flower (Celery Monitoring UI)
   # ============================================
   flower:
     build: .
@@ -121,7 +179,9 @@ services:
       - redis
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/1
-    command: celery -A app.workers.processor.celery flower --port=5555
+    command: celery -A services.workers.processor.celery flower --port=5555 --persistent=True
+    profiles:
+      - monitor  # Only starts with: docker-compose --profile monitor up
 
 volumes:
   redis_data:

@@ -10,7 +10,7 @@ from pydantic import BaseModel, Field
 from fastapi import APIRouter, HTTPException, Query
 from datetime import datetime
 
-from pipelines.inference.impact_engine import ImpactEngine, Entity, Relationship, ImpactPath
+from pipelines.inference.impact_engine import ImpactEngine, Entity, Relationship, ImpactPath, ImpactType
 from pipelines.inference.deduction_enrichment import BusinessEntityExtractor, EntityTypePattern
 
 # =============================================================================
@@ -410,16 +410,15 @@ async def get_kpi_dashboard(kpi_id: str):
         kpi_entity = Entity(
             id=kpi_id,
             name=kpi_id.replace("_", " ").title(),
-            type=EntityTypePattern.KPI,
-            description="Key performance indicator"
+            entity_type="KPI",
+            confidence=0.95
         )
         
         # Perform impact analysis
         impact_analysis = engine.analyze_kpi_impact(
-            primary_kpi=kpi_entity,
+            kpi_entity=kpi_entity,
             entities=[kpi_entity],
-            relationships=[],
-            kpi_history={}
+            relationships=[]
         )
         
         # Convert to dashboard summary
@@ -457,8 +456,8 @@ async def get_impact_network(
         kpi_entity = Entity(
             id=kpi_id,
             name=kpi_id.replace("_", " ").title(),
-            type=EntityTypePattern.KPI,
-            description="Key performance indicator"
+            entity_type="KPI",
+            confidence=0.95
         )
         
         # Build test entities for visualization
@@ -469,24 +468,25 @@ async def get_impact_network(
             dept = Entity(
                 id=f"dept_{i}",
                 name=f"Department {i}",
-                type=EntityTypePattern.DEPARTMENT
+                entity_type="DEPARTMENT",
+                confidence=0.9
             )
             test_entities.append(dept)
             
             rel = Relationship(
                 source_id=kpi_id,
                 target_id=f"dept_{i}",
-                impact_type="DIRECT",
-                confidence=0.8 + (i * 0.05)
+                relationship_type="AFFECTS",
+                confidence=0.8 + (i * 0.05),
+                impact_type=ImpactType.DIRECT
             )
             test_relationships.append(rel)
         
         # Perform impact analysis
         impact_analysis = engine.analyze_kpi_impact(
-            primary_kpi=kpi_entity,
+            kpi_entity=kpi_entity,
             entities=test_entities,
-            relationships=test_relationships,
-            kpi_history={}
+            relationships=test_relationships
         )
         
         # Get impact paths
@@ -510,7 +510,7 @@ async def get_impact_network(
 
 
 @router.get(
-    "/dmaic/{kpi_id}",
+    "/dmaic-dashboard/{kpi_id}",
     response_model=DMAICDashboard,
     summary="Get DMAIC analysis for dashboard",
     description="Returns all 5 DMAIC phases with metrics and recommended actions"
@@ -531,7 +531,8 @@ async def get_dmaic_dashboard(kpi_id: str):
         kpi_entity = Entity(
             id=kpi_id,
             name=kpi_id.replace("_", " ").title(),
-            type=EntityTypePattern.KPI
+            entity_type="KPI",
+            confidence=0.95
         )
         
         # Get DMAIC analysis
@@ -607,15 +608,15 @@ async def batch_analyze_kpis(request: BatchAnalysisRequest):
             kpi_entity = Entity(
                 id=kpi_id,
                 name=kpi_id.replace("_", " ").title(),
-                type=EntityTypePattern.KPI
+                entity_type="KPI",
+                confidence=0.95
             )
             
             # Analyze
             impact_analysis = engine.analyze_kpi_impact(
-                primary_kpi=kpi_entity,
+                kpi_entity=kpi_entity,
                 entities=[kpi_entity],
-                relationships=[],
-                kpi_history={}
+                relationships=[]
             )
             
             # Create summary

@@ -99,7 +99,7 @@ class PromptLogger:
             "success": 1 if success else 0,
             "error_message": error_message,
             "exec_metadata": metadata,  # Renamed column
-            "created_at": datetime.utcnow().isoformat()
+            "created_at": datetime.utcnow()
         }
         
         # Log to database

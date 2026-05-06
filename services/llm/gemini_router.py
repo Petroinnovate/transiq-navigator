@@ -33,8 +33,8 @@ from scripts.document_manifest import DocumentManifest
 
 # Initialize Gemini client only if API key is available from settings
 _MODEL_FALLBACKS = {
-    "gemini-2.0-flash": ["gemini-2.0-flash", "gemini-2.5-flash"],
     "gemini-2.5-flash": ["gemini-2.5-flash"],
+    "gemini-2.0-flash": ["gemini-2.5-flash"],
 }
 
 
@@ -138,9 +138,9 @@ def generate_chart_response(content: List[str], num_files: int, source_type: str
     approach only if the pipeline module is not importable.
 
     The pipeline runs four focused LLM stages:
-      Stage 1 — KPI extraction        (gemini-2.0-flash, cheap)
+      Stage 1 — KPI extraction        (gemini-2.5-flash, cheap)
       Stage 2 — DMAIC / analytics     (gemini-2.5-flash, smart)
-      Stage 3 — Recommendations       (gemini-2.0-flash, cheap)
+      Stage 3 — Recommendations       (gemini-2.5-flash, cheap)
       Stage 4 — Executive views       (gemini-2.5-flash, smart)
 
     Post-processing is fully deterministic: financial scoring, ESG
@@ -578,7 +578,7 @@ Use this exact structure:
         raise ValueError("GEMINI_API_KEY not set. Please set the GEMINI_API_KEY environment variable to use AI features.")
     
     count = client.models.count_tokens(
-        model="gemini-2.0-flash", contents=[prompt_text]
+        model="gemini-2.5-flash", contents=[prompt_text]
     ).total_tokens
     if count and count > 1_000_000:
         num = count // 1_000_000

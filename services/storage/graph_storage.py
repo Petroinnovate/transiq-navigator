@@ -8,9 +8,7 @@ from datetime import datetime, timezone
 
 from services.db.session import SessionLocal
 from services.db.models import GraphEntity, GraphRelationship, GraphEntityMention, GraphRelationshipMention
-from app.processors.graph_rag.entity_resolver import EntityResolver
-from app.processors.graph_rag.graph_engine import KnowledgeGraphEngine
-from app.processors.graph_rag.facts_to_graph import FactsToGraphConverter
+from pipelines.processing.graph_rag import EntityResolver, KnowledgeGraphEngine, FactsToGraphConverter
 
 logger = logging.getLogger(__name__)
 
@@ -204,7 +202,7 @@ class GraphStorage:
         Returns:
             List of related entities with paths
         """
-        from app.processors.graph_rag.graph_analytics import GraphAnalytics
+        from pipelines.processing.graph_rag import GraphAnalytics
         
         related = []
         
@@ -304,7 +302,7 @@ class GraphStorage:
     
     def get_graph_summary(self) -> Dict[str, Any]:
         """Get overall graph summary"""
-        from app.processors.graph_rag.graph_analytics import GraphAnalytics
+        from pipelines.processing.graph_rag import GraphAnalytics
         
         with GraphAnalytics() as analytics:
             stats = self.graph_engine.get_graph_stats()
@@ -323,7 +321,7 @@ class GraphStorage:
     
     def get_entity_impact(self, entity_id: str) -> Dict[str, Any]:
         """Get impact analysis for entity"""
-        from app.processors.graph_rag.graph_analytics import GraphAnalytics
+        from pipelines.processing.graph_rag import GraphAnalytics
         
         with GraphAnalytics() as analytics:
             return analytics.analyze_entity_influence(entity_id)

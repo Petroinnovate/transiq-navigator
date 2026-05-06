@@ -26,8 +26,8 @@ import numpy as np
 
 logger = logging.getLogger(__name__)
 
-# Batch size for embedding calls (avoid OOM on large docs)
-_EMBED_BATCH_SIZE = int(os.getenv("EMBED_BATCH_SIZE", "64"))
+# Batch size for embedding calls (0 = auto-detect from hardware)
+_EMBED_BATCH_SIZE = int(os.getenv("EMBED_BATCH_SIZE", "0"))
 
 
 class PreIndexService:
@@ -188,14 +188,28 @@ class PreIndexService:
     # ------------------------------------------------------------------
 
     def _batch_embed(self, texts: List[str]) -> Optional[np.ndarray]:
-        """Embed texts in batches to avoid memory issues."""
+        """Embed texts in batches with OOM auto-fallback."""
         if self._embedding_model is None:
             return None
+        # Resolve batch size: env override → hardware-optimal default
+        if _EMBED_BATCH_SIZE > 0:
+            batch_size = _EMBED_BATCH_SIZE
+        else:
+            try:
+                from services.vector_store.indexing.vector_storage import get_batch_size
+                batch_size = get_batch_size()
+            except Exception:
+                batch_size = 128
         try:
+            return self._embedding_model.embed_batch(texts, batch_size=batch_size)
+        except RuntimeError:
+            # embed_batch already retries internally; if it still fails, manual fallback
+            logger.warning("PreIndex: full-batch embed failed, falling back to small batches")
             all_embeddings = []
-            for start in range(0, len(texts), _EMBED_BATCH_SIZE):
-                batch = texts[start : start + _EMBED_BATCH_SIZE]
-                embs = self._embedding_model.encode(batch)
+            small_bs = 16
+            for start in range(0, len(texts), small_bs):
+                batch = texts[start : start + small_bs]
+                embs = self._embedding_model.embed(batch)
                 all_embeddings.append(np.array(embs, dtype=np.float32))
             return np.vstack(all_embeddings) if all_embeddings else None
         except Exception as e:

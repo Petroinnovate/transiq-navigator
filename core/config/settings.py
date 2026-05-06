@@ -16,7 +16,9 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: Optional[str] = None
     GROK_API_KEY: Optional[str] = None
     ANTHROPIC_API_KEY: Optional[str] = None
-    DEFAULT_LLM_PROVIDER: Optional[str] = None  # Force specific provider (openai, gemini, grok, etc.)
+    LING_API_KEY: Optional[str] = None
+    LING_MODEL: str = "inclusionai/ling-2.6-1t:free"
+    DEFAULT_LLM_PROVIDER: Optional[str] = None  # Force specific provider (openai, gemini, grok, ling, etc.)
     
     # Redis Configuration
     REDIS_URL: str = "redis://localhost:6379/0"
@@ -42,6 +44,7 @@ class Settings(BaseSettings):
     API_KEY: Optional[str] = None  # Primary API key for authentication
     API_KEY_2: Optional[str] = None  # Backup API key
     API_KEY_3: Optional[str] = None  # Additional API key
+    JWT_SECRET: Optional[str] = None  # Dedicated JWT signing secret (MUST differ from API_KEY)
     FRONTEND_URL: str = "http://localhost:5173"  # CORS allowed origin (production: https://yourdomain.com)
     RATE_LIMIT_PER_MINUTE: int = 60  # Requests per minute per API key
     
@@ -60,9 +63,24 @@ class Settings(BaseSettings):
     DEFAULT_CHUNK_SIZE: int = 8000
     DEFAULT_CHUNK_OVERLAP: int = 400
     
+    # Pipeline Optimization
+    PIPELINE_MAX_CONCURRENT_LLM: int = 8       # Max parallel LLM calls in deduction
+    PIPELINE_LLM_TIMEOUT: int = 30             # Seconds per LLM call
+    PIPELINE_ENABLE_CONTENT_CACHE: bool = True  # Cache results by content hash
+    PIPELINE_DASHBOARD_MAX_CONTEXT: int = 20    # Max chunks sent to dashboard LLM
+    
+    # Worker Concurrency
+    WORKER_CONCURRENCY: int = 4                 # Celery worker processes (match CPU cores)
+    WORKER_PREFETCH_MULTIPLIER: int = 1         # 1 = fair scheduling, prevents task hogging
+    WORKER_MAX_TASKS_PER_CHILD: int = 100       # Recycle workers to prevent memory leaks
+    WORKER_POOL: str = "prefork"                # prefork (safe with asyncio.run) or gevent
+    WORKER_MAX_MEMORY_PER_CHILD: int = 512000   # 512MB per worker child (KB)
+    
     # Embedding Configuration
     EMBEDDING_MODEL: str = "all-MiniLM-L6-v2"
     EMBEDDING_DIMENSION: int = 384
+    EMBEDDING_BATCH_SIZE: int = 0          # 0 = auto-detect (128 CPU / 256 GPU)
+    EMBEDDING_DEVICE: str = "auto"          # auto | cpu | cuda
     
     # Search Configuration
     DEFAULT_SEARCH_TOP_K: int = 10

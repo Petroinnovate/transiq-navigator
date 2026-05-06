@@ -65,7 +65,7 @@ except Exception as _gloss_err:
 # ---------------------------------------------------------------------------
 # Gemini model names
 # ---------------------------------------------------------------------------
-_CHEAP_MODEL = "gemini-2.0-flash"      # Stage 1 & 3 — fast / cheap
+_CHEAP_MODEL = "gemini-2.5-flash"      # Stage 1 & 3 — fast / cheap
 _SMART_MODEL = "gemini-2.5-flash"      # Stage 2 & 4 — requires reasoning
 
 

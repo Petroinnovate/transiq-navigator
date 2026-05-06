@@ -2,15 +2,17 @@
 GraphRAG API Endpoints (v2)
 Graph-based entity and relationship queries
 """
+from __future__ import annotations
+
 import logging
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, TYPE_CHECKING
 from fastapi import APIRouter, Query, HTTPException, Depends
 from pydantic import BaseModel
 
-from services.storage.graph_storage import GraphStorage
-from pipelines.processing.graph_rag import GraphAnalytics
-from app.config.security import verify_api_key
 from core.logging.logger import get_logger
+
+if TYPE_CHECKING:
+    from services.storage.graph_storage import GraphStorage
 
 logger = get_logger(__name__)
 
@@ -57,8 +59,9 @@ class EntityFilterRequest(BaseModel):
 # Dependencies
 # ============================================================================
 
-async def get_graph_storage() -> GraphStorage:
+async def get_graph_storage():
     """Dependency: Get GraphStorage instance"""
+    from services.storage.graph_storage import GraphStorage
     return GraphStorage()
 
 
@@ -69,7 +72,7 @@ async def get_graph_storage() -> GraphStorage:
 @router.post("/entities/search")
 async def search_entities(
     req: EntitySearchRequest,
-    api_key: str = Depends(verify_api_key),
+
     graph: GraphStorage = Depends(get_graph_storage)
 ):
     """
@@ -96,7 +99,7 @@ async def search_entities(
 @router.get("/entities/{entity_id}")
 async def get_entity(
     entity_id: str,
-    api_key: str = Depends(verify_api_key),
+
     graph: GraphStorage = Depends(get_graph_storage)
 ):
     """
@@ -125,7 +128,7 @@ async def get_entity(
 @router.post("/entities/list")
 async def list_entities(
     req: EntityFilterRequest,
-    api_key: str = Depends(verify_api_key),
+
     graph: GraphStorage = Depends(get_graph_storage)
 ):
     """
@@ -167,7 +170,7 @@ async def list_entities(
 async def get_related_entities(
     entity_id: str,
     max_depth: int = Query(2, ge=1, le=5),
-    api_key: str = Depends(verify_api_key),
+
     graph: GraphStorage = Depends(get_graph_storage)
 ):
     """
@@ -197,7 +200,7 @@ async def get_related_entities(
 @router.post("/relationships/search")
 async def search_relationships(
     req: RelationshipSearchRequest,
-    api_key: str = Depends(verify_api_key),
+
     graph: GraphStorage = Depends(get_graph_storage)
 ):
     """
@@ -225,7 +228,7 @@ async def get_entity_relationships(
     entity_id: str,
     direction: str = Query("both", regex="^(both|outgoing|incoming)$"),
     rel_type: Optional[str] = None,
-    api_key: str = Depends(verify_api_key),
+
     graph: GraphStorage = Depends(get_graph_storage)
 ):
     """
@@ -256,7 +259,7 @@ async def list_relationships(
     rel_type: Optional[str] = None,
     min_confidence: int = Query(0, ge=0, le=100),
     limit: int = 20,
-    api_key: str = Depends(verify_api_key),
+
     graph: GraphStorage = Depends(get_graph_storage)
 ):
     """
@@ -287,7 +290,7 @@ async def list_relationships(
 @router.post("/paths")
 async def find_paths(
     req: PathFindingRequest,
-    api_key: str = Depends(verify_api_key)
+
 ):
     """
     Find paths between two entities
@@ -301,6 +304,7 @@ async def find_paths(
         List of paths with entities and relationships
     """
     try:
+        from pipelines.processing.graph_rag import GraphAnalytics
         with GraphAnalytics() as analytics:
             paths = analytics.find_paths(
                 req.source_entity_id,
@@ -323,7 +327,7 @@ async def find_paths(
 async def get_shortest_path(
     source_entity_id: str = Query(...),
     target_entity_id: str = Query(...),
-    api_key: str = Depends(verify_api_key)
+
 ):
     """
     Find shortest path between two entities
@@ -336,6 +340,7 @@ async def get_shortest_path(
         Shortest path or null if no path exists
     """
     try:
+        from pipelines.processing.graph_rag import GraphAnalytics
         with GraphAnalytics() as analytics:
             path = analytics.shortest_path(source_entity_id, target_entity_id)
         
@@ -356,7 +361,7 @@ async def get_shortest_path(
 async def get_common_neighbors(
     entity_id1: str = Query(...),
     entity_id2: str = Query(...),
-    api_key: str = Depends(verify_api_key)
+
 ):
     """
     Find entities that connect to both input entities
@@ -369,6 +374,7 @@ async def get_common_neighbors(
         List of common neighbor IDs
     """
     try:
+        from pipelines.processing.graph_rag import GraphAnalytics
         with GraphAnalytics() as analytics:
             neighbors = analytics.find_common_neighbors(entity_id1, entity_id2)
         
@@ -390,7 +396,7 @@ async def get_common_neighbors(
 @router.post("/analytics/centrality")
 async def get_central_entities(
     req: CentralityRequest,
-    api_key: str = Depends(verify_api_key)
+
 ):
     """
     Get most central entities
@@ -403,6 +409,7 @@ async def get_central_entities(
         List of entities with centrality scores
     """
     try:
+        from pipelines.processing.graph_rag import GraphAnalytics
         with GraphAnalytics() as analytics:
             entities = analytics.get_top_central_entities(req.metric, req.limit)
         
@@ -418,7 +425,7 @@ async def get_central_entities(
 
 @router.get("/analytics/summary")
 async def get_graph_summary(
-    api_key: str = Depends(verify_api_key),
+
     graph: GraphStorage = Depends(get_graph_storage)
 ):
     """
@@ -439,7 +446,7 @@ async def get_graph_summary(
 
 @router.get("/analytics/quality")
 async def get_data_quality(
-    api_key: str = Depends(verify_api_key),
+
     graph: GraphStorage = Depends(get_graph_storage)
 ):
     """
@@ -460,7 +467,7 @@ async def get_data_quality(
 
 @router.get("/analytics/anomalies")
 async def detect_anomalies(
-    api_key: str = Depends(verify_api_key)
+
 ):
     """
     Detect anomalies in the graph
@@ -469,6 +476,7 @@ async def detect_anomalies(
         List of detected anomalies
     """
     try:
+        from pipelines.processing.graph_rag import GraphAnalytics
         with GraphAnalytics() as analytics:
             anomalies = analytics.detect_anomalies()
         
@@ -481,7 +489,7 @@ async def detect_anomalies(
 @router.get("/analytics/impact/{entity_id}")
 async def analyze_entity_impact(
     entity_id: str,
-    api_key: str = Depends(verify_api_key),
+
     graph: GraphStorage = Depends(get_graph_storage)
 ):
     """
@@ -510,7 +518,7 @@ async def analyze_entity_impact(
 @router.post("/maintenance/resolve-duplicates")
 async def resolve_duplicates(
     threshold: float = Query(0.85, ge=0.0, le=1.0),
-    api_key: str = Depends(verify_api_key),
+
     graph: GraphStorage = Depends(get_graph_storage)
 ):
     """

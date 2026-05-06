@@ -12,12 +12,14 @@ from sqlalchemy.orm import Session
 
 from services.db.session import get_db
 from pipelines.inference.ddr.models import (
+    BulkLogistics,
     DDRReport,
     DDRRig,
     DepthSummary,
     ExtractedMetric,
     MudData,
     NPTEvent,
+    Personnel,
     Timeline,
 )
 from core.logging.logger import get_logger
@@ -25,6 +27,28 @@ from core.logging.logger import get_logger
 logger = get_logger(__name__)
 
 router = APIRouter(prefix="/api/v2/fleet", tags=["Fleet Analytics"])
+
+
+def _make_fleet_kpi(
+    value, unit: str = "", status: str = "normal",
+    confidence: float = 1.0, field: str = "", is_derived: bool = True,
+) -> Dict[str, Any]:
+    """Build a KPIValue-compatible dict for fleet aggregate values."""
+    return {
+        "value": value,
+        "unit": unit,
+        "status": status,
+        "is_derived": is_derived,
+        "confidence": confidence,
+        "extraction_method": "pdfplumber",
+        "source_page": 0,
+        "source_section": "fleet_aggregate",
+        "source_field": field,
+        "source_citation": "",
+        "page_hash": "",
+        "imputed": False,
+        "under_review": False,
+    }
 
 
 # ============================================================================
@@ -55,13 +79,23 @@ def fleet_summary(
         target = latest
 
     if target is None:
+        empty_kpi = _make_fleet_kpi(0)
         return {
-            "date": None,
+            "report_date": None,
             "total_rigs": 0,
-            "avg_rop": 0,
-            "total_footage": 0,
-            "total_npt_hours": 0,
-            "avg_mud_weight": 0,
+            "active_rigs": 0,
+            "rigs_drilling": 0,
+            "rigs_standby": 0,
+            "rigs_completion": 0,
+            "rigs_critical": 0,
+            "rigs_warning": 0,
+            "avg_rop_ft_hr": empty_kpi,
+            "total_daily_footage_ft": empty_kpi,
+            "avg_npt_pct": empty_kpi,
+            "total_npt_hours": empty_kpi,
+            "total_personnel": empty_kpi,
+            "total_fuel_bbls": empty_kpi,
+            "avg_depth_ft": empty_kpi,
             "kpis": [],
         }
 
@@ -120,11 +154,19 @@ def fleet_summary(
 
     # Per-rig KPI breakdown
     kpis: List[Dict[str, Any]] = []
+    rigs_critical = 0
+    rigs_warning = 0
     for report in reports:
         rig = db.query(DDRRig).filter(DDRRig.id == report.rig_id).first() if report.rig_id else None
         rig_depth = next((d for d in depth_rows if d.report_id == report.id), None)
         rig_npt = sum(n.duration_hours or 0 for n in npt_rows if n.report_id == report.id)
         rig_rop_m = next((m for m in rop_metrics if m.report_id == report.id), None)
+
+        # Classify rig status based on NPT threshold
+        if rig_npt > 8:
+            rigs_critical += 1
+        elif rig_npt > 4:
+            rigs_warning += 1
 
         kpis.append({
             "rig_id": report.rig_id or report.id,
@@ -135,13 +177,56 @@ def fleet_summary(
             "rop_citation": rig_rop_m.citation if rig_rop_m else None,
         })
 
+    # Aggregate personnel count
+    total_personnel = 0
+    if report_ids:
+        total_personnel = (
+            db.query(sa_func.sum(Personnel.count))
+            .filter(Personnel.report_id.in_(report_ids))
+            .scalar()
+        ) or 0
+
+    # Aggregate fuel from bulk logistics
+    total_fuel = 0.0
+    if report_ids:
+        fuel_sum = (
+            db.query(sa_func.sum(BulkLogistics.consumed))
+            .filter(BulkLogistics.report_id.in_(report_ids))
+            .filter(BulkLogistics.material.ilike("%fuel%"))
+            .scalar()
+        )
+        total_fuel = round(fuel_sum, 2) if fuel_sum else 0.0
+
+    # Average depth
+    depth_values = [d.hole_depth for d in depth_rows if d.hole_depth]
+    avg_depth = round(sum(depth_values) / len(depth_values), 2) if depth_values else 0
+
+    # NPT percentage
+    total_rigs = len(rig_ids) or len(reports)
+    avg_npt_pct = round((total_npt / (total_rigs * 24)) * 100, 1) if total_rigs > 0 else 0
+
+    def _rop_status(v):
+        return "critical" if v < 20 else ("warning" if v < 40 else "normal")
+
+    def _npt_status(v):
+        return "critical" if v > 10 else ("warning" if v > 5 else "normal")
+
     return {
-        "date": target_date_start.strftime("%Y-%m-%d"),
-        "total_rigs": len(rig_ids) or len(reports),
-        "avg_rop": avg_rop,
-        "total_footage": round(total_footage, 2),
-        "total_npt_hours": round(total_npt, 2),
-        "avg_mud_weight": avg_mud_weight,
+        "report_date": target_date_start.strftime("%Y-%m-%d"),
+        "total_rigs": total_rigs,
+        "active_rigs": total_rigs,
+        "rigs_drilling": total_rigs - rigs_critical,
+        "rigs_standby": 0,
+        "rigs_completion": 0,
+        "rigs_critical": rigs_critical,
+        "rigs_warning": rigs_warning,
+        "avg_rop_ft_hr": _make_fleet_kpi(avg_rop, "ft/hr", _rop_status(avg_rop), field="rop"),
+        "total_daily_footage_ft": _make_fleet_kpi(round(total_footage, 2), "ft", field="footage"),
+        "avg_npt_pct": _make_fleet_kpi(avg_npt_pct, "%", _npt_status(avg_npt_pct), field="npt_pct"),
+        "total_npt_hours": _make_fleet_kpi(round(total_npt, 2), "hrs", _npt_status(total_npt), field="npt_hours"),
+        "total_personnel": _make_fleet_kpi(total_personnel, "", field="personnel"),
+        "total_fuel_bbls": _make_fleet_kpi(total_fuel, "bbls", field="fuel"),
+        "avg_depth_ft": _make_fleet_kpi(avg_depth, "ft", field="depth"),
         "kpis": kpis,
     }
 

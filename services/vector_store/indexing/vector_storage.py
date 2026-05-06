@@ -6,9 +6,18 @@ Why Qdrant over FAISS:
   - Local file persistence: no server required (qdrant_storage/ folder)
   - Small-to-big retrieval: store chunk + parent context as payload
   - Backward-compatible API: same interface as previous FAISS implementation
+
+Embedding optimisations (v2):
+  - Hardware-aware device selection (CPU / CUDA)
+  - Dynamic batch sizing (128 CPU, 256 GPU, env-overridable)
+  - OOM auto-fallback (halve batch on RuntimeError)
+  - Parallel embedding for large chunk sets (>500 chunks)
+  - Per-call performance logging
 """
 
+import asyncio
 import os
+import time
 import uuid
 import logging
 from typing import List, Dict, Any, Optional, Tuple
@@ -25,6 +34,56 @@ USE_LOCAL_QDRANT = os.getenv("USE_LOCAL_QDRANT", "true").lower() == "true"
 COLLECTION_NAME = "transiq_chunks"
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
 EMBEDDING_DIM   = 384
+
+# ------------------------------------------------------------------
+# Hardware detection helpers
+# ------------------------------------------------------------------
+
+def _detect_device(override: str = "auto") -> str:
+    """Return the best available device string ('cuda' or 'cpu').
+
+    ``override`` can be 'auto', 'cpu', or 'cuda'.  When 'auto' (default)
+    CUDA is selected only when PyTorch reports it as available.
+    """
+    if override and override.lower() not in ("auto", ""):
+        return override.lower()
+    try:
+        import torch
+        if torch.cuda.is_available():
+            return "cuda"
+    except ImportError:
+        pass
+    return "cpu"
+
+
+def _optimal_batch_size(device: str, override: int = 0) -> int:
+    """Return a sensible embedding batch size for *device*.
+
+    ``override`` > 0 forces a specific value (from settings / env).
+    Otherwise: 256 for CUDA, 128 for CPU.
+    """
+    if override and override > 0:
+        return override
+    return 256 if device == "cuda" else 128
+
+
+def get_device() -> str:
+    """Public helper — resolve device from settings (safe import)."""
+    try:
+        from core.config.settings import settings
+        return _detect_device(getattr(settings, "EMBEDDING_DEVICE", "auto"))
+    except Exception:
+        return _detect_device("auto")
+
+
+def get_batch_size(device: str | None = None) -> int:
+    """Public helper — resolve batch size from settings + device."""
+    device = device or get_device()
+    try:
+        from core.config.settings import settings
+        return _optimal_batch_size(device, getattr(settings, "EMBEDDING_BATCH_SIZE", 0))
+    except Exception:
+        return _optimal_batch_size(device, 0)
 
 
 class VectorStorageService:
@@ -48,6 +107,8 @@ class VectorStorageService:
         self._client             = None
         self._collection_ready   = False
         self._is_docker_mode     = False
+        self._device             = get_device()
+        self._batch_size         = get_batch_size(self._device)
         self._init_model()
         self._init_qdrant()
 
@@ -57,11 +118,13 @@ class VectorStorageService:
 
     def _init_model(self):
         try:
-            logger.info("Loading embedding model: %s", self.model_name)
-            self.model = SentenceTransformer(self.model_name)
+            logger.info("Loading embedding model: %s (device=%s, batch_size=%d)",
+                        self.model_name, self._device, self._batch_size)
+            self.model = SentenceTransformer(self.model_name, device=self._device)
             test_emb   = self.model.encode("test")
             self.embedding_dimension = len(test_emb)
-            logger.info("Embedding model ready. Dimension: %d", self.embedding_dimension)
+            logger.info("Embedding model ready. Dimension: %d, device: %s",
+                        self.embedding_dimension, self._device)
         except Exception as e:
             logger.error("Failed to load embedding model: %s", e)
             raise
@@ -132,19 +195,87 @@ class VectorStorageService:
     def generate_embeddings_batch(
         self,
         texts: List[str],
-        batch_size: int = 32,
+        batch_size: int = 0,
         show_progress: bool = True,
     ) -> List[List[float]]:
+        """Generate embeddings with dynamic batching and OOM auto-fallback.
+
+        Args:
+            texts:         Strings to embed.
+            batch_size:    0 → use instance default (hardware-optimised).
+            show_progress: Show tqdm progress bar.
+
+        Returns:
+            List of float-lists (one per input text).
+        """
         if not self.model:
             raise ValueError("Embedding model not initialised")
-        logger.info("Generating embeddings for %d texts", len(texts))
-        embeddings = self.model.encode(
-            texts,
-            batch_size=batch_size,
-            show_progress_bar=show_progress,
-            convert_to_tensor=False,
-        )
+
+        effective_bs = batch_size if batch_size > 0 else self._batch_size
+        n = len(texts)
+        logger.info("Generating embeddings for %d texts (batch_size=%d, device=%s)",
+                     n, effective_bs, self._device)
+
+        t0 = time.time()
+        embeddings = self._encode_with_fallback(texts, effective_bs, show_progress)
+        elapsed_ms = (time.time() - t0) * 1000
+
+        logger.info("Embedding complete: %d texts in %.0f ms (%.1f texts/s)",
+                     n, elapsed_ms, n / (elapsed_ms / 1000) if elapsed_ms > 0 else 0)
         return [e.tolist() for e in embeddings]
+
+    def _encode_with_fallback(
+        self,
+        texts: List[str],
+        batch_size: int,
+        show_progress: bool,
+        _min_batch: int = 16,
+    ) -> np.ndarray:
+        """Encode with automatic batch-size halving on OOM / RuntimeError."""
+        try:
+            return self.model.encode(
+                texts,
+                batch_size=batch_size,
+                show_progress_bar=show_progress,
+                convert_to_tensor=False,
+                device=self._device,
+            )
+        except RuntimeError as exc:
+            if batch_size <= _min_batch:
+                raise
+            new_bs = max(_min_batch, batch_size // 2)
+            logger.warning("Embedding OOM at batch_size=%d — retrying with %d (%s)",
+                           batch_size, new_bs, exc)
+            return self._encode_with_fallback(texts, new_bs, show_progress, _min_batch)
+
+    # ------------------------------------------------------------------
+    # Parallel embedding (large document optimisation)
+    # ------------------------------------------------------------------
+
+    async def generate_embeddings_parallel(
+        self,
+        texts: List[str],
+        group_size: int = 500,
+    ) -> List[List[float]]:
+        """Embed *texts* in parallel thread-pool groups.
+
+        Useful when chunk count is very large (>500).  Each group is
+        dispatched to the default executor so the GIL is released during
+        the C-level ONNX / MKL computation inside SentenceTransformer.
+        """
+        if len(texts) <= group_size:
+            return await asyncio.to_thread(self.generate_embeddings_batch, texts)
+
+        groups = [texts[i:i + group_size] for i in range(0, len(texts), group_size)]
+        logger.info("Parallel embedding: %d groups of ≤%d texts", len(groups), group_size)
+
+        loop = asyncio.get_event_loop()
+        tasks = [
+            loop.run_in_executor(None, self.generate_embeddings_batch, g, 0, False)
+            for g in groups
+        ]
+        results = await asyncio.gather(*tasks)
+        return [emb for group in results for emb in group]
 
     def generate_query_embedding(self, query: str) -> List[float]:
         return self.generate_embedding(query)

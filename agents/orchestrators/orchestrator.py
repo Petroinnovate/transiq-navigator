@@ -45,11 +45,11 @@ class AgentOrchestrator:
 
         # Agent registry — ordered execution pipeline
         self._agents = [
-            ("data_interpretation",   DataInterpreterAgent(llm_client, "gemini-2.0-flash")),
+            ("data_interpretation",   DataInterpreterAgent(llm_client, "gemini-2.5-flash")),
             ("dmaic_analysis",        DMAICAgent(llm_client, "gemini-2.5-flash")),
-            ("domain_intelligence",   DomainIntelligenceAgent(llm_client, "gemini-2.0-flash")),
+            ("domain_intelligence",   DomainIntelligenceAgent(llm_client, "gemini-2.5-flash")),
             ("decision_intelligence", DecisionIntelligenceAgent(llm_client, "gemini-2.5-flash")),
-            ("operationalization",    OperationalizationAgent(llm_client, "gemini-2.0-flash")),
+            ("operationalization",    OperationalizationAgent(llm_client, "gemini-2.5-flash")),
             ("outcome_intelligence",  OutcomeIntelligenceAgent(llm_client, "gemini-2.5-flash")),
             ("ux_layers",             UXSimplificationAgent(llm_client, "gemini-2.5-flash")),
         ]

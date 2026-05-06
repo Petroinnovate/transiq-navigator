@@ -1,8 +1,8 @@
 """
 v2 API endpoints
 """
-from fastapi import APIRouter, UploadFile, File, HTTPException, Query, WebSocket
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, UploadFile, File, HTTPException, Query, WebSocket, Request
+from fastapi.responses import JSONResponse, StreamingResponse
 from typing import Optional, List, Tuple
 import uuid
 import os
@@ -34,7 +34,7 @@ class AgentRunRequest(BaseModel):
 
 
 @router.get('/health')
-async def health_check():
+def health_check():
     """
     Health check endpoint - verifies all local services are operational
     
@@ -95,27 +95,23 @@ async def health_check():
             llm_providers.append("openai")
         if settings.ANTHROPIC_API_KEY:
             llm_providers.append("anthropic")
+        if settings.LING_API_KEY:
+            llm_providers.append("ling")
         
         status["services"]["llm"] = "ok" if llm_providers else "no_api_keys"
         status["services"]["llm_providers"] = llm_providers
     except Exception as e:
         status["services"]["llm"] = f"error: {str(e)}"
     
-    # 5. Check Celery Workers (optional, non-blocking)
+    # 5. Check Celery Workers (optional)
     try:
         from services.workers.processor import celery, CELERY_AVAILABLE
         if CELERY_AVAILABLE and celery:
-            import asyncio
             try:
-                inspect_result = await asyncio.wait_for(
-                    asyncio.get_event_loop().run_in_executor(
-                        None, lambda: celery.control.inspect(timeout=2.0).active()
-                    ),
-                    timeout=3.0,
-                )
+                inspect_result = celery.control.inspect(timeout=2.0).active()
                 status["services"]["celery"] = "ok" if inspect_result else "no_workers"
                 status["services"]["worker_count"] = len(inspect_result) if inspect_result else 0
-            except (asyncio.TimeoutError, Exception):
+            except Exception:
                 status["services"]["celery"] = "timeout"
         else:
             status["services"]["celery"] = "unavailable"
@@ -132,6 +128,29 @@ async def health_check():
         return JSONResponse(status_code=503, content=status)
     
     return status
+
+
+@router.get('/cache/stats')
+async def cache_stats():
+    """Return content cache statistics (entries, hits, expired)."""
+    try:
+        from services.cache.content_cache import ContentCache
+        cache = ContentCache(storage)
+        return cache.stats()
+    except Exception as e:
+        return {"available": False, "error": str(e)}
+
+
+@router.post('/cache/cleanup')
+async def cache_cleanup():
+    """Remove expired cache entries."""
+    try:
+        from services.cache.content_cache import ContentCache
+        cache = ContentCache(storage)
+        deleted = cache.cleanup_expired()
+        return {"deleted": deleted}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 def _enrich_kpis_with_intelligence(kpis: list) -> Tuple[list, dict]:
@@ -315,6 +334,8 @@ def _transform_to_dashboard_response(doc_id: str, doc: dict, dashboard_data: dic
     }
     
     return {
+        "title": dashboard_data.get("title", "AI Analytics Dashboard"),
+        "description": dashboard_data.get("description", ""),
         "meta": meta,
         "autoClassification": auto_classification,
         "sixSigma": six_sigma,
@@ -322,6 +343,8 @@ def _transform_to_dashboard_response(doc_id: str, doc: dict, dashboard_data: dic
         "widgets": kpi_widgets,
         "predictive": predictive,
         "charts": charts,
+        "tables": dashboard_data.get("tables", []),
+        "sections": dashboard_data.get("sections", []),
         "optimizationSuggestions": optimizations,
         "insights": insights,
         "explainability": explainability,
@@ -416,6 +439,10 @@ def _transform_kpis(kpis_data: list) -> list:
             "confidence": kpi.get('confidence', 0.85),
             "linkedCTQ": None,
             "context": kpi.get('change', ''),
+            # Frontend KPICard reads these directly
+            "change": kpi.get('change', ''),
+            "icon": kpi.get('icon', 'activity'),
+            "color": kpi.get('color', 'cyan'),
             # Pass through raw fields needed by kpi_engine
             "id": kpi.get('id', ''),
             "title": kpi.get('title', 'KPI'),
@@ -444,18 +471,20 @@ def _map_change_type(change_type: str) -> str:
 
 
 def _transform_charts(charts_data: list) -> list:
-    """Transform charts to match frontend schema"""
+    """Transform charts — preserve full structure for frontend normalizeChart."""
     transformed = []
     for chart in charts_data:
         transformed.append({
-            "chartId": chart.get('id', str(uuid.uuid4())),
+            "id": chart.get('id', str(uuid.uuid4())),
             "title": chart.get('title', 'Chart'),
-            "type": _map_chart_type(chart.get('type', 'BarChart')),
+            "type": chart.get('type', 'BarChart'),
+            "size": chart.get('size', 'half'),
             "data": chart.get('data', []),
-            "xAxis": chart.get('xAxis'),
-            "yAxis": chart.get('yAxis'),
-            "annotations": [],
-            "compareMode": False
+            "chartConfig": chart.get('chartConfig', {}),
+            "insights": chart.get('insights', []),
+            "subtitle": chart.get('subtitle'),
+            "category": chart.get('category'),
+            "dataSource": chart.get('dataSource'),
         })
     return transformed
 
@@ -535,8 +564,10 @@ def _get_fallback_dashboard_response(doc_id: str, doc: dict) -> dict:
     metadata = doc.get('metadata', {})
     file_name = metadata.get('file_name', 'Unknown')
     created_at = doc.get('created_at', datetime.now().isoformat())
+    doc_status = metadata.get('status', 'processing')
     
     return {
+        "status": doc_status,
         "meta": {
             "reportId": doc_id,
             "ingestedAt": created_at,
@@ -584,24 +615,28 @@ def _get_fallback_dashboard_response(doc_id: str, doc: dict) -> dict:
 
 @router.post('/generate')
 async def generate(
+    request: Request,
     file: UploadFile = File(...),
     provider: Optional[str] = Query(None, description="LLM provider override"),
-    enable_deduction: bool = Query(False, description="Enable deduction engine"),
+    enable_deduction: bool = Query(False, description="Force deduction ON. Default (false) uses smart auto-detection based on document type/complexity."),
     enable_patterns: bool = Query(False, description="Enable pattern recognition")
 ):
     """
-    Upload and process a document
+    Upload and process a document.
     
-    Args:
-        file: Uploaded file
-        provider: LLM provider name (optional)
-        enable_deduction: Enable deduction engine
-        enable_patterns: Enable pattern recognition
-        
-    Returns:
-        Document ID and task ID
+    Deduction is auto-triggered for financial reports, technical documents,
+    contracts, and complex documents. Set enable_deduction=true to force it
+    for any document.
+    
+    Uses async pipeline orchestrator for parallel processing when no Celery/Redis.
+    Falls back to Celery queue when available.
+    
+    Auth: user_id extracted from JWT via middleware (request.state.user_id).
     """
     try:
+        # Extract user_id from auth middleware (JWT sets request.state.user_id)
+        user_id = getattr(request.state, 'user_id', 'anonymous')
+
         # Generate document ID
         doc_id = str(uuid.uuid4())
         
@@ -611,6 +646,54 @@ async def generate(
         
         content = await file.read()
         
+        # ── Endpoint-level content dedup ─────────────────────────────
+        # Read the text content to compute a cache hash BEFORE enqueuing.
+        # If the identical document was already processed, return the cached
+        # result immediately (~0.1s instead of ~25s).
+        try:
+            from services.file_reader import read_file_content
+            from services.cache.content_cache import ContentCache, content_hash
+            import tempfile
+
+            # Write to a temp file so file_reader can decode it
+            with tempfile.NamedTemporaryFile(delete=False, suffix=file_extension) as tmp:
+                tmp.write(content)
+                tmp_path = tmp.name
+            try:
+                text_for_hash = read_file_content(tmp_path)
+            finally:
+                os.unlink(tmp_path)
+
+            cache = ContentCache(storage)
+            cached = cache.get(text_for_hash)
+            if cached:
+                # Re-use cached result — save doc entry pointing to it
+                cached_doc_id = cached.get('doc_id', doc_id)
+                storage.save_document(doc_id, {
+                    "file_name": file.filename,
+                    "file_size": len(content),
+                    "file_type": file_extension,
+                    "status": "completed",
+                    "dashboard_data": cached.get('dashboard_data'),
+                    "cached_from": cached_doc_id,
+                }, user_id=user_id)
+
+                logger.info(
+                    f"Endpoint cache HIT for {file.filename} — "
+                    f"returning cached result from doc {cached_doc_id}"
+                )
+                return {
+                    "doc_id": doc_id,
+                    "task_id": None,
+                    "status": "completed",
+                    "from_cache": True,
+                    "cached_from": cached_doc_id,
+                    "message": "Identical document already processed — returning cached result",
+                }
+        except Exception as cache_err:
+            # Cache check is best-effort — proceed with normal processing
+            logger.debug(f"Endpoint cache check skipped: {cache_err}")
+
         # Ensure upload directory exists (handle both relative and absolute paths)
         upload_dir = os.path.dirname(file_path) or settings.UPLOAD_DIR
         os.makedirs(upload_dir, exist_ok=True)
@@ -620,16 +703,15 @@ async def generate(
             f.write(content)
         
         # Use the saved file path for processing
-        # The processor will handle reading the file based on its type
         text_path = file_path
         
-        # Save document metadata
+        # Save document metadata with user ownership
         storage.save_document(doc_id, {
             "file_name": file.filename,
             "file_size": len(content),
             "file_type": file_extension,
             "status": "processing"
-        })
+        }, user_id=user_id)
         
         # Enqueue for processing
         task_id = enqueue_document(
@@ -662,7 +744,7 @@ async def generate(
 async def generate_batch(
     files: List[UploadFile] = File(...),
     provider: Optional[str] = Query(None, description="LLM provider override"),
-    enable_deduction: bool = Query(False, description="Enable deduction engine"),
+    enable_deduction: bool = Query(False, description="Force deduction ON. Default (false) uses smart auto-detection."),
     enable_patterns: bool = Query(False, description="Enable pattern recognition")
 ):
     """
@@ -670,12 +752,12 @@ async def generate_batch(
     
     This endpoint accepts multiple files and processes them independently in the background.
     Each file gets its own doc_id and task_id. All files are grouped under a batch_id
-    for progress tracking.
+    for progress tracking. Deduction is auto-triggered based on document type/complexity.
     
     Args:
         files: List of uploaded files
         provider: LLM provider name (optional)
-        enable_deduction: Enable deduction engine
+        enable_deduction: Force deduction ON (false = smart auto-detect)
         enable_patterns: Enable pattern recognition
         
     Returns:
@@ -903,7 +985,7 @@ async def get_chunks(doc_id: str):
 
 
 @router.post('/search')
-async def search(request: SearchRequest):
+def search(request: SearchRequest):
     """
     Search across documents
     
@@ -961,7 +1043,7 @@ async def search(request: SearchRequest):
 
 
 @router.post('/agent/run')
-async def run_agent(request: AgentRunRequest):
+def run_agent(request: AgentRunRequest):
     """Run the lightweight GodMode-style agent against a high-level goal."""
     try:
         from agents.orchestrators.godmode_agent import GodModeAgent
@@ -1023,6 +1105,73 @@ async def get_dashboard(doc_id: str):
         return _get_fallback_dashboard_response(doc_id, doc)
 
 
+@router.get('/documents/{doc_id}/dashboard/stream')
+async def stream_dashboard(
+    doc_id: str,
+    provider: Optional[str] = Query(None, description="LLM provider override"),
+):
+    """
+    Stream dashboard generation via Server-Sent Events (SSE).
+
+    Generates a dashboard from stored chunks and streams sections
+    progressively so the frontend can render KPIs, charts, and insights
+    as soon as each stage completes.
+
+    Event format (one JSON object per ``data:`` line)::
+
+        data: {"stage": "context_ready", "data": {...}}
+        data: {"stage": "kpis",          "data": {"kpis": [...]}}
+        data: {"stage": "charts",        "data": {"charts": [...]}}
+        data: {"stage": "insights",      "data": {"insights": {...}}}
+        data: {"stage": "sixSigma",      "data": {"sixSigma": {...}}}
+        data: {"stage": "complete",      "data": {"dashboard": {...}}}
+
+    On error: ``{"stage": "error", "error": "..."}``
+    """
+    doc = storage.get_document(doc_id)
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    chunks = storage.get_chunks(doc_id)
+    chunk_texts = [c['chunk_text'] if isinstance(c, dict) else c.get('chunk_text', str(c))
+                   for c in (chunks or [])]
+
+    if not chunk_texts:
+        raise HTTPException(status_code=404, detail="No chunks found for document")
+
+    file_name = doc.get('file_name', doc.get('metadata', {}).get('file_name', 'document'))
+    if isinstance(file_name, str) and file_name.startswith('{'):
+        try:
+            file_name = json.loads(file_name).get('file_name', 'document')
+        except Exception:
+            pass
+
+    async def event_generator():
+        from pipelines.processing.dashboard import DashboardGenerator
+
+        gen = DashboardGenerator(provider_name=provider)
+        try:
+            async for event in gen.agenerate_dashboard_stream(
+                chunks=chunk_texts,
+                file_name=file_name if isinstance(file_name, str) else 'document',
+                doc_id=doc_id,
+            ):
+                yield f"data: {json.dumps(event, default=str)}\n\n"
+        except Exception as exc:
+            logger.error(f"Dashboard stream error for {doc_id}: {exc}")
+            yield f"data: {json.dumps({'stage': 'error', 'error': str(exc)})}\n\n"
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )
+
+
 @router.get('/dashboard/latest')
 async def get_latest_dashboard():
     """Get the most recently processed dashboard"""
@@ -1042,13 +1191,22 @@ async def get_latest_dashboard():
                 detail="No completed dashboards found"
             )
         
-        # Get the most recent one
-        latest_doc = completed_docs[0]
-        doc_id = latest_doc['id']
+        # Prefer docs with actual KPI data (not Gemini-failed empty dashboards)
+        best_doc = None
+        for doc in completed_docs:
+            dd = doc.get('dashboard_data', {})
+            if dd.get('kpis') and len(dd['kpis']) > 0:
+                best_doc = doc
+                break
+        # Fall back to most recent if none have KPIs
+        if not best_doc:
+            best_doc = completed_docs[0]
+        
+        doc_id = best_doc['id']
         
         # Transform and return
-        dashboard_data = latest_doc.get('dashboard_data', {})
-        return _transform_to_dashboard_response(doc_id, latest_doc, dashboard_data)
+        dashboard_data = best_doc.get('dashboard_data', {})
+        return _transform_to_dashboard_response(doc_id, best_doc, dashboard_data)
     except HTTPException:
         raise
     except Exception as e:

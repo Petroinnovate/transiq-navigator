@@ -9,7 +9,7 @@ import uuid
 
 from services.db.session import SessionLocal
 from services.db.models import GraphEntity, GraphRelationship, GraphEntityMention, GraphRelationshipMention
-from app.processors.graph_rag.entity_resolver import EntityResolver
+from pipelines.processing.graph_rag.entity_resolver import EntityResolver
 
 logger = logging.getLogger(__name__)
 

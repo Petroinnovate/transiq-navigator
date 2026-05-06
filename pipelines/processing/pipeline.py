@@ -1,7 +1,8 @@
+import asyncio
 import os
 import time
 import uuid
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List, Callable
 from pipelines.processing.chunking.adaptive import AdaptiveChunker
 from core.logging.logger import get_logger
 
@@ -26,7 +27,7 @@ class ChunkingPipeline:
         metrics = {}
         t0 = time.time()
 
-        # --- Chunk ---
+        # --- Chunk (no document-level truncation — full text) ---
         t1 = time.time()
         chunker = AdaptiveChunker()
         chunks_with_meta = chunker.chunk_with_metadata(text)
@@ -37,7 +38,7 @@ class ChunkingPipeline:
 
         logger.info(f"Chunked document {doc_id}: {len(chunk_texts)} chunks")
 
-        # Cap chunks for embedding
+        # Cap chunks for embedding (vector DB index)
         embed_texts = chunk_texts[:self.max_embed_chunks]
 
         # --- Embed + Index (Qdrant) ---
@@ -69,6 +70,118 @@ class ChunkingPipeline:
                 int(sum(len(c) for c in chunk_texts) / len(chunk_texts))
                 if chunk_texts else 0
             )
+
+        return {
+            'chunks_data': chunks_with_meta,
+            'chunks_count': len(chunk_texts),
+            'embeddings_count': embedding_count,
+            'metrics': metrics,
+        }
+
+    # ------------------------------------------------------------------
+    # Async version — chunk-only (no embedding, no IO)
+    # ------------------------------------------------------------------
+
+    async def achunk(
+        self,
+        text: str,
+        doc_id: str,
+        progress_cb: Optional[Callable] = None,
+    ) -> Dict[str, Any]:
+        """
+        Async chunking ONLY — no embedding, no storage.
+
+        Returns chunk data so the caller can fan out embedding, deduction,
+        and dashboard as three independent parallel branches.
+        """
+        metrics = {}
+        t0 = time.time()
+
+        chunker = AdaptiveChunker()
+        chunks_with_meta = chunker.chunk_with_metadata(text)
+        chunk_texts = [c['text'] for c in chunks_with_meta]
+        metrics['chunking_time_ms'] = int((time.time() - t0) * 1000)
+        metrics['total_chunks'] = len(chunk_texts)
+        logger.info(f"Chunked {doc_id}: {len(chunk_texts)} chunks in {metrics['chunking_time_ms']}ms")
+
+        if progress_cb:
+            progress_cb('chunking', 25, f'Created {len(chunk_texts)} chunks')
+
+        metrics['avg_chunk_size'] = (
+            int(sum(len(c) for c in chunk_texts) / len(chunk_texts))
+            if chunk_texts else 0
+        )
+
+        return {
+            'chunks_data': chunks_with_meta,
+            'chunks_count': len(chunk_texts),
+            'embeddings_count': 0,
+            'metrics': metrics,
+        }
+
+    # ------------------------------------------------------------------
+    # Async version — embedding runs in background thread
+    # ------------------------------------------------------------------
+
+    async def aprocess(
+        self,
+        text: str,
+        doc_id: str,
+        storage=None,
+        progress_cb: Optional[Callable] = None,
+    ) -> Dict[str, Any]:
+        """
+        Async chunking + embedding. Chunking is CPU so runs inline,
+        embedding is IO-bound so runs in a thread.
+        """
+        metrics = {}
+        t0 = time.time()
+
+        # --- Chunk (full document, no truncation) ---
+        t1 = time.time()
+        chunker = AdaptiveChunker()
+        chunks_with_meta = chunker.chunk_with_metadata(text)
+        chunk_texts = [c['text'] for c in chunks_with_meta]
+        metrics['chunking_time_ms'] = int((time.time() - t1) * 1000)
+        metrics['total_chunks'] = len(chunk_texts)
+        logger.info(f"Chunked {doc_id}: {len(chunk_texts)} chunks in {metrics['chunking_time_ms']}ms")
+
+        if progress_cb:
+            progress_cb('chunking', 25, f'Created {len(chunk_texts)} chunks')
+
+        embed_texts = chunk_texts[:self.max_embed_chunks]
+
+        # --- Embed + Index in thread (IO-bound) ---
+        async def _embed():
+            try:
+                from services.vector_store.indexing.vector_storage import VectorStorageService
+                vs = VectorStorageService()
+                count = await asyncio.to_thread(vs.upsert_chunks, embed_texts, doc_id)
+                logger.info(f"Indexed {count} embeddings for {doc_id}")
+                return count
+            except Exception as e:
+                logger.warning(f"Vector indexing skipped: {e}")
+                return 0
+
+        # --- Save chunks to SQLite in thread ---
+        async def _save_chunks():
+            if not storage:
+                return
+            def _do():
+                for idx, cm in enumerate(chunks_with_meta):
+                    chunk_id = f"{doc_id}-c-{idx}"
+                    storage.save_chunk(chunk_id, doc_id, cm['text'], cm.get('metadata', {}))
+            await asyncio.to_thread(_do)
+
+        # Run embedding + chunk save in parallel
+        embedding_count, _ = await asyncio.gather(_embed(), _save_chunks())
+
+        metrics['total_time_ms'] = int((time.time() - t0) * 1000)
+        metrics['embeddings_count'] = embedding_count
+        metrics['avg_chunk_size'] = (
+            int(sum(len(c) for c in chunk_texts) / len(chunk_texts))
+            if chunk_texts else 0
+        )
 
         return {
             'chunks_data': chunks_with_meta,

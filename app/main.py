@@ -11,6 +11,7 @@ from app.api.v2 import auth as auth_endpoints
 from app.api.v2 import impact_endpoints
 from app.api.v2 import dashboard_endpoints
 from app.api.v2 import intelligence_graph_endpoints
+from app.api.v2 import graph_endpoints
 from app.api.v2 import observability_endpoints
 from app.api.ddr import endpoints as ddr_endpoints
 from app.api.ddr import fleet_endpoints as fleet_endpoints
@@ -119,6 +120,7 @@ app.include_router(v2_endpoints.router, prefix="/api/v2", tags=["v2"])
 app.include_router(impact_endpoints.router, tags=["Intelligence"])  # Impact analysis endpoints (already has /api/v2 prefix)
 app.include_router(dashboard_endpoints.router, tags=["Dashboard"])  # Dashboard visualization endpoints (already has /api/v2 prefix)
 app.include_router(intelligence_graph_endpoints.router, tags=["Graph-Intelligence"])  # Phase 5: Intelligence-weighted graph analysis
+app.include_router(graph_endpoints.router, tags=["GraphRAG"])  # GraphRAG entity/relationship exploration
 app.include_router(ddr_endpoints.router, tags=["DDR Intelligence"])  # P1: DDR parsing, SPC, citations
 app.include_router(fleet_endpoints.router, tags=["Fleet Analytics"])  # P2: Fleet-wide DDR endpoints
 app.include_router(rig_endpoints.router, tags=["Rig Analytics"])  # P2: Per-rig DDR endpoints
@@ -163,7 +165,7 @@ async def root():
             "dashboard": {
                 "kpi_dashboard": "GET /api/v2/intelligence/dashboard/{kpi_id}",
                 "impact_network": "GET /api/v2/intelligence/impact-network/{kpi_id}",
-                "dmaic_dashboard": "GET /api/v2/intelligence/dmaic/{kpi_id}",
+                "dmaic_dashboard": "GET /api/v2/intelligence/dmaic-dashboard/{kpi_id}",
                 "batch_analysis": "POST /api/v2/intelligence/batch-analysis",
                 "dashboard_status": "GET /api/v2/intelligence/dashboard-status"
             }

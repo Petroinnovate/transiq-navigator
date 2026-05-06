@@ -10,6 +10,46 @@ run:
 run-prod:
 	python main.py --host 0.0.0.0 --port 8001 --no-reload
 
+# ── Celery Workers ──────────────────────────────
+worker:
+	celery -A services.workers.processor.celery worker \
+		--loglevel=info \
+		--concurrency=4 \
+		--prefetch-multiplier=1 \
+		--max-tasks-per-child=100 \
+		-Q documents,graphs,maintenance \
+		-n worker1@%h
+
+worker-single:
+	celery -A services.workers.processor.celery worker \
+		--loglevel=info \
+		--concurrency=1 \
+		-Q documents,graphs,maintenance
+
+worker-scale:
+	celery -A services.workers.processor.celery worker \
+		--loglevel=info \
+		--concurrency=4 \
+		--prefetch-multiplier=1 \
+		--max-tasks-per-child=100 \
+		-Q documents,graphs,maintenance \
+		-n worker2@%h
+
+worker-gevent:
+	celery -A services.workers.processor.celery worker \
+		--loglevel=info \
+		--concurrency=8 \
+		--pool=gevent \
+		--prefetch-multiplier=1 \
+		-Q documents,graphs,maintenance \
+		-n gevent1@%h
+
+flower:
+	celery -A services.workers.processor.celery flower --port=5555
+
+beat:
+	celery -A services.workers.processor.celery beat --loglevel=info
+
 # ── Testing ─────────────────────────────────────
 test:
 	python -m pytest tests/ -v

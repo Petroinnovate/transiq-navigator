@@ -251,6 +251,7 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
             auth_header = request.headers.get("Authorization", "")
             if auth_header.startswith("Bearer "):
                 jwt_token = auth_header[7:]
+                jwt_authenticated = False
                 try:
                     from core.security.jwt import decode_access_token
                     user_id = decode_access_token(jwt_token)
@@ -264,7 +265,20 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
                     request.state.api_key = None
                     request.state.user_id = user_id
                     request.state.role = DEFAULT_JWT_ROLE
+                    jwt_authenticated = True
 
+                except (ValueError, TypeError, KeyError) as e:
+                    logger.warning(f"Invalid Bearer JWT from {request.client.host}: {e}")
+                    # Fall through to 401 below
+                except Exception as e:
+                    # Import errors or unexpected failures during token decode
+                    logger.error(f"Unexpected error during JWT validation: {e}")
+                    # Fall through to 401 below
+
+                # CRITICAL: call_next OUTSIDE try/except so downstream
+                # handler errors (ModuleNotFoundError, DB errors, etc.)
+                # are NOT caught and converted to false 401s.
+                if jwt_authenticated:
                     # RBAC check for JWT users
                     if not check_permission(request.url.path, DEFAULT_JWT_ROLE):
                         return JSONResponse(
@@ -276,10 +290,6 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
                         )
 
                     return await call_next(request)
-
-                except Exception as e:
-                    logger.warning(f"Invalid Bearer JWT from {request.client.host}: {e}")
-                    # Fall through to 401 below
 
         # 3. No valid credential found
         if not api_key:

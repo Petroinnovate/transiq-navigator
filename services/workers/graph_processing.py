@@ -15,7 +15,7 @@ except ImportError:
 
 from core.config.settings import settings
 from services.storage.graph_storage import GraphStorage
-from app.processors.graph_rag.entity_resolver import EntityResolver
+from pipelines.processing.graph_rag import EntityResolver
 from core.logging.logger import get_logger
 
 logger = get_logger(__name__)

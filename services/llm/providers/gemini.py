@@ -30,7 +30,7 @@ class GeminiProvider(LLMProvider):
     # Model fallback order within each key
     _FALLBACK_MODELS = ["gemini-2.5-flash", "gemini-2.5-flash-lite"]
 
-    def __init__(self, api_key: Optional[str] = None, model: str = "gemini-2.0-flash", **kwargs):
+    def __init__(self, api_key: Optional[str] = None, model: str = "gemini-2.5-flash", **kwargs):
         """
         Initialize Gemini provider.
 
@@ -129,7 +129,21 @@ class GeminiProvider(LLMProvider):
                             )
                             time.sleep(wait)
                             continue
-                        # Non-quota error — don't rotate, raise immediately
+                        # 503 UNAVAILABLE (model overloaded) — try next model
+                        if "503" in err_str or "UNAVAILABLE" in err_str:
+                            logger.warning(
+                                f"Gemini model unavailable: "
+                                f"{key_label} / {model} — trying next model/key"
+                            )
+                            break  # break attempt loop → try next model
+                        # 404 NOT_FOUND (model deprecated/removed) — try next model
+                        if "404" in err_str or "NOT_FOUND" in err_str:
+                            logger.warning(
+                                f"Gemini model not found (deprecated?): "
+                                f"{key_label} / {model} — trying next model/key"
+                            )
+                            break  # break attempt loop → try next model
+                        # Other non-quota error — don't rotate, raise immediately
                         logger.error(f"Gemini error ({key_label}/{model}): {e}")
                         raise LLMProviderError(
                             f"Gemini failed: {str(e)}", provider="gemini"
@@ -189,11 +203,33 @@ class GeminiProvider(LLMProvider):
         raw = self._call_with_rotation(contents, config)
 
         try:
-            json_match = re.search(r'(\{.*\})', raw, re.DOTALL)
-            if json_match:
-                return json.loads(json_match.group(1))
-            return json.loads(raw)
-        except json.JSONDecodeError as e:
+            # 1. Try parsing the raw response directly (most common case)
+            return json.loads(raw.strip())
+        except json.JSONDecodeError:
+            pass
+
+        try:
+            # 2. Try extracting first JSON object via decoder (handles "Extra data" —
+            #    Gemini sometimes returns multiple concatenated JSON objects)
+            decoder = json.JSONDecoder()
+            obj, _ = decoder.raw_decode(raw.strip())
+            if isinstance(obj, dict):
+                return obj
+        except (json.JSONDecodeError, ValueError):
+            pass
+
+        try:
+            # 3. Fallback: extract first {...} block with balanced braces
+            start = raw.index('{')
+            depth = 0
+            for i, ch in enumerate(raw[start:], start):
+                if ch == '{':
+                    depth += 1
+                elif ch == '}':
+                    depth -= 1
+                    if depth == 0:
+                        return json.loads(raw[start:i + 1])
+        except (ValueError, json.JSONDecodeError) as e:
             logger.error(f"JSON parsing error: {e}")
             raise LLMProviderError(f"Failed to parse JSON response: {str(e)}", provider="gemini")
     
