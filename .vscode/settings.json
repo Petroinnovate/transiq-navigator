@@ -1,0 +1,980 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^Start-Sleep -Seconds 3 ; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\\\.venv\\\\Scripts\\\\python\\.exe\" -c \"\nimport requests, json\nresp = requests\\.get\\('http://localhost:8001/api/v2/dashboard/latest', timeout=10\\)\nprint\\('STATUS:', resp\\.status_code\\)\nif resp\\.ok:\n    d = resp\\.json\\(\\)\n    print\\('title:', d\\.get\\('title'\\)\\)\n    print\\('kpis:', len\\(d\\.get\\('kpis', \\[\\]\\)\\)\\)\n    if d\\.get\\('kpis'\\):\n        for k in d\\['kpis'\\]:\n            print\\(' ', k\\.get\\('title'\\), '=', k\\.get\\('value'\\), k\\.get\\('unit'\\)\\)\nelse:\n    print\\('ERROR:', resp\\.text\\[:300\\]\\)\n\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -c \"import section_analyzer; print\\('OK:', dir\\(section_analyzer\\)\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\uvicorn\\.exe\" main:app --host 0\\.0\\.0\\.0 --port 8001 --reload 2>&1$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\uvicorn\\.exe\" main:app --host 0\\.0\\.0\\.0 --port 8001$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\python\\.exe\" -c \"import ast, sys; ast\\.parse\\(open\\('llm\\.py'\\)\\.read\\(\\)\\); print\\('llm\\.py syntax OK'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\python\\.exe\" -c \"import ast; ast\\.parse\\(open\\('llm\\.py'\\)\\.read\\(\\)\\); print\\('OK'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\python\\.exe\" -m uvicorn main:app --host 0\\.0\\.0\\.0 --port 8001 --reload$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\python\\.exe\" -c \"\nimport uvicorn, sys, subprocess, json\n\n# Quick syntax \\+ import check\ntry:\n    import ast\n    ast\\.parse\\(open\\('llm\\.py'\\)\\.read\\(\\)\\)\n    print\\('llm\\.py: syntax OK'\\)\nexcept SyntaxError as e:\n    print\\('SYNTAX ERROR:', e\\)\n\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^\\$b = \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"\n\n# Create organising folders\nNew-Item -ItemType Directory -Path \"\\$b\\\\tests\"   -Force \\| Out-Null\nNew-Item -ItemType Directory -Path \"\\$b\\\\scripts\" -Force \\| Out-Null\nNew-Item -ItemType Directory -Path \"\\$b\\\\data\"    -Force \\| Out-Null\n\n# ── Test files → tests/\n\\$tests = @\\(\n  \"test_api_response\\.py\",\"test_celery_connection\\.py\",\"test_complete_flow\\.py\",\n  \"test_debug\\.py\",\"test_gemini_api\\.py\",\"test_grok_api\\.py\",\"test_local_backend\\.py\",\n  \"test_upload\\.py\",\"test_v3_offline\\.py\",\"test_v3_pipeline\\.py\",\n  \"test_gemini\\.py\",\"test_upload_root\\.py\"\n\\)\nforeach \\(\\$f in \\$tests\\) \\{\n  if \\(Test-Path \"\\$b\\\\\\$f\"\\) \\{ Move-Item \"\\$b\\\\\\$f\" \"\\$b\\\\tests\\\\\\$f\" -Force \\}\n\\}\n\n# ── Utility / maintenance scripts → scripts/\n\\$scripts = @\\(\n  \"check_cache\\.py\",\"check_cache2\\.py\",\"check_cache3\\.py\",\n  \"inspect_cache\\.py\",\"show_analysis\\.py\",\"verify_system\\.py\",\n  \"verify_db_schema\\.py\",\"verify_setup\\.py\",\"_import_check\\.py\",\n  \"check_vector_db\\.py\",\"clear_cache\\.py\",\"migrate_database\\.py\",\n  \"monitor_redis\\.py\",\"run_demo\\.py\",\"demo_complete_workflow\\.py\"\n\\)\nforeach \\(\\$f in \\$scripts\\) \\{\n  if \\(Test-Path \"\\$b\\\\\\$f\"\\) \\{ Move-Item \"\\$b\\\\\\$f\" \"\\$b\\\\scripts\\\\\\$f\" -Force \\}\n\\}\n\n# ── Data / output / sample files → data/\n\\$data = @\\(\n  \"dashboard_output\\.json\",\"gemini_full_response\\.json\",\n  \"test_v3_result\\.json\",\"demo_result\\.json\",\n  \"latest_response\\.json\",\"response\\.json\",\n  \"test_dmaic_data\\.csv\",\"test_sales_data\\.csv\",\n  \"monthly_sales\\.txt\",\"sales_q1\\.txt\",\"simple\\.txt\",\n  \"test_document\\.txt\",\"test_report\\.txt\",\n  \"faiss_index_root\\.bin\",\"faiss_index_root\\.bin\\.map\",\"local_storage_root\\.db\"\n\\)\nforeach \\(\\$f in \\$data\\) \\{\n  if \\(Test-Path \"\\$b\\\\\\$f\"\\) \\{ Move-Item \"\\$b\\\\\\$f\" \"\\$b\\\\data\\\\\\$f\" -Force \\}\n\\}\n\nWrite-Host \"`n=== Backend root files remaining ===\"\nGet-ChildItem \\$b -File \\| Select-Object Name\n\nWrite-Host \"`n=== tests/ ===\"\nGet-ChildItem \"\\$b\\\\tests\" -File \\| Select-Object Name\n\nWrite-Host \"`n=== scripts/ ===\"\nGet-ChildItem \"\\$b\\\\scripts\" -File \\| Select-Object Name\n\nWrite-Host \"`n=== data/ ===\"\nGet-ChildItem \"\\$b\\\\data\" -File \\| Select-Object Name$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^type \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\\\\start_backend\\.bat\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-frontend-main\\\\TransIQ-frontend-main\" ; npx tsc --noEmit 2>&1 \\| Select-Object -First 60$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-frontend-main\\\\TransIQ-frontend-main\" ; npx tsc --noEmit 2>&1 \\| head -60$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -c \"import ast, sys; \\[ast\\.parse\\(open\\(f\\)\\.read\\(\\)\\) or print\\(f'OK: \\{f\\}'\\) for f in \\['app/agents/__init__\\.py','app/agents/base_agent\\.py','app/agents/orchestrator\\.py','app/agents/data_interpreter\\.py','app/agents/dmaic_agent\\.py','app/agents/domain_agent\\.py','app/agents/decision_agent\\.py','app/agents/operationalization_agent\\.py','app/agents/ux_agent\\.py'\\]\\]\" 2>&1$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -m py_compile app/agents/__init__\\.py app/agents/base_agent\\.py app/agents/orchestrator\\.py app/agents/data_interpreter\\.py app/agents/dmaic_agent\\.py app/agents/domain_agent\\.py app/agents/decision_agent\\.py app/agents/operationalization_agent\\.py app/agents/ux_agent\\.py ; Write-Host \"All agent files syntax OK\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -m py_compile llm\\.py ; Write-Host \"llm\\.py syntax OK\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-frontend-main\\\\TransIQ-frontend-main\" ; npx tsc --noEmit 2>&1$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-frontend-main\\\\TransIQ-frontend-main\" ; npx tsc --noEmit$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-frontend-main\\\\TransIQ-frontend-main\" ; npx tsc --noEmit ; echo \"EXIT:\\$LASTEXITCODE\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -m py_compile app/agents/base_agent\\.py app/agents/decision_agent\\.py app/agents/ux_agent\\.py ; echo \"Python OK: \\$LASTEXITCODE\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-frontend-main\\\\TransIQ-frontend-main\" ; npx tsc --noEmit ; echo \"TS_EXIT:\\$LASTEXITCODE\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; \\$env:GEMINI_API_KEY=\"AIzaSyCmr50T6O34LM_4WzbAdk554b8zeBbaSq4\" ; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\uvicorn\\.exe\" app\\.main:app --host 0\\.0\\.0\\.0 --port 8001 --reload$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; \\$env:GEMINI_API_KEY=\"AIzaSyCmr50T6O34LM_4WzbAdk554b8zeBbaSq4\" ; \\$env:GROK_API_KEY=\"xai-6FqaVPv5yE3Gq06lspVOqWlRYcUSkPQM2mFYskiG0RZ5ZM3xExioZ2Jvnjqj9uZepd07M8wXg5iI2s0E\" ; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\python\\.exe\" -m uvicorn main:app --host localhost --port 8001 --reload$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-frontend-main\\\\TransIQ-frontend-main\" ; npx tsc --noEmit ; echo \"TS:\\$LASTEXITCODE\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\python\\.exe\" -m uvicorn app\\.main:app --host 0\\.0\\.0\\.0 --port 8001 --reload$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^netstat -ano \\| findstr \":8001\" \\| head -5; cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\python\\.exe\" -c \"from app\\.main import app; print\\('Import OK'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\python\\.exe\" -c \"\nfrom app\\.workers\\.processor import process_document_sync\nfrom app\\.llm\\.providers\\.gemini import GeminiProvider\nfrom app\\.utils\\.file_reader import get_file_chunks_for_dashboard, read_pdf\nfrom app\\.processors\\.dashboard import DashboardGenerator\nprint\\('All imports OK'\\)\n\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\python\\.exe\" -m uvicorn app\\.main:app --host 0\\.0\\.0\\.0 --port 8001 2>&1 \\| Tee-Object -FilePath \"\\.\\\\logs\\\\uvicorn_live\\.txt\" &$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; Start-Job -ScriptBlock \\{ cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\python\\.exe\" -m uvicorn app\\.main:app --host 0\\.0\\.0\\.0 --port 8001 2>&1 \\| Out-File \"\\.\\\\logs\\\\uvicorn_live\\.txt\" \\}; Start-Sleep 7; netstat -ano \\| findstr \"8001\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Get-Item \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\\\\app\\\\processors\\\\chunker\\\\adaptive\\.py\" \\| Select-Object Name, LastWriteTime$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^& \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\python\\.exe\" -c \"\nimport sys; sys\\.path\\.insert\\(0, 'c:/github-copiolot/1 A TransIQ/Backend'\\)\nimport importlib, app\\.processors\\.chunker\\.adaptive as m\nimport inspect\nclasses = \\[name for name, obj in inspect\\.getmembers\\(m, inspect\\.isclass\\) if name == 'AdaptiveChunker'\\]\nprint\\(f'AdaptiveChunker class count: \\{len\\(classes\\)\\}'\\)\nfrom app\\.processors\\.chunker\\.adaptive import AdaptiveChunker\nc = AdaptiveChunker\\(\\)\n# Check it has no table_pattern \\(old class had it\\)\nhas_old_regex = hasattr\\(c, 'table_pattern'\\)\nprint\\(f'Has old table_pattern regex: \\{has_old_regex\\}'\\)\n# Time it on a typical PDF-like text\nimport time\ntext = \\('Sales Report Q1 2026\\\\n\\\\nTotal revenue exceeded target by 15\\.3%\\. '\n        'Key metrics show strong performance across all regions\\.\\\\n\\\\n'\n        '\\| Region \\| Revenue \\| Growth \\|\\\\n\\|--------\\|---------\\|--------\\|\\\\n'\n        '\\| North  \\| 120000  \\| 12%    \\|\\\\n\\| South  \\| 145000  \\| 21%    \\|\\\\n\\\\n'\\) \\* 200\nprint\\(f'Text size: \\{len\\(text\\):,\\} chars'\\)\nt0 = time\\.time\\(\\)\nchunks = c\\.chunk_with_metadata\\(text\\)\nprint\\(f'Done: \\{len\\(chunks\\)\\} chunks in \\{time\\.time\\(\\)-t0:\\.3f\\}s'\\)\n\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\python\\.exe\" -m uvicorn app\\.main:app --host 0\\.0\\.0\\.0 --port 8001$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\python\\.exe\" -c \"from app\\.api\\.v2\\.endpoints import router; print\\('Import successful'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\python\\.exe\" -m uvicorn app\\.main:app --host 0\\.0\\.0\\.0 --port 8001 2>&1 \\| Select-Object -First 20$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Get-Process -Name python -ErrorAction SilentlyContinue \\| ForEach-Object \\{ Write-Host \"Killing PID \\$\\(\\$_\\.Id\\)\"; Stop-Process -Id \\$_\\.Id -Force \\}; Start-Sleep -Seconds 3; cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\python\\.exe\" -m uvicorn app\\.main:app --host 0\\.0\\.0\\.0 --port 8001$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; \\$env:GEMINI_API_KEY=\"AIzaSyCmr50T6O34LM_4WzbAdk554b8zeBbaSq4\" ; \\$env:GROK_API_KEY=\"xai-6FqaVPv5yE3Gq06lspVOqWlRYcUSkPQM2mFYskiG0RZ5ZM3xExioZ2Jvnjqj9uZepd07M8wXg5iI2s0E\" ; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\python\\.exe\" main\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; \\$env:GEMINI_API_KEY=\"AIzaSyCmr50T6O34LM_4WzbAdk554b8zeBbaSq4\" ; \\$env:GROK_API_KEY=\"xai-6FqaVPv5yE3Gq06lspVOqWlRYcUSkPQM2mFYskiG0RZ5ZM3xExioZ2Jvnjqj9uZepd07M8wXg5iI2s0E\" ; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\python\\.exe\" -c \"from supa import auth_router, user_router, history_router, analytics_router, documents_router, search_router; from llm import processing_router, system_router, v2_compat_router; print\\('imports OK'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Frontend\" ; bun run dev$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -c \"\nimport sys\nmodules = \\[\n    'app\\.intelligence\\.financial_engine',\n    'app\\.intelligence\\.validation',\n    'app\\.intelligence\\.esg_engine',\n    'app\\.intelligence\\.drilling_engine',\n    'app\\.intelligence\\.pipeline',\n    'app\\.intelligence',\n\\]\nfor m in modules:\n    try:\n        __import__\\(m\\)\n        print\\(f'OK: \\{m\\}'\\)\n    except Exception as e:\n        print\\(f'ERROR: \\{m\\} -> \\{e\\}'\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -c \"\nimport sys\nfor m in \\['llm', 'app\\.api\\.v2\\.endpoints'\\]:\n    try:\n        __import__\\(m\\)\n        print\\(f'OK: \\{m\\}'\\)\n    except Exception as e:\n        print\\(f'ERROR: \\{m\\} -> \\{e\\}'\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^python -c \"\nfor m in \\['llm', 'app\\.api\\.v2\\.endpoints'\\]:\n    try:\n        __import__\\(m\\)\n        print\\(f'OK: \\{m\\}'\\)\n    except Exception as e:\n        print\\(f'ERROR: \\{m\\} -> \\{e\\}'\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^python -m py_compile \"llm\\.py\" ; echo \"llm\\.py: syntax OK\"\npython -m py_compile \"app/api/v2/endpoints\\.py\" ; echo \"endpoints\\.py: syntax OK\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^python -m py_compile \"app/api/v2/endpoints\\.py\" ; echo \"endpoints\\.py: syntax OK\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^for f in \"app/intelligence/__init__\\.py\" \"app/intelligence/financial_engine\\.py\" \"app/intelligence/validation\\.py\" \"app/intelligence/esg_engine\\.py\" \"app/intelligence/drilling_engine\\.py\" \"app/intelligence/pipeline\\.py\"; do python -m py_compile \"\\$f\" ; echo \"\\$f: OK\"; done\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^\\$files = @\\(\"app/intelligence/__init__\\.py\",\"app/intelligence/financial_engine\\.py\",\"app/intelligence/validation\\.py\",\"app/intelligence/esg_engine\\.py\",\"app/intelligence/drilling_engine\\.py\",\"app/intelligence/pipeline\\.py\"\\); foreach \\(\\$f in \\$files\\) \\{ python -m py_compile \\$f; Write-Host \"\\$f OK\" \\}\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -m py_compile app/intelligence/impact_engine\\.py app/intelligence/deduction_enrichment\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -c \"from app\\.intelligence import ImpactEngine, BusinessEntityExtractor, create_impact_engine, create_extractor; print\\('✓ All imports successful!'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -m py_compile app/api/v2/impact_endpoints\\.py ; echo \"✓ Syntax OK\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -c \"from app\\.main import app; print\\('✓ Main app import successful'\\); print\\(f'✓ App initialized: \\{app\\.title\\}'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -c \"from app\\.api\\.v2 import impact_endpoints; from app\\.intelligence import ImpactEngine, BusinessEntityExtractor; print\\('✓ All modules imported successfully'\\)\" 2>&1 \\| findstr /v \"Redis\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -c \"from app\\.intelligence\\.impact_engine import ImpactEngine; from app\\.intelligence\\.deduction_enrichment import BusinessEntityExtractor; print\\('✓ Core modules import OK'\\)\" 2>&1$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python tests/test_impact_integration\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python tests/test_impact_integration\\.py 2>&1 \\| head -150$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python tests/test_impact_integration\\.py 2>&1 \\| tail -100$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python tests/test_impact_integration\\.py 2>&1 \\| Select-Object -Last 50$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python tests/test_impact_integration\\.py 2>&1 \\| Select-Object -Last 80$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python tests/test_impact_integration\\.py 2>&1 \\| Select-Object -Last 120$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python tests/test_scenarios/drilling_npt_scenario\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python tests/test_scenarios/drilling_npt_scenario\\.py 2>&1 \\| Select-Object -Last 150$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python tests/test_scenarios/drilling_npt_scenario\\.py 2>&1 \\| Select-Object -Last 120$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python tests/test_scenarios/drilling_npt_scenario\\.py 2>&1$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -m py_compile app/api/v2/dashboard_endpoints\\.py ; Write-Host \"dashboard_endpoints\\.py OK\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -m py_compile app/main\\.py ; Write-Host \"main\\.py OK\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -m py_compile tests/test_dashboard_integration\\.py ; Write-Host \"test_dashboard_integration\\.py OK\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; \\$files = @\\(\"app/intelligence/graphrag_connector\\.py\",\"app/intelligence/real_data_provider\\.py\",\"app/intelligence/__init__\\.py\",\"tests/test_graphrag_phase4\\.py\"\\); foreach \\(\\$f in \\$files\\) \\{ python -m py_compile \\$f; Write-Host \"\\$f OK\" \\}$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -m py_compile app/api/v2/intelligence_graph_endpoints\\.py tests/test_intelligence_phase5\\.py app/main\\.py ; echo \"✅ All Phase 5 files compile successfully\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -m pytest tests/test_intelligence_phase5\\.py -v --tb=short 2>&1 \\| head -100$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -m pytest tests/test_intelligence_phase5\\.py -v --tb=short$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -c \"from app\\.api\\.v2\\.intelligence_graph_endpoints import router, WeightedEntity, CrossEngineAnalysis; print\\('✅ Phase 5 imports successful'\\); print\\('✅ Intelligence endpoints router loaded'\\); print\\('✅ All models importable'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -m uvicorn app\\.main:app --host 0\\.0\\.0\\.0 --port 8000 --reload$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -c \"import ast; ast\\.parse\\(open\\('pipeline_diagnostics\\.py'\\)\\.read\\(\\)\\); print\\('pipeline_diagnostics\\.py: OK'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^python -c \"import ast; ast\\.parse\\(open\\('section_analyzer\\.py'\\)\\.read\\(\\)\\); print\\('section_analyzer\\.py: OK'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^python -c \"import ast; ast\\.parse\\(open\\('section_analyzer\\.py', encoding='utf-8'\\)\\.read\\(\\)\\); print\\('section_analyzer\\.py: OK'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^python -c \"import ast; ast\\.parse\\(open\\('llm\\.py', encoding='utf-8'\\)\\.read\\(\\)\\); print\\('llm\\.py: OK'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^\\$env:PIPELINE_DIAGNOSTICS=\"1\"; python -c \"from pipeline_diagnostics import PipelineDiagnostics, DIAGNOSTICS_ENABLED; d = PipelineDiagnostics\\(\\); print\\(f'Diagnostics enabled: \\{d\\.enabled\\}'\\); report = d\\.build_report\\(\\); print\\(f'Report keys: \\{list\\(report\\.keys\\(\\)\\)\\}'\\); print\\('OK'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -c \"import ast; ast\\.parse\\(open\\('document_manifest\\.py', encoding='utf-8'\\)\\.read\\(\\)\\); print\\('document_manifest\\.py: OK'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^python -c \"\nfrom document_manifest import DocumentManifest, ChunkStatus, SectionStatus, GateResult\n\n# Test basic manifest lifecycle\nm = DocumentManifest\\('test-doc'\\)\n\n# Register pages\nm\\.register_pages\\(100, list\\(range\\(1, 98\\)\\), \\[98, 99, 100\\], \\{i: 500 for i in range\\(1, 98\\)\\}\\)\nprint\\(f'Pages: \\{m\\.total_pages\\} total, \\{m\\.pages_parsed\\} parsed, \\{len\\(m\\.pages_empty\\)\\} empty'\\)\n\n# Register chunks \\(simulate brain\\.chunks with \\[Page N\\] markers\\)\nchunks = \\[f'\\[Page \\{i\\}\\]\\\\nSome text for page \\{i\\}' for i in range\\(1, 98\\)\\]\nm\\.register_chunks\\(chunks\\)\nprint\\(f'Chunks registered: \\{len\\(m\\.chunks\\)\\}'\\)\n\n# Gate ingestion\ng = m\\.gate_ingestion\\(\\)\nprint\\(f'Ingestion gate: passed=\\{g\\.passed\\}'\\)\n\n# Register sections\nfor s_idx in range\\(10\\):\n    start = s_idx \\* 10 \\+ 1\n    end = min\\(\\(s_idx \\+ 1\\) \\* 10, 97\\)\n    m\\.register_section\\(f'S\\{s_idx:03d\\}', f'Section \\{s_idx\\}', start, end, 5000\\)\nprint\\(f'Sections registered: \\{len\\(m\\.sections\\)\\}'\\)\n\n# Gate chunking\ng = m\\.gate_chunking\\(\\)\nprint\\(f'Chunking gate: passed=\\{g\\.passed\\}'\\)\n\n# Update scoring\nfor sid, sec in m\\.sections\\.items\\(\\):\n    m\\.update_section_scoring\\(sid, 0\\.65, 2, True, 'balanced'\\)\n\n# Mark some processed, one skipped\nfor sid in list\\(m\\.sections\\.keys\\(\\)\\)\\[:8\\]:\n    m\\.mark_section_processed\\(sid, 4000, 0\\.75, 3, 5\\)\nm\\.update_section_scoring\\('S008', 0\\.10, 3, False, 'cheap'\\)\nm\\.mark_section_failed\\('S009'\\)\n\n# Gate processing\ng = m\\.gate_processing\\(\\)\nprint\\(f'Processing gate: passed=\\{g\\.passed\\}'\\)\n\n# Validate\nreport = m\\.validate\\(\\)\nprint\\(f'Validate keys: \\{sorted\\(report\\.keys\\(\\)\\)\\}'\\)\nprint\\(f'All gates passed: \\{report\\[\\\\\"all_gates_passed\\\\\"\\]\\}'\\)\nprint\\(f'Page heatmap: \\{report\\[\\\\\"page_coverage\\\\\"\\]\\[\\\\\"analysis_coverage_pct\\\\\"\\]\\}% analyzed'\\)\nprint\\(f'Chunk statuses: \\{report\\[\\\\\"chunk_summary\\\\\"\\]\\[\\\\\"statuses\\\\\"\\]\\}'\\)\nprint\\(f'Section statuses: \\{report\\[\\\\\"section_summary\\\\\"\\]\\[\\\\\"statuses\\\\\"\\]\\}'\\)\nprint\\('ALL TESTS PASSED'\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^python -c \"\nfrom document_manifest import DocumentManifest, ChunkStatus, SectionStatus, GateResult\n\nm = DocumentManifest\\('test-doc'\\)\nm\\.register_pages\\(100, list\\(range\\(1, 98\\)\\), \\[98, 99, 100\\], \\{i: 500 for i in range\\(1, 98\\)\\}\\)\nprint\\('Pages: %d total, %d parsed, %d empty' % \\(m\\.total_pages, m\\.pages_parsed, len\\(m\\.pages_empty\\)\\)\\)\n\nchunks = \\['\\[Page %d\\]\\\\nSome text for page %d' % \\(i, i\\) for i in range\\(1, 98\\)\\]\nm\\.register_chunks\\(chunks\\)\nprint\\('Chunks registered: %d' % len\\(m\\.chunks\\)\\)\n\ng = m\\.gate_ingestion\\(\\)\nprint\\('Ingestion gate: passed=%s' % g\\.passed\\)\n\nfor s_idx in range\\(10\\):\n    start = s_idx \\* 10 \\+ 1\n    end = min\\(\\(s_idx \\+ 1\\) \\* 10, 97\\)\n    m\\.register_section\\('S%03d' % s_idx, 'Section %d' % s_idx, start, end, 5000\\)\nprint\\('Sections registered: %d' % len\\(m\\.sections\\)\\)\n\ng = m\\.gate_chunking\\(\\)\nprint\\('Chunking gate: passed=%s' % g\\.passed\\)\n\nfor sid, sec in m\\.sections\\.items\\(\\):\n    m\\.update_section_scoring\\(sid, 0\\.65, 2, True, 'balanced'\\)\n\nfor sid in list\\(m\\.sections\\.keys\\(\\)\\)\\[:8\\]:\n    m\\.mark_section_processed\\(sid, 4000, 0\\.75, 3, 5\\)\nm\\.update_section_scoring\\('S008', 0\\.10, 3, False, 'cheap'\\)\nm\\.mark_section_failed\\('S009'\\)\n\ng = m\\.gate_processing\\(\\)\nprint\\('Processing gate: passed=%s' % g\\.passed\\)\n\nreport = m\\.validate\\(\\)\nprint\\('Validate keys: %s' % sorted\\(report\\.keys\\(\\)\\)\\)\nprint\\('All gates passed: %s' % report\\['all_gates_passed'\\]\\)\nhm = report\\['page_coverage'\\]\nprint\\('Pages analyzed: %\\.1f%%' % hm\\['analysis_coverage_pct'\\]\\)\nprint\\('Chunk statuses: %s' % report\\['chunk_summary'\\]\\['statuses'\\]\\)\nprint\\('Section statuses: %s' % report\\['section_summary'\\]\\['statuses'\\]\\)\nprint\\('ALL TESTS PASSED'\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^python -c \"from document_manifest import DocumentManifest; from pipeline_diagnostics import PipelineDiagnostics, DIAGNOSTICS_ENABLED; print\\('Both modules import OK'\\); print\\('DIAGNOSTICS_ENABLED=%s' % DIAGNOSTICS_ENABLED\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -c \"import ast; \\[ast\\.parse\\(open\\(f, encoding='utf-8'\\)\\.read\\(\\)\\) or print\\(f'OK: \\{f\\}'\\) for f in \\['app/agents/orchestrator\\.py', 'app/agents/data_interpreter\\.py', 'app/agents/dmaic_agent\\.py', 'app/agents/fixed_orchestrator\\.py', 'section_analyzer\\.py', 'llm\\.py'\\]\\]\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -c \"\nimport ast, sys\nfiles = \\['app/agents/orchestrator\\.py', 'app/agents/data_interpreter\\.py', 'app/agents/dmaic_agent\\.py', 'app/agents/fixed_orchestrator\\.py', 'section_analyzer\\.py', 'llm\\.py'\\]\nok = True\nfor f in files:\n    try:\n        ast\\.parse\\(open\\(f, encoding='utf-8'\\)\\.read\\(\\)\\)\n        print\\(f'OK: \\{f\\}'\\)\n    except SyntaxError as e:\n        print\\(f'FAIL: \\{f\\} -> \\{e\\}'\\)\n        ok = False\nif ok:\n    print\\('All files pass syntax check'\\)\nelse:\n    sys\\.exit\\(1\\)\n\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -c \"\nimport sys; sys\\.path\\.insert\\(0, '\\.'\\)\n# Test agents\nfrom app\\.agents\\.orchestrator import AgentOrchestrator\nprint\\('OK: AgentOrchestrator'\\)\nfrom app\\.agents\\.fixed_orchestrator import FixedAgentOrchestrator\nprint\\('OK: FixedAgentOrchestrator'\\)\nfrom app\\.agents\\.data_interpreter import DataInterpreterAgent\nprint\\('OK: DataInterpreterAgent'\\)\nfrom app\\.agents\\.dmaic_agent import DMAICAgent\nprint\\('OK: DMAICAgent'\\)\n# Test section_analyzer and document_manifest\nfrom document_manifest import DocumentManifest\nprint\\('OK: DocumentManifest'\\)\nfrom pipeline_diagnostics import PipelineDiagnostics\nprint\\('OK: PipelineDiagnostics'\\)\n# Verify orchestrator accepts section_analyses param\nimport inspect\nsig = inspect\\.signature\\(AgentOrchestrator\\.run\\)\nassert 'section_analyses' in sig\\.parameters, 'Missing section_analyses in AgentOrchestrator\\.run!'\nprint\\('OK: AgentOrchestrator\\.run accepts section_analyses'\\)\nsig2 = inspect\\.signature\\(FixedAgentOrchestrator\\.run\\)\nassert 'section_analyses' in sig2\\.parameters, 'Missing section_analyses in FixedAgentOrchestrator\\.run!'\nprint\\('OK: FixedAgentOrchestrator\\.run accepts section_analyses'\\)\nprint\\('All import tests passed'\\)\n\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -c \"\nimport ast, sys\nfiles = \\[\n    'app/agents/orchestrator\\.py',\n    'app/agents/data_interpreter\\.py',\n    'app/agents/dmaic_agent\\.py',\n    'app/agents/fixed_orchestrator\\.py',\n    'section_analyzer\\.py',\n    'llm\\.py',\n    'document_manifest\\.py',\n    'pipeline_diagnostics\\.py',\n\\]\nok = True\nfor f in files:\n    try:\n        ast\\.parse\\(open\\(f, encoding='utf-8'\\)\\.read\\(\\)\\)\n        print\\(f'OK: \\{f\\}'\\)\n    except SyntaxError as e:\n        print\\(f'FAIL: \\{f\\} -> \\{e\\}'\\)\n        ok = False\nif ok:\n    print\\('All 8 files pass syntax check'\\)\nelse:\n    sys\\.exit\\(1\\)\n\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -c \"\nimport sys; sys\\.path\\.insert\\(0, '\\.'\\)\n# Verify orchestrators\nfrom app\\.agents\\.orchestrator import AgentOrchestrator\nfrom app\\.agents\\.fixed_orchestrator import FixedAgentOrchestrator\nfrom app\\.agents\\.data_interpreter import DataInterpreterAgent\nfrom app\\.agents\\.dmaic_agent import DMAICAgent\nimport inspect\n\n# Check signatures\nsig1 = inspect\\.signature\\(AgentOrchestrator\\.run\\)\nsig2 = inspect\\.signature\\(FixedAgentOrchestrator\\.run\\)\nassert 'section_analyses' in sig1\\.parameters, 'AgentOrchestrator missing section_analyses'\nassert 'section_analyses' in sig2\\.parameters, 'FixedAgentOrchestrator missing section_analyses'\n\n# Verify DataInterpreterAgent can handle section_analysis in ctx\nagent = DataInterpreterAgent\\.__new__\\(DataInterpreterAgent\\)\nprompt = agent\\.build_prompt\\(\\{'raw_content': 'test', 'source_type': 'test', 'section_analysis': \\{'sections': \\[\\{'a':1\\}\\], 'kpis': \\[\\{'name': 'x'\\}\\], 'all_findings': \\[\\], 'all_risks': \\[\\], 'quality_score': \\{\\}, 'sections_analyzed': 1\\}\\}\\)\nassert 'PRE-ANALYZED STRUCTURED DATA' in prompt, 'DataInterpreterAgent not using section_analysis!'\n\n# Verify DMAICAgent can handle section_analysis in ctx\nagent2 = DMAICAgent\\.__new__\\(DMAICAgent\\)\nprompt2 = agent2\\.build_prompt\\(\\{'raw_content': 'test', 'source_type': 'test', 'data_interpretation': \\{\\}, 'section_analysis': \\{'sections': \\[\\{'a':1\\}\\], 'six_sigma': \\{'level': '4'\\}, 'all_findings': \\[\\{'f': 1\\}\\], 'all_risks': \\[\\{'r': 1\\}\\], 'kpis': \\[\\{'k': 1\\}\\], 'sections_analyzed': 1\\}\\}\\)\nassert 'FULL-COVERAGE ANALYSIS' in prompt2, 'DMAICAgent not using section_analysis!'\n\n# Verify section_analyzer imports\nfrom section_analyzer import _call_gemini_json, MODELS\nsig3 = inspect\\.signature\\(_call_gemini_json\\)\nassert 'max_output_tokens' in sig3\\.parameters, '_call_gemini_json missing max_output_tokens'\nassert MODELS\\['cheap'\\]\\['max_output_tokens'\\] == 1500, f'Cheap tokens wrong: \\{MODELS\\[\\\\\"cheap\\\\\"\\]\\[\\\\\"max_output_tokens\\\\\"\\]\\}'\nassert MODELS\\['balanced'\\]\\['max_output_tokens'\\] == 3000, f'Balanced tokens wrong'\nassert MODELS\\['powerful'\\]\\['max_output_tokens'\\] == 5000, f'Powerful tokens wrong'\n\n# Verify executive_synthesis accepts manifest\nfrom section_analyzer import executive_synthesis\nsig4 = inspect\\.signature\\(executive_synthesis\\)\nassert 'manifest' in sig4\\.parameters, 'executive_synthesis missing manifest'\n\nprint\\('All integration tests passed!'\\)\n\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -c \"\nimport sys; sys\\.path\\.insert\\(0, '\\.'\\)\nfrom app\\.agents\\.orchestrator import AgentOrchestrator\nfrom app\\.agents\\.fixed_orchestrator import FixedAgentOrchestrator\nfrom app\\.agents\\.data_interpreter import DataInterpreterAgent\nfrom app\\.agents\\.dmaic_agent import DMAICAgent\nimport inspect\n\nsig1 = inspect\\.signature\\(AgentOrchestrator\\.run\\)\nsig2 = inspect\\.signature\\(FixedAgentOrchestrator\\.run\\)\nassert 'section_analyses' in sig1\\.parameters\nassert 'section_analyses' in sig2\\.parameters\nprint\\('OK: Both orchestrators accept section_analyses'\\)\n\nagent = DataInterpreterAgent\\.__new__\\(DataInterpreterAgent\\)\nprompt = agent\\.build_prompt\\(\\{'raw_content': 'test', 'source_type': 'test', 'section_analysis': \\{'sections': \\[\\{'a':1\\}\\], 'kpis': \\[\\{'name': 'x'\\}\\], 'all_findings': \\[\\], 'all_risks': \\[\\], 'quality_score': \\{\\}, 'sections_analyzed': 1\\}\\}\\)\nassert 'PRE-ANALYZED STRUCTURED DATA' in prompt\nprint\\('OK: DataInterpreterAgent uses section_analysis'\\)\n\nagent2 = DMAICAgent\\.__new__\\(DMAICAgent\\)\nprompt2 = agent2\\.build_prompt\\(\\{'raw_content': 'test', 'source_type': 'test', 'data_interpretation': \\{\\}, 'section_analysis': \\{'sections': \\[\\{'a':1\\}\\], 'six_sigma': \\{'level': '4'\\}, 'all_findings': \\[\\{'f': 1\\}\\], 'all_risks': \\[\\{'r': 1\\}\\], 'kpis': \\[\\{'k': 1\\}\\], 'sections_analyzed': 1\\}\\}\\)\nassert 'FULL-COVERAGE ANALYSIS' in prompt2\nprint\\('OK: DMAICAgent uses section_analysis'\\)\n\nfrom section_analyzer import _call_gemini_json, MODELS, executive_synthesis\nsig3 = inspect\\.signature\\(_call_gemini_json\\)\nassert 'max_output_tokens' in sig3\\.parameters\nprint\\('OK: _call_gemini_json accepts max_output_tokens'\\)\n\nassert MODELS\\['cheap'\\]\\['max_output_tokens'\\] == 1500\nassert MODELS\\['balanced'\\]\\['max_output_tokens'\\] == 3000\nassert MODELS\\['powerful'\\]\\['max_output_tokens'\\] == 5000\nprint\\('OK: Token limits raised \\(1500/3000/5000\\)'\\)\n\nsig4 = inspect\\.signature\\(executive_synthesis\\)\nassert 'manifest' in sig4\\.parameters\nprint\\('OK: executive_synthesis accepts manifest'\\)\n\nprint\\('ALL INTEGRATION TESTS PASSED'\\)\n\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -c \"\nimport ast, sys\nfiles = \\['section_analyzer\\.py', 'llm\\.py', 'app/agents/orchestrator\\.py', 'app/agents/data_interpreter\\.py', 'app/agents/dmaic_agent\\.py', 'app/agents/fixed_orchestrator\\.py', 'document_manifest\\.py', 'pipeline_diagnostics\\.py'\\]\nok = True\nfor f in files:\n    try:\n        ast\\.parse\\(open\\(f, encoding='utf-8'\\)\\.read\\(\\)\\)\n        print\\(f'OK: \\{f\\}'\\)\n    except SyntaxError as e:\n        print\\(f'FAIL: \\{f\\} -> line \\{e\\.lineno\\}: \\{e\\.msg\\}'\\)\n        ok = False\nif ok:\n    print\\('All 8 files pass syntax check'\\)\nelse:\n    sys\\.exit\\(1\\)\n\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -c \"\nimport sys; sys\\.path\\.insert\\(0, '\\.'\\)\nimport inspect\n\n# Test section_analyzer imports and new functions\nfrom section_analyzer import \\(\n    group_aggregate, _detect_groups, _merge_group_batch, _batch_merge_group,\n    _compact_section_for_merge, synthesize_phases, executive_synthesis,\n    generate_full_report_analysis, DocumentBrain, MODELS,\n    _MAX_SECTIONS_PER_MERGE, _MIN_SECTIONS_FOR_GROUPING,\n\\)\nprint\\('OK: All new functions import correctly'\\)\n\n# Verify signatures\nsig_ga = inspect\\.signature\\(group_aggregate\\)\nassert 'brain' in sig_ga\\.parameters\nassert 'progress' in sig_ga\\.parameters\nassert 'diag' in sig_ga\\.parameters\nprint\\('OK: group_aggregate signature correct'\\)\n\nsig_sp = inspect\\.signature\\(synthesize_phases\\)\nprint\\('OK: synthesize_phases signature correct'\\)\n\nsig_es = inspect\\.signature\\(executive_synthesis\\)\nassert 'manifest' in sig_es\\.parameters\nprint\\('OK: executive_synthesis signature correct'\\)\n\n# Verify constants\nassert _MAX_SECTIONS_PER_MERGE == 15\nassert _MIN_SECTIONS_FOR_GROUPING == 8\nprint\\(f'OK: Constants: MAX_PER_MERGE=\\{_MAX_SECTIONS_PER_MERGE\\}, MIN_FOR_GROUPING=\\{_MIN_SECTIONS_FOR_GROUPING\\}'\\)\n\n# Verify token limits\nassert MODELS\\['cheap'\\]\\['max_output_tokens'\\] == 1500\nassert MODELS\\['balanced'\\]\\['max_output_tokens'\\] == 3000\nassert MODELS\\['powerful'\\]\\['max_output_tokens'\\] == 5000\nprint\\('OK: Token limits correct \\(1500/3000/5000\\)'\\)\n\n# Test _detect_groups with a mock brain  \nbrain = DocumentBrain\\(\\['chunk1', 'chunk2', 'chunk3', 'chunk4', 'chunk5'\\], 'test'\\)\nbrain\\.tree = \\[\n    \\{'title': 'Part A', 'start_index': 1, 'end_index': 3\\},\n    \\{'title': 'Part B', 'start_index': 4, 'end_index': 5\\},\n\\]\n# Manually add sections\nfrom section_analyzer import SectionNode\nbrain\\.sections\\['S000'\\] = SectionNode\\(id='S000', title='Sec 1', text='t', depth=0, start_index=1, end_index=2\\)\nbrain\\.sections\\['S001'\\] = SectionNode\\(id='S001', title='Sec 2', text='t', depth=0, start_index=3, end_index=3\\)\nbrain\\.sections\\['S002'\\] = SectionNode\\(id='S002', title='Sec 3', text='t', depth=0, start_index=4, end_index=5\\)\n\ngroups = _detect_groups\\(brain\\)\nassert 'G000' in groups  # Part A\nassert 'G001' in groups  # Part B\nassert 'S000' in groups\\['G000'\\]\\['section_ids'\\]\nassert 'S002' in groups\\['G001'\\]\\['section_ids'\\]\nprint\\(f'OK: _detect_groups works: \\{len\\(groups\\)\\} groups detected'\\)\n\n# Test that group_aggregate skips small docs\nbrain\\.results\\['sections'\\] = \\{\n    'S000': \\{'confidence': 0\\.8, 'keyFindings': \\[\\], 'kpis': \\[\\]\\},\n    'S001': \\{'confidence': 0\\.7, 'keyFindings': \\[\\], 'kpis': \\[\\]\\},\n    'S002': \\{'confidence': 0\\.6, 'keyFindings': \\[\\], 'kpis': \\[\\]\\},\n\\}\ngroup_aggregate\\(brain\\)\nassert brain\\.results\\['groups'\\] is None  # only 3 sections < threshold of 8\nprint\\('OK: group_aggregate correctly skips small docs'\\)\n\n# Test orchestrator signatures\nfrom app\\.agents\\.orchestrator import AgentOrchestrator\nfrom app\\.agents\\.fixed_orchestrator import FixedAgentOrchestrator\nsig1 = inspect\\.signature\\(AgentOrchestrator\\.run\\)\nsig2 = inspect\\.signature\\(FixedAgentOrchestrator\\.run\\)\nassert 'section_analyses' in sig1\\.parameters\nassert 'section_analyses' in sig2\\.parameters\nprint\\('OK: Both orchestrators accept section_analyses'\\)\n\nprint\\(''\\)\nprint\\('=== ALL INTEGRATION TESTS PASSED ==='\\)\n\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -c \"import ast; ast\\.parse\\(open\\('section_analyzer\\.py', encoding='utf-8'\\)\\.read\\(\\)\\); print\\('Syntax OK'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -c \"from section_analyzer import execute_analysis, route_models, _compact_section_for_merge, group_aggregate; print\\('Import OK'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -c \"\nfrom section_analyzer import route_models, _compact_section_for_merge, _normalize_tier2, MODELS, DocumentBrain\nimport json\n\n# Test 1: route_models gives T3 sections T2-level params  \nclass FakeNode:\n    def __init__\\(self, tier, score\\):\n        self\\.tier = tier\n        self\\.score = score\n        self\\.execution = \\{\\}\n        self\\.text = 'x' \\* 1000\nbrain = DocumentBrain\\.__new__\\(DocumentBrain\\)\nbrain\\.sections = \\{\\}\nbrain\\.metadata = \\{'model_usage': \\{\\}\\}\nn3 = FakeNode\\(3, 0\\.30\\)\nn3\\.id = 's1'\nn3\\.title = 'Test'\nn3\\.start_index = 1\nn3\\.end_index = 5\nbrain\\.sections\\['s1'\\] = n3\n\nbrain\\.execution_plan = \\{'cheap': \\['s1'\\], 'balanced': \\[\\], 'powerful': \\[\\], 'skip': \\[\\]\\}\n# Manually test - T3 should get text_cap=80000, max_tokens=500\n# The route_models function uses iter_sections, so let's test _compact_section_for_merge instead\n\n# Test 2: _compact_section_for_merge down-weights T3\nsr_t2 = \\{'sectionTitle': 'T2 Section', 'confidence': 0\\.8, '_source_tier': 2, '_source_type': 'llm_light'\\}\nsr_t3 = \\{'sectionTitle': 'T3 Section', 'confidence': 0\\.8, '_source_tier': 3, '_source_type': 'llm_light'\\}\n\nc2 = _compact_section_for_merge\\(sr_t2\\)\nc3 = _compact_section_for_merge\\(sr_t3\\)\n\nassert c2\\['confidence'\\] == 0\\.8, f'T2 confidence should stay 0\\.8, got \\{c2\\[\\\\\"confidence\\\\\"\\]\\}'\nassert c3\\['confidence'\\] == 0\\.56, f'T3 confidence should be 0\\.8\\*0\\.7=0\\.56, got \\{c3\\[\\\\\"confidence\\\\\"\\]\\}'\nassert c3\\['source_tier'\\] == 3, f'T3 source_tier should be 3, got \\{c3\\[\\\\\"source_tier\\\\\"\\]\\}'\nassert c3\\['source_type'\\] == 'llm_light', f'T3 source_type wrong'\n\n# Test 3: _normalize_tier2 works on T2-format output \\(as T3 will now produce\\)  \nraw = \\{'keyPoints': \\['finding 1', 'finding 2'\\], 'metrics': \\[\\{'name': 'Yield', 'value': '95%'\\}\\], 'risks': \\[\\{'description': 'Supply chain risk'\\}\\]\\}\nnorm = _normalize_tier2\\(raw, 'Test Section'\\)\nassert 'keyFindings' in norm, f'Expected keyFindings in normalized output, got \\{list\\(norm\\.keys\\(\\)\\)\\}'\n\n# Test 4: tier breakdown counting  \nsections = \\{\n    's1': \\{'_source_tier': 1, 'confidence': 0\\.9\\},\n    's2': \\{'_source_tier': 2, 'confidence': 0\\.7\\},\n    's3': \\{'_source_tier': 3, 'confidence': 0\\.5\\},\n    's4': \\{'_source_tier': 0, 'confidence': 0\\.0\\},\n\\}\ntb = \\{'tier1': 0, 'tier2': 0, 'tier3_promoted': 0, 'skipped': 0\\}\nfor sid, sr in sections\\.items\\(\\):\n    st = sr\\.get\\('_source_tier'\\)\n    if st == 1: tb\\['tier1'\\] \\+= 1\n    elif st == 2: tb\\['tier2'\\] \\+= 1\n    elif st == 3: tb\\['tier3_promoted'\\] \\+= 1\n    else: tb\\['skipped'\\] \\+= 1\nassert tb == \\{'tier1': 1, 'tier2': 1, 'tier3_promoted': 1, 'skipped': 1\\}, f'Tier breakdown wrong: \\{tb\\}'\n\nprint\\('All 4 integration tests PASSED'\\)\n\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -c \"from section_analyzer import _has_source_pages, _strip_untraceable, _inject_source_pages, _normalize_tier2, _score_traceability, _compact_section_for_merge, execute_analysis, group_aggregate, synthesize_phases, score_report; print\\('Import OK'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -c \"\nfrom section_analyzer import \\(\n    _has_source_pages, _strip_untraceable, _inject_source_pages,\n    _normalize_tier2, _score_traceability, DocumentBrain\n\\)\n\n# ── Test 1: _has_source_pages ──\nassert _has_source_pages\\(\\{'source_pages': \\[1, 2\\]\\}\\) == True\nassert _has_source_pages\\(\\{'source_pages': \\[\\]\\}\\) == False\nassert _has_source_pages\\(\\{'source_reference': \\{'source_pages': 'Pages 10-12'\\}\\}\\) == True\nassert _has_source_pages\\(\\{'finding': 'no source'\\}\\) == False\nassert _has_source_pages\\('not a dict'\\) == False\nprint\\('Test 1 PASSED: _has_source_pages'\\)\n\n# ── Test 2: _strip_untraceable ──\nitems = \\[\n    \\{'finding': 'A', 'source_pages': \\[1\\]\\},\n    \\{'finding': 'B'\\},\n    \\{'finding': 'C', 'source_pages': \\[3, 4\\]\\},\n\\]\nkept, dropped = _strip_untraceable\\(items, 'test'\\)\nassert len\\(kept\\) == 2 and dropped == 1\nprint\\('Test 2 PASSED: _strip_untraceable'\\)\n\n# ── Test 3: _inject_source_pages ──\nitems = \\[\n    \\{'finding': 'A'\\},\n    \\{'finding': 'B', 'source_pages': \\[5\\]\\},\n\\]\n_inject_source_pages\\(items, \\[10, 11\\]\\)\nassert items\\[0\\]\\['source_pages'\\] == \\[10, 11\\], items\\[0\\]\nassert items\\[1\\]\\['source_pages'\\] == \\[5\\], items\\[1\\]\nprint\\('Test 3 PASSED: _inject_source_pages'\\)\n\n# ── Test 4: _normalize_tier2 preserves source_pages ──\nraw = \\{\n    'keyPoints': \\[\\{'point': 'yield drop', 'impact': 'high', 'source_pages': \\[42\\]\\}\\],\n    'metrics': \\[\\{'name': 'Yield', 'value': 95, 'unit': '%', 'source_pages': \\[43\\]\\}\\],\n    'risks': \\[\\{'risk': 'supply chain', 'severity': 'high', 'source_pages': \\[44\\]\\}\\],\n    'dmaicRelevance': \\{'phase': 'measure'\\},\n    'confidence': 0\\.7\n\\}\nnorm = _normalize_tier2\\(raw, 'Section', start_page=40, end_page=50\\)\nassert norm\\['keyFindings'\\]\\[0\\]\\['source_pages'\\] == \\[42\\], norm\\['keyFindings'\\]\\[0\\]\nassert norm\\['kpis'\\]\\[0\\]\\['source_pages'\\] == \\[43\\], norm\\['kpis'\\]\\[0\\]\nassert norm\\['risks'\\]\\[0\\]\\['source_pages'\\] == \\[44\\], norm\\['risks'\\]\\[0\\]\nassert norm\\['pageRange'\\] == 'Pages 40-50'\nprint\\('Test 4 PASSED: _normalize_tier2 preserves source_pages'\\)\n\n# ── Test 5: _normalize_tier2 injects fallback when source_pages missing ──\nraw2 = \\{\n    'keyPoints': \\[\\{'point': 'no source', 'impact': 'low'\\}\\],\n    'metrics': \\[\\{'name': 'M', 'value': 1, 'unit': 'x'\\}\\],\n    'risks': \\[\\{'risk': 'R', 'severity': 'low'\\}\\],\n    'confidence': 0\\.5\n\\}\nnorm2 = _normalize_tier2\\(raw2, 'S2', start_page=10, end_page=15\\)\nassert norm2\\['keyFindings'\\]\\[0\\]\\['source_pages'\\] == \\[10, 11, 12, 13, 14, 15\\], norm2\\['keyFindings'\\]\\[0\\]\nassert norm2\\['kpis'\\]\\[0\\]\\['source_pages'\\] == \\[10, 11, 12, 13, 14, 15\\]\n# risks get injected via _inject_source_pages\nassert norm2\\['risks'\\]\\[0\\]\\.get\\('source_pages'\\) == \\[10, 11, 12, 13, 14, 15\\]\nprint\\('Test 5 PASSED: _normalize_tier2 injects fallback source_pages'\\)\n\n# ── Test 6: _score_traceability ──\nbrain = DocumentBrain\\.__new__\\(DocumentBrain\\)\nbrain\\.results = \\{'sections': \\{\n    's1': \\{\n        'keyFindings': \\[\\{'finding': 'A', 'source_pages': \\[1\\]\\}\\],\n        'kpis': \\[\\{'title': 'K', 'source_pages': \\[2\\]\\}\\],\n        'risks': \\[\\{'risk': 'R', 'source_pages': \\[3\\]\\}\\],\n    \\},\n    's2': \\{\n        'keyFindings': \\[\\{'finding': 'B'\\}\\],\n        'kpis': \\[\\{'title': 'K2', 'source_pages': \\[5\\]\\}\\],\n        'risks': \\[\\],\n    \\},\n\\}\\}\nscore, gaps = _score_traceability\\(brain\\)\n# 4 out of 5 traced = 80%\nassert score == 4\\.0, f'Expected 4\\.0, got \\{score\\}'\nprint\\('Test 6 PASSED: _score_traceability'\\)\n\nprint\\('ALL TRACEABILITY TESTS PASSED'\\)\n\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -c \"\nfrom section_analyzer import _TIER2_PROMPT, _SUBCHUNK_EXTRACT_PROMPT, _DMAIC_PHASE_PROMPTS\n\n# Test: _TIER2_PROMPT has source_pages\nassert 'source_pages' in _TIER2_PROMPT, '_TIER2_PROMPT missing source_pages'\nassert 'MUST include source_pages' in _TIER2_PROMPT, '_TIER2_PROMPT missing enforcement rule'\nprint\\('TIER2_PROMPT: source_pages enforced'\\)\n\n# Test: _SUBCHUNK_EXTRACT_PROMPT has source_pages on findings\nassert 'source_pages' in _SUBCHUNK_EXTRACT_PROMPT\nprint\\('SUBCHUNK_EXTRACT_PROMPT: source_pages present'\\)\n\n# Test: All 5 DMAIC phase prompts have source_pages\nfor phase in \\['define', 'measure', 'analyze', 'improve', 'control'\\]:\n    prompt = _DMAIC_PHASE_PROMPTS\\[phase\\]\n    assert 'source_pages' in prompt, f'\\{phase\\} prompt missing source_pages'\n    assert 'MUST include source_pages' in prompt or 'source_pages at root' in prompt, f'\\{phase\\} prompt missing enforcement'\nprint\\('All 5 DMAIC prompts: source_pages enforced'\\)\n\n# Test: prompts can render without error\nrendered = _TIER2_PROMPT\\.format\\(title='Test', start=1, end=10, num=1, total=5, text='sample text'\\)\nassert 'source_pages' in rendered\nprint\\('TIER2_PROMPT renders correctly'\\)\n\nprint\\('ALL PROMPT TESTS PASSED'\\)\n\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -c \"\nfrom section_analyzer import _EXECUTIVE_SYNTHESIS_PROMPT\n# Check traceability rule\nassert 'TRACEABILITY \\(NON-NEGOTIABLE\\)' in _EXECUTIVE_SYNTHESIS_PROMPT\nassert 'source_pages' in _EXECUTIVE_SYNTHESIS_PROMPT\n# Count how many times source_pages appears\ncount = _EXECUTIVE_SYNTHESIS_PROMPT\\.count\\('source_pages'\\)\nprint\\(f'Executive prompt: source_pages appears \\{count\\} times'\\)\n# Check sections schema has source_pages\nassert '\\\\\"source_pages\\\\\": \\[int\\]' in _EXECUTIVE_SYNTHESIS_PROMPT\nprint\\('Executive synthesis prompt: traceability enforced'\\)\n\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -c \"from section_analyzer import _EXECUTIVE_SYNTHESIS_PROMPT; assert 'TRACEABILITY \\(NON-NEGOTIABLE\\)' in _EXECUTIVE_SYNTHESIS_PROMPT; c = _EXECUTIVE_SYNTHESIS_PROMPT\\.count\\('source_pages'\\); print\\(f'source_pages appears \\{c\\} times'\\); print\\('Executive synthesis: traceability enforced'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -c \"import ast; ast\\.parse\\(open\\('section_analyzer\\.py', encoding='utf-8'\\)\\.read\\(\\)\\); print\\('SYNTAX OK'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -c \"\nimport section_analyzer as sa\nprint\\('IMPORT OK'\\)\n\n# Verify system instructions are now compiler role\nimport inspect\nsrc = inspect\\.getsource\\(sa\\)\n\n# Check system instructions\nassert 'Deterministic data compiler' in src, 'Missing compiler role in system instructions'\nassert 'Board-Grade Decision Intelligence' not in src, 'Old analyst role still present'\nassert 'Six Sigma Master Black Belt\\. Synthesize' not in src, 'Old DMAIC sys instr still present'\nassert 'Data aggregation specialist\\.' not in src, 'Old group merge sys instr still present'\nprint\\('SYSTEM INSTRUCTIONS: All converted to compiler role'\\)\n\n# Check prompt preambles\nassert 'DETERMINISTIC DATA COMPILER' in src, 'Missing compiler preamble in prompts'\nassert 'ONLY use data present in the input' in src, 'Missing data-only constraint'\nassert 'NEVER infer, generalize, or invent' in src, 'Missing anti-hallucination constraint'\nassert 'INSUFFICIENT_DATA' in src, 'Missing fail-fast pattern'\nprint\\('PROMPT CONSTRAINTS: Anti-hallucination rules present'\\)\n\n# Check post-LLM validation functions exist\nassert hasattr\\(sa, '_validate_dashboard_traceability'\\), 'Missing _validate_dashboard_traceability'\nassert hasattr\\(sa, '_validate_phase_traceability'\\), 'Missing _validate_phase_traceability'\nassert hasattr\\(sa, '_validate_group_traceability'\\), 'Missing _validate_group_traceability'\nprint\\('POST-LLM VALIDATION: All 3 validators present'\\)\n\n# Check DMAIC prompts use compiler language\nfor phase in \\['define', 'measure', 'analyze', 'improve', 'control'\\]:\n    prompt = sa\\._DMAIC_PHASE_PROMPTS\\[phase\\]\n    assert 'COMPILE the' in prompt, f'\\{phase\\} prompt missing COMPILE directive'\n    assert 'ONLY use data present in the input' in prompt, f'\\{phase\\} prompt missing data-only constraint'\n    assert 'NEVER infer' in prompt, f'\\{phase\\} prompt missing anti-hallucination'\nprint\\('DMAIC PROMPTS: All 5 phases converted to compiler mode'\\)\n\n# Check group merge prompt\nassert 'DETERMINISTIC DATA COMPILER' in sa\\._GROUP_MERGE_PROMPT, 'Group merge prompt missing compiler role'\nassert 'ANTI-HALLUCINATION RULES' in sa\\._GROUP_MERGE_PROMPT, 'Group merge prompt missing anti-hallucination section'\nprint\\('GROUP MERGE PROMPT: Converted to compiler mode'\\)\n\n# Check phase batch merge prompt\nassert 'DETERMINISTIC DATA COMPILER' in sa\\._PHASE_BATCH_MERGE_PROMPT, 'Phase merge missing compiler'\nprint\\('PHASE BATCH MERGE: Converted to compiler mode'\\)\n\nprint\\(\\)\nprint\\('ALL PHASE 11 TESTS PASSED'\\)\n\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -c \"import ast; ast\\.parse\\(open\\('section_analyzer\\.py', encoding='utf-8'\\)\\.read\\(\\)\\); print\\('SYNTAX OK'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python test_confidence_engine\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python test_coverage_engine\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -m pytest test_confidence_engine\\.py test_coverage_engine\\.py -v 2>&1 \\| Select-Object -First 80$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -m pytest test_pipeline_architecture\\.py -v 2>&1 \\| Select-Object -First 60$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -m pytest test_pipeline_architecture\\.py -v 2>&1 \\| Select-Object -First 80$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -m pytest test_confidence_engine\\.py test_coverage_engine\\.py test_pipeline_architecture\\.py -v 2>&1 \\| Select-Object -First 50$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -m pytest test_pipeline_architecture\\.py -v 2>&1 \\| Select-Object -First 40$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -m pytest test_pipeline_architecture\\.py -v 2>&1 \\| Select-Object -First 50$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -m pytest test_confidence_engine\\.py test_coverage_engine\\.py test_pipeline_architecture\\.py -v 2>&1 \\| Select-Object -First 55$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -m pytest test_pipeline_architecture\\.py -v 2>&1 \\| Select-Object -First 65$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -m pytest test_confidence_engine\\.py test_coverage_engine\\.py test_pipeline_architecture\\.py -v 2>&1 \\| Select-Object -First 60$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -c \"import ast; ast\\.parse\\(open\\('section_analyzer\\.py', encoding='utf-8'\\)\\.read\\(\\)\\); ast\\.parse\\(open\\('llm\\.py', encoding='utf-8'\\)\\.read\\(\\)\\); ast\\.parse\\(open\\('test_pipeline_architecture\\.py', encoding='utf-8'\\)\\.read\\(\\)\\); print\\('SYNTAX OK'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -m pytest test_pipeline_architecture\\.py -v 2>&1 \\| Select-Object -First 90$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -m pytest test_pipeline_architecture\\.py -v 2>&1 \\| Select-Object -First 70$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -m pytest test_pipeline_architecture\\.py::test_group_aggregate_sets_group_id -vv$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -m pytest test_confidence_engine\\.py test_coverage_engine\\.py test_pipeline_architecture\\.py -v 2>&1 \\| Select-Object -First 75$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -m pytest test_pipeline_architecture\\.py::test_normalize_tier2_assigns_insight_ids test_pipeline_architecture\\.py::test_group_aggregate_sets_group_id -v$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -m pytest test_confidence_engine\\.py test_coverage_engine\\.py test_pipeline_architecture\\.py -q$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -c \"import ast; ast\\.parse\\(open\\('llm\\.py', encoding='utf-8'\\)\\.read\\(\\)\\); ast\\.parse\\(open\\('supabase_service\\.py', encoding='utf-8'\\)\\.read\\(\\)\\); ast\\.parse\\(open\\('local_storage\\.py', encoding='utf-8'\\)\\.read\\(\\)\\); ast\\.parse\\(open\\('section_analyzer\\.py', encoding='utf-8'\\)\\.read\\(\\)\\); print\\('SYNTAX OK'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -c \"import ast; ast\\.parse\\(open\\('app/pageindex/tree_builder\\.py', encoding='utf-8'\\)\\.read\\(\\)\\); ast\\.parse\\(open\\('app/pageindex/tree_search\\.py', encoding='utf-8'\\)\\.read\\(\\)\\); ast\\.parse\\(open\\('llm\\.py', encoding='utf-8'\\)\\.read\\(\\)\\); ast\\.parse\\(open\\('supabase_service\\.py', encoding='utf-8'\\)\\.read\\(\\)\\); ast\\.parse\\(open\\('local_storage\\.py', encoding='utf-8'\\)\\.read\\(\\)\\); ast\\.parse\\(open\\('section_analyzer\\.py', encoding='utf-8'\\)\\.read\\(\\)\\); print\\('SYNTAX OK'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -m pytest test_confidence_engine\\.py test_coverage_engine\\.py test_pipeline_architecture\\.py -q 2>&1$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; python -m pytest tests/ -q --ignore=tests/test_celery_connection\\.py --ignore=tests/test_gemini\\.py --ignore=tests/test_gemini_api\\.py --ignore=tests/test_grok_api\\.py 2>&1$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\Activate\\.ps1\"; python -c \"import fastapi, fitz, google\\.generativeai; print\\('deps OK'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\Activate\\.ps1\"; python -c \"import fastapi, fitz, google\\.genai; print\\('deps OK'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\Activate\\.ps1\"; uvicorn main:app --host 0\\.0\\.0\\.0 --port 8001 --reload 2>&1$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -m app\\.intelligence\\.glossary_filter$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -c \"from app\\.intelligence\\.pipeline import run_pipeline, _TERM_INDEX, _S1_PROMPT_TEMPLATE; print\\('Import OK'\\); print\\(f'Term index size: \\{len\\(_TERM_INDEX\\)\\} aliases'\\); sample = _S1_PROMPT_TEMPLATE\\.format\\(content='test doc with DPMO and NPT values', domain_terms_section='\\\\nDOMAIN TERMINOLOGY:\\\\ntest hint\\\\n'\\); print\\('Template renders OK'\\); print\\('domain_terms_section present:', 'DOMAIN TERMINOLOGY' in sample\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -c \"from app\\.intelligence\\.pipeline import _S1_PROMPT_TEMPLATE; sample = _S1_PROMPT_TEMPLATE\\.format\\(content='test'\\); print\\('Original format OK'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -c \"\nfrom app\\.intelligence\\.pipeline import _S1_PROMPT_TEMPLATE, _TERM_INDEX, DOMAIN_GLOSSARY\nfrom app\\.intelligence\\.glossary_filter import filter_glossary, format_for_prompt\n\n# Simulate a document with a few domain terms\ntest_doc = 'The rig reported NPT of 4\\.5 hours\\. DPMO was calculated at 3400\\. OPEX exceeded budget by 12%\\.'\n\n# Filter and format\nterms = filter_glossary\\(test_doc, DOMAIN_GLOSSARY, _TERM_INDEX\\)\ndomain_terms = format_for_prompt\\(terms\\)\ndomain_terms_section = \\(\n    f'\\\\nDOMAIN TERMINOLOGY \\(use these exact names in output fields\\):\\\\n\\{domain_terms\\}\\\\n'\n    if domain_terms else ''\n\\)\n\n# Render the Stage 1 prompt\nprompt = _S1_PROMPT_TEMPLATE\\.format\\(content=test_doc, domain_terms_section=domain_terms_section\\)\n\nprint\\(f'\\[OK\\] Stage 1 prompt rendered — \\{len\\(prompt\\)\\} chars'\\)\nprint\\(f'\\[OK\\] Terms injected: \\{\\[e\\.term for e in terms\\]\\}'\\)\nprint\\(f'\\[OK\\] domain_terms_section present: \\{\\\\\"DOMAIN TERMINOLOGY\\\\\" in prompt\\}'\\)\nprint\\(f'\\[OK\\] source_reference block present: \\{\\\\\"source_reference\\\\\" in prompt\\}'\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; python -c \"\nfrom app\\.intelligence\\.pipeline import _S1_PROMPT_TEMPLATE, _TERM_INDEX, DOMAIN_GLOSSARY\nfrom app\\.intelligence\\.glossary_filter import filter_glossary, format_for_prompt\n\ntest_doc = 'The rig reported NPT of 4\\.5 hours\\. DPMO was calculated at 3400\\. OPEX exceeded budget by 12pct\\.'\nterms = filter_glossary\\(test_doc, DOMAIN_GLOSSARY, _TERM_INDEX\\)\ndomain_terms = format_for_prompt\\(terms\\)\ndomain_terms_section = \\('\\\\nDOMAIN TERMINOLOGY \\(use these exact names in output fields\\):\\\\n' \\+ domain_terms \\+ '\\\\n'\\) if domain_terms else ''\nprompt = _S1_PROMPT_TEMPLATE\\.format\\(content=test_doc, domain_terms_section=domain_terms_section\\)\n\nprint\\('\\[OK\\] Stage 1 prompt rendered -', len\\(prompt\\), 'chars'\\)\nprint\\('\\[OK\\] Terms injected:', \\[e\\.term for e in terms\\]\\)\nprint\\('\\[OK\\] domain_terms_section present:', 'DOMAIN TERMINOLOGY' in prompt\\)\nprint\\('\\[OK\\] source_reference block intact:', 'source_reference' in prompt\\)\nprint\\('\\[OK\\] always_include present \\(DMAIC\\):', 'DMAIC' in prompt\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; & \"c:/github-copiolot/1 A TransIQ/\\.venv/Scripts/python\\.exe\" -c \"from app\\.intelligence\\.context_builder import build_context; from app\\.intelligence\\.pipeline import run_pipeline; sample='Header\\\\n\\\\nDowntime was 12 hrs with \\$400 variance\\.\\\\n\\\\nRepeated note\\\\n\\\\nRepeated note'; reduced=build_context\\(sample, max_output_chars=150000\\); print\\('context_builder_ok', len\\(reduced\\), 'downtime' in reduced\\.lower\\(\\)\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; & \"c:/github-copiolot/1 A TransIQ/\\.venv/Scripts/python\\.exe\" -c \"from llm import client; print\\('client_available', client is not None\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; & \"c:/github-copiolot/1 A TransIQ/\\.venv/Scripts/python\\.exe\" -c \"from app\\.config\\.settings import settings; import os; print\\('settings_has_key', bool\\(settings\\.GEMINI_API_KEY\\)\\); print\\('env_has_key', bool\\(os\\.getenv\\('GEMINI_API_KEY'\\)\\)\\); print\\('default_provider', settings\\.DEFAULT_LLM_PROVIDER\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; & \"c:/github-copiolot/1 A TransIQ/\\.venv/Scripts/python\\.exe\" -c \"from app\\.config\\.settings import settings; from llm import client, validate_gemini_configuration; validate_gemini_configuration\\(\\); print\\('settings_keys', len\\(settings\\.get_gemini_api_keys\\(\\)\\)\\); print\\('client_available', client is not None\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; & \"c:/github-copiolot/1 A TransIQ/\\.venv/Scripts/python\\.exe\" -c \"import main; import app\\.main; print\\('startup_imports_ok', True\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; & \"c:/github-copiolot/1 A TransIQ/\\.venv/Scripts/python\\.exe\" -c \"from app\\.intelligence\\.context_builder import build_context; sample='Header\\\\n\\\\nDowntime was 12 hrs with \\$400 variance\\.\\\\n\\\\nShort 2024\\\\n\\\\nRepeated note\\\\n\\\\nRepeated note'; reduced=build_context\\(sample, max_output_chars=150000\\); print\\('context_builder_ok', len\\(reduced\\), reduced\\.count\\('Repeated note'\\) <= 1\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\" ; & \"c:/github-copiolot/1 A TransIQ/\\.venv/Scripts/python\\.exe\" -c \"from app\\.intelligence\\.context_builder import build_context; sample='Header\\\\n\\\\nMetric label\\\\n\\\\nValue 45%\\\\n\\\\nExplanation text\\\\n\\\\nOther section'; out=build_context\\(sample, max_output_chars=150000\\); print\\('ok', len\\(out\\)\\); print\\(out\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; & \"c:/github-copiolot/1 A TransIQ/\\.venv/Scripts/python\\.exe\" tests/test_v3_offline\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; \\$env:PYTHONPATH='\\.'; & \"c:/github-copiolot/1 A TransIQ/\\.venv/Scripts/python\\.exe\" tests/test_v3_offline\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; \\$env:PYTHONPATH='\\.'; & \"c:/github-copiolot/1 A TransIQ/\\.venv/Scripts/python\\.exe\" -c \"from llm import client; print\\('client_available', client is not None\\); print\\(type\\(client\\)\\.__name__ if client is not None else 'None'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; \\$env:PYTHONPATH='\\.'; & \"c:/github-copiolot/1 A TransIQ/\\.venv/Scripts/python\\.exe\" -c \"from llm import client; from app\\.intelligence\\.pipeline import run_pipeline; sample='Executive Summary\\\\n\\\\nDowntime was 12 hrs with \\$400 variance\\.\\\\n\\\\nDefect rate improved from 8\\.2% to 1\\.8%\\.\\\\n\\\\nProjected annual savings: \\$1\\.52 million\\.\\\\n\\\\nControl plan includes hourly SPC checks\\.'; result=run_pipeline\\(sample, 1, 'PDF', client, content_limit=5000\\); print\\('pipeline_ok', isinstance\\(result, dict\\), sorted\\(result\\.keys\\(\\)\\)\\[:10\\]\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; \\$env:PYTHONPATH='\\.'; & \"c:/github-copiolot/1 A TransIQ/\\.venv/Scripts/python\\.exe\" -c \"import json, time, re; from llm import client; from app\\.intelligence import pipeline as p; from app\\.intelligence\\.context_builder import normalize_block, score_block, split_into_blocks; from app\\.intelligence\\.validation import validate_recommendations, _value_visible_in_text; chunks = \\['''Project Charter - Define Phase\nProblem Statement: Widget production line experiencing 8\\.2% defect rate, well above industry standard of 2%\\.\nProject Scope: Main assembly line, Building A, shifts 1-3\\.\nCTQ: Dimensional accuracy within \\+/- 0\\.05mm tolerance\\.\nVoice of Customer: 47 complaints in Q3 about widget fit issues\\.\nFinancial Exposure: Estimated COPQ of \\$1\\.8 million annually from scrap, rework, and warranty claims\\.\nProject Team: John \\(BB\\), Sarah \\(GB\\), Mike \\(Champion\\), Lisa \\(Process Owner\\)\\.\nTollgate Review: Approved by steering committee on Jan 15\\.''', '''Baseline Measurement - Measure Phase\nData Collection: 500 samples over 4 weeks from all 3 shifts\\.\nMeasurement System Analysis: Gage R&R = 12\\.5% \\(acceptable\\)\\.\nBaseline Sigma Level: 2\\.9 sigma \\(DPMO = 80,757\\)\\.\nProcess Capability: Cpk = 0\\.72, Ppk = 0\\.68\\.\nKey Metrics:\n- Defect Rate: 8\\.2% \\(target: < 2%\\)\n- Cycle Time: 45 sec/unit \\(target: 38 sec/unit\\)\n- First Pass Yield: 91\\.8% \\(target: > 98%\\)\n- Scrap Rate: 4\\.1% of total production\nSIPOC Map: Supplier -> Input\\(steel rods\\) -> Process\\(cutting,forming,assembly\\) -> Output\\(widgets\\) -> Customer\\(OEMs\\)\\.''', '''Root Cause Analysis - Analyze Phase\nFishbone Diagram identified 23 potential causes across 6M categories\\.\nPareto Analysis: Top 3 causes account for 78% of defects:\n1\\. Tool wear \\(42%\\) - cutting tools not replaced per schedule\n2\\. Material variation \\(21%\\) - incoming steel hardness varies \\+/- 15%\n3\\. Operator technique \\(15%\\) - inconsistent fixture clamping force\n\nStatistical Analysis:\n- ANOVA: Tool age vs defect rate, F=34\\.2, p<0\\.001 \\(significant\\)\n- Regression: R-squared = 0\\.82, hardness explains 82% of dimensional variation\n- Chi-square: Shift 2 defect rate significantly higher \\(p=0\\.003\\)\n- Correlation: fixture pressure vs tolerance deviation r = -0\\.76\n\n5-Why Analysis on tool wear:\nWhy 1: Tools not replaced -> Why 2: No tracking system -> Why 3: Manual logs lost\nWhy 4: No digital system -> Why 5: No budget allocated for tool management software\\.''', '''Improvement Actions - Improve Phase\nSolution 1: Implement digital tool life tracking system \\(\\$45,000 one-time\\)\n- Expected impact: Reduce tool-wear defects by 85%\n- Pilot results: Defect rate dropped from 8\\.2% to 3\\.1% in 2-week pilot\n\nSolution 2: Incoming material inspection with hardness testing \\(\\$12,000/year\\)\n- Expected impact: Reject out-of-spec material before production\n- Pilot: 95% of hardness-related defects eliminated\n\nSolution 3: Standardized clamping procedure with torque wrench \\(\\$8,000\\)\n- Training completed for all 45 operators across 3 shifts\n- Fixture-related defects reduced by 70% in pilot\n\nCombined pilot results \\(4 weeks\\):\n- Defect rate: 1\\.8% \\(from 8\\.2% - target achieved!\\)\n- Sigma level improved from 2\\.9 to 3\\.6\n- First Pass Yield: 98\\.2% \\(target: >98% - achieved!\\)\n- Projected annual savings: \\$1\\.52 million''', '''Control Plan - Control Phase\nStatistical Process Control:\n- X-bar and R charts for critical dimensions \\(hourly sampling, n=5\\)\n- P-chart for defect rate \\(daily, all units\\)\n- Alert threshold: 2 consecutive points outside 2-sigma\n\nControl Plan Items:\n1\\. Tool life monitoring: automated alerts at 80% tool life\n2\\. Material inspection: 100% hardness testing on incoming lots\n3\\. Operator certification: quarterly re-certification on clamping procedure\n4\\. Monthly management review of SPC dashboard\n\nResponse Plan:\n- Out of control signal -> Stop production -> Root cause -> Corrective action within 4 hours\n- KPI dashboard updated real-time for shift supervisors\n\nSustainment:\n- Training plan for new operators \\(2-day program\\)\n- Annual process audit by Quality team\n- Lessons learned documented in knowledge base''', '''Executive Summary and Conclusions\nThis Six Sigma DMAIC project successfully reduced the widget defect rate from 8\\.2% to 1\\.8%,\nachieving a sigma level improvement from 2\\.9 to 3\\.6\\.\n\nKey Results:\n- Defect rate: 8\\.2% -> 1\\.8% \\(78% reduction\\)\n- Sigma level: 2\\.9 -> 3\\.6 \\(0\\.7 sigma lift\\)\n- Annual savings: \\$1\\.52 million \\(ROI: 2,338% in year 1\\)\n- First Pass Yield: 91\\.8% -> 98\\.2%\n- Customer complaints: projected 75% reduction\n\nTotal investment: \\$65,000\nPayback period: 16 days\n\nProject completed on schedule\\. Control plan implemented and verified stable for 8 weeks\\.'''\\]; content='\\\\n\\\\n'\\.join\\(chunks\\); \n\ndef phase1_build_context\\(content, max_output_chars=150000\\):\n    blocks = split_into_blocks\\(content\\)\n    if not blocks:\n        return ''\n    scores = \\[score_block\\(block\\) for block in blocks\\]\n    anchors = \\[index for index, score in enumerate\\(scores\\) if score >= 2\\]\n    if not anchors:\n        first_block = blocks\\[0\\]\n        return first_block if len\\(first_block\\) <= max_output_chars else ''\n    def has_digits\\(block\\):\n        return any\\(char\\.isdigit\\(\\) for char in block\\)\n    def neighbor_allowed\\(index\\):\n        return scores\\[index\\] >= 1 or has_digits\\(blocks\\[index\\]\\)\n    def group_char_length\\(indexes\\):\n        return len\\('\\\\n\\\\n'\\.join\\(blocks\\[index\\] for index in indexes\\)\\)\n    def best_neighbor\\(anchor_indexes, candidate_indexes\\):\n        anchor_set = set\\(anchor_indexes\\)\n        neighbor_candidates = \\[index for index in sorted\\(candidate_indexes\\) if index not in anchor_set and neighbor_allowed\\(index\\)\\]\n        if not neighbor_candidates:\n            return \\[\\]\n        best_index = max\\(neighbor_candidates, key=lambda index: \\(scores\\[index\\], has_digits\\(blocks\\[index\\]\\), -len\\(blocks\\[index\\]\\), -abs\\(index - anchor_indexes\\[0\\]\\)\\)\\)\n        return \\[best_index\\]\n    def trim_group_indexes\\(group, anchors_in_group\\):\n        ordered_indexes = sorted\\(group\\)\n        if group_char_length\\(ordered_indexes\\) <= 3000:\n            return ordered_indexes\n        return sorted\\(set\\(anchors_in_group \\+ best_neighbor\\(anchors_in_group, group\\)\\)\\)\n    def merge_overlapping_groups\\(groups\\):\n        merged_groups = \\[\\]\n        for group in groups:\n            overlapping = \\[index for index, existing in enumerate\\(merged_groups\\) if not group\\.isdisjoint\\(existing\\)\\]\n            if not overlapping:\n                merged_groups\\.append\\(set\\(group\\)\\)\n                continue\n            base_group = merged_groups\\[overlapping\\[0\\]\\]\n            base_group\\.update\\(group\\)\n            for index in reversed\\(overlapping\\[1:\\]\\):\n                base_group\\.update\\(merged_groups\\[index\\]\\)\n                del merged_groups\\[index\\]\n        return merged_groups\n    groups = \\[\\]\n    for index in anchors:\n        group = \\{index\\}\n        if index - 1 >= 0 and neighbor_allowed\\(index - 1\\):\n            group\\.add\\(index - 1\\)\n        if index \\+ 1 < len\\(blocks\\) and neighbor_allowed\\(index \\+ 1\\):\n            group\\.add\\(index \\+ 1\\)\n        groups\\.append\\(group\\)\n    merged_groups = merge_overlapping_groups\\(groups\\)\n    group_data = \\[\\]\n    anchor_set = set\\(anchors\\)\n    for group in merged_groups:\n        anchors_in_group = sorted\\(index for index in group if index in anchor_set\\)\n        candidate_indexes = trim_group_indexes\\(group, anchors_in_group\\)\n        if not candidate_indexes:\n            continue\n        group_score = max\\(scores\\[index\\] for index in candidate_indexes\\)\n        group_chars = max\\(group_char_length\\(candidate_indexes\\), 1\\)\n        group_efficiency = group_score / group_chars\n        group_data\\.append\\(\\(candidate_indexes, group_score, group_efficiency\\)\\)\n    group_data\\.sort\\(key=lambda item: \\(-item\\[2\\], -item\\[1\\], item\\[0\\]\\[0\\]\\)\\)\n    selected_indexes = set\\(\\)\n    total_chars = 0\n    for ordered_indexes, _, _ in group_data\\[:14\\]:\n        group_text='\\\\n\\\\n'\\.join\\(blocks\\[index\\] for index in ordered_indexes\\)\n        if total_chars \\+ len\\(group_text\\) > min\\(max_output_chars, int\\(len\\(content\\) \\* 0\\.55\\)\\):\n            continue\n        selected_indexes\\.update\\(ordered_indexes\\)\n        total_chars \\+= len\\(group_text\\)\n    final_blocks = \\[blocks\\[index\\] for index in sorted\\(selected_indexes\\)\\]\n    return '\\\\n\\\\n'\\.join\\(final_blocks\\)\n\ndef extract_summary_text\\(result\\):\n    boardroom = result\\.get\\('boardroom_mode', \\{\\}\\) if isinstance\\(result, dict\\) else \\{\\}\n    if isinstance\\(boardroom, dict\\):\n        for key in \\('executive_summary', 'summary', 'narrative'\\):\n            value = boardroom\\.get\\(key\\)\n            if isinstance\\(value, str\\) and value\\.strip\\(\\):\n                return value\\.strip\\(\\)\n            if isinstance\\(value, list\\):\n                return ' '\\.join\\(str\\(item\\) for item in value if item\\)\n    ceo = result\\.get\\('ceo_view', \\{\\}\\) if isinstance\\(result, dict\\) else \\{\\}\n    for key in \\('executive_summary', 'summary'\\):\n        value = ceo\\.get\\(key\\)\n        if isinstance\\(value, str\\) and value\\.strip\\(\\):\n            return value\\.strip\\(\\)\n    insights = result\\.get\\('dashboard', \\{\\}\\)\\.get\\('insights', \\{\\}\\) if isinstance\\(result, dict\\) else \\{\\}\n    value = insights\\.get\\('summary', ''\\) if isinstance\\(insights, dict\\) else ''\n    return value\\.strip\\(\\) if isinstance\\(value, str\\) else ''\n\ndef dmaic_completeness\\(result\\):\n    dmaic = result\\.get\\('dashboard', \\{\\}\\)\\.get\\('sixSigma', \\{\\}\\)\\.get\\('dmaic', \\{\\}\\)\n    phases = \\['define', 'measure', 'analyze', 'improve', 'control'\\]\n    present = 0\n    for phase in phases:\n        phase_data = dmaic\\.get\\(phase\\)\n        if phase_data:\n            if isinstance\\(phase_data, dict\\):\n                if any\\(bool\\(v\\) for v in phase_data\\.values\\(\\)\\):\n                    present \\+= 1\n            else:\n                present \\+= 1\n    return present\n\ndef metrics\\(label, result, elapsed, context_text\\):\n    kpis = result\\.get\\('dashboard', \\{\\}\\)\\.get\\('kpis', \\[\\]\\)\n    recs = result\\.get\\('dashboard', \\{\\}\\)\\.get\\('optimizationSuggestions', \\[\\]\\)\n    findings = result\\.get\\('dashboard', \\{\\}\\)\\.get\\('findings', \\[\\]\\)\n    validated_recs = validate_recommendations\\(recs, kpis\\)\n    value_mismatches = sum\\(1 for kpi in kpis if not _value_visible_in_text\\(kpi\\.get\\('value'\\), context_text\\)\\)\n    generic_recs = sum\\(1 for rec in validated_recs if not rec\\.get\\('kpi_linked'\\)\\)\n    low_conf_recs = sum\\(1 for rec in recs if float\\(rec\\.get\\('confidence', 1\\) or 1\\) < 0\\.55\\)\n    summary_text = extract_summary_text\\(result\\)\n    return \\{\n        'label': label,\n        'kpi_count': len\\(kpis\\),\n        'evidence_mismatches': value_mismatches,\n        'hallucination_signals': value_mismatches \\+ generic_recs \\+ low_conf_recs,\n        'dmaic_completeness': f'\\{dmaic_completeness\\(result\\)\\}/5',\n        'summary_length_chars': len\\(summary_text\\),\n        'approx_tokens': len\\(json\\.dumps\\(result\\)\\) // 4,\n        'latency_seconds': round\\(elapsed, 2\\),\n    \\}\n\ndef run\\(label, builder\\):\n    original = p\\.build_context\n    p\\.build_context = builder\n    try:\n        start = time\\.time\\(\\)\n        result = p\\.run_pipeline\\(content, 1, 'PDF', client, content_limit=500000\\)\n        elapsed = time\\.time\\(\\) - start\n        return metrics\\(label, result, elapsed, content\\)\n    finally:\n        p\\.build_context = original\n\nsummary = \\{\\}\ntry:\n    summary\\['A_phase1'\\] = run\\('A_phase1', phase1_build_context\\)\n    summary\\['B_phase2'\\] = run\\('B_phase2', p\\.build_context\\)\n    print\\(json\\.dumps\\(summary, indent=2\\)\\)\nexcept Exception as exc:\n    print\\(json\\.dumps\\(\\{'error': type\\(exc\\)\\.__name__, 'message': str\\(exc\\)\\}, indent=2\\)\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; \\$env:PYTHONPATH='\\.'; & \"c:/github-copiolot/1 A TransIQ/\\.venv/Scripts/python\\.exe\" -c \"import json, time; from llm import client; from app\\.intelligence import pipeline as p; from app\\.intelligence\\.context_builder import score_block, split_into_blocks; from app\\.intelligence\\.validation import validate_recommendations, _value_visible_in_text; chunks = \\['''Project Charter - Define Phase\nProblem Statement: Widget production line experiencing 8\\.2% defect rate, well above industry standard of 2%\\.\nProject Scope: Main assembly line, Building A, shifts 1-3\\.\nCTQ: Dimensional accuracy within \\+/- 0\\.05mm tolerance\\.\nVoice of Customer: 47 complaints in Q3 about widget fit issues\\.\nFinancial Exposure: Estimated COPQ of \\$1\\.8 million annually from scrap, rework, and warranty claims\\.\nProject Team: John \\(BB\\), Sarah \\(GB\\), Mike \\(Champion\\), Lisa \\(Process Owner\\)\\.\nTollgate Review: Approved by steering committee on Jan 15\\.''', '''Baseline Measurement - Measure Phase\nData Collection: 500 samples over 4 weeks from all 3 shifts\\.\nMeasurement System Analysis: Gage R&R = 12\\.5% \\(acceptable\\)\\.\nBaseline Sigma Level: 2\\.9 sigma \\(DPMO = 80,757\\)\\.\nProcess Capability: Cpk = 0\\.72, Ppk = 0\\.68\\.\nKey Metrics:\n- Defect Rate: 8\\.2% \\(target: < 2%\\)\n- Cycle Time: 45 sec/unit \\(target: 38 sec/unit\\)\n- First Pass Yield: 91\\.8% \\(target: > 98%\\)\n- Scrap Rate: 4\\.1% of total production\nSIPOC Map: Supplier -> Input\\(steel rods\\) -> Process\\(cutting,forming,assembly\\) -> Output\\(widgets\\) -> Customer\\(OEMs\\)\\.''', '''Root Cause Analysis - Analyze Phase\nFishbone Diagram identified 23 potential causes across 6M categories\\.\nPareto Analysis: Top 3 causes account for 78% of defects:\n1\\. Tool wear \\(42%\\) - cutting tools not replaced per schedule\n2\\. Material variation \\(21%\\) - incoming steel hardness varies \\+/- 15%\n3\\. Operator technique \\(15%\\) - inconsistent fixture clamping force\n\nStatistical Analysis:\n- ANOVA: Tool age vs defect rate, F=34\\.2, p<0\\.001 \\(significant\\)\n- Regression: R-squared = 0\\.82, hardness explains 82% of dimensional variation\n- Chi-square: Shift 2 defect rate significantly higher \\(p=0\\.003\\)\n- Correlation: fixture pressure vs tolerance deviation r = -0\\.76\n\n5-Why Analysis on tool wear:\nWhy 1: Tools not replaced -> Why 2: No tracking system -> Why 3: Manual logs lost\nWhy 4: No digital system -> Why 5: No budget allocated for tool management software\\.''', '''Improvement Actions - Improve Phase\nSolution 1: Implement digital tool life tracking system \\(\\$45,000 one-time\\)\n- Expected impact: Reduce tool-wear defects by 85%\n- Pilot results: Defect rate dropped from 8\\.2% to 3\\.1% in 2-week pilot\n\nSolution 2: Incoming material inspection with hardness testing \\(\\$12,000/year\\)\n- Expected impact: Reject out-of-spec material before production\n- Pilot: 95% of hardness-related defects eliminated\n\nSolution 3: Standardized clamping procedure with torque wrench \\(\\$8,000\\)\n- Training completed for all 45 operators across 3 shifts\n- Fixture-related defects reduced by 70% in pilot\n\nCombined pilot results \\(4 weeks\\):\n- Defect rate: 1\\.8% \\(from 8\\.2% - target achieved!\\)\n- Sigma level improved from 2\\.9 to 3\\.6\n- First Pass Yield: 98\\.2% \\(target: >98% - achieved!\\)\n- Projected annual savings: \\$1\\.52 million''', '''Control Plan - Control Phase\nStatistical Process Control:\n- X-bar and R charts for critical dimensions \\(hourly sampling, n=5\\)\n- P-chart for defect rate \\(daily, all units\\)\n- Alert threshold: 2 consecutive points outside 2-sigma\n\nControl Plan Items:\n1\\. Tool life monitoring: automated alerts at 80% tool life\n2\\. Material inspection: 100% hardness testing on incoming lots\n3\\. Operator certification: quarterly re-certification on clamping procedure\n4\\. Monthly management review of SPC dashboard\n\nResponse Plan:\n- Out of control signal -> Stop production -> Root cause -> Corrective action within 4 hours\n- KPI dashboard updated real-time for shift supervisors\n\nSustainment:\n- Training plan for new operators \\(2-day program\\)\n- Annual process audit by Quality team\n- Lessons learned documented in knowledge base''', '''Executive Summary and Conclusions\nThis Six Sigma DMAIC project successfully reduced the widget defect rate from 8\\.2% to 1\\.8%,\nachieving a sigma level improvement from 2\\.9 to 3\\.6\\.\n\nKey Results:\n- Defect rate: 8\\.2% -> 1\\.8% \\(78% reduction\\)\n- Sigma level: 2\\.9 -> 3\\.6 \\(0\\.7 sigma lift\\)\n- Annual savings: \\$1\\.52 million \\(ROI: 2,338% in year 1\\)\n- First Pass Yield: 91\\.8% -> 98\\.2%\n- Customer complaints: projected 75% reduction\n\nTotal investment: \\$65,000\nPayback period: 16 days\n\nProject completed on schedule\\. Control plan implemented and verified stable for 8 weeks\\.'''\\]; content='\\\\n\\\\n'\\.join\\(chunks\\);\n\ndef phase1_build_context\\(content, max_output_chars=150000\\):\n    blocks = split_into_blocks\\(content\\)\n    if not blocks:\n        return ''\n    scores = \\[score_block\\(block\\) for block in blocks\\]\n    anchors = \\[index for index, score in enumerate\\(scores\\) if score >= 2\\]\n    if not anchors:\n        first_block = blocks\\[0\\]\n        return first_block if len\\(first_block\\) <= max_output_chars else ''\n    def has_digits\\(block\\):\n        return any\\(char\\.isdigit\\(\\) for char in block\\)\n    def neighbor_allowed\\(index\\):\n        return scores\\[index\\] >= 1 or has_digits\\(blocks\\[index\\]\\)\n    def group_char_length\\(indexes\\):\n        return len\\('\\\\n\\\\n'\\.join\\(blocks\\[index\\] for index in indexes\\)\\)\n    def best_neighbor\\(anchor_indexes, candidate_indexes\\):\n        anchor_set = set\\(anchor_indexes\\)\n        neighbor_candidates = \\[index for index in sorted\\(candidate_indexes\\) if index not in anchor_set and neighbor_allowed\\(index\\)\\]\n        if not neighbor_candidates:\n            return \\[\\]\n        best_index = max\\(neighbor_candidates, key=lambda index: \\(scores\\[index\\], has_digits\\(blocks\\[index\\]\\), -len\\(blocks\\[index\\]\\), -abs\\(index - anchor_indexes\\[0\\]\\)\\)\\)\n        return \\[best_index\\]\n    def trim_group_indexes\\(group, anchors_in_group\\):\n        ordered_indexes = sorted\\(group\\)\n        if group_char_length\\(ordered_indexes\\) <= 3000:\n            return ordered_indexes\n        return sorted\\(set\\(anchors_in_group \\+ best_neighbor\\(anchors_in_group, group\\)\\)\\)\n    def merge_overlapping_groups\\(groups\\):\n        merged_groups = \\[\\]\n        for group in groups:\n            overlapping = \\[index for index, existing in enumerate\\(merged_groups\\) if not group\\.isdisjoint\\(existing\\)\\]\n            if not overlapping:\n                merged_groups\\.append\\(set\\(group\\)\\)\n                continue\n            base_group = merged_groups\\[overlapping\\[0\\]\\]\n            base_group\\.update\\(group\\)\n            for index in reversed\\(overlapping\\[1:\\]\\):\n                base_group\\.update\\(merged_groups\\[index\\]\\)\n                del merged_groups\\[index\\]\n        return merged_groups\n    groups = \\[\\]\n    for index in anchors:\n        group = \\{index\\}\n        if index - 1 >= 0 and neighbor_allowed\\(index - 1\\):\n            group\\.add\\(index - 1\\)\n        if index \\+ 1 < len\\(blocks\\) and neighbor_allowed\\(index \\+ 1\\):\n            group\\.add\\(index \\+ 1\\)\n        groups\\.append\\(group\\)\n    merged_groups = merge_overlapping_groups\\(groups\\)\n    group_data = \\[\\]\n    anchor_set = set\\(anchors\\)\n    for group in merged_groups:\n        anchors_in_group = sorted\\(index for index in group if index in anchor_set\\)\n        candidate_indexes = trim_group_indexes\\(group, anchors_in_group\\)\n        if not candidate_indexes:\n            continue\n        group_score = max\\(scores\\[index\\] for index in candidate_indexes\\)\n        group_chars = max\\(group_char_length\\(candidate_indexes\\), 1\\)\n        group_efficiency = group_score / group_chars\n        group_data\\.append\\(\\(candidate_indexes, group_score, group_efficiency\\)\\)\n    group_data\\.sort\\(key=lambda item: \\(-item\\[2\\], -item\\[1\\], item\\[0\\]\\[0\\]\\)\\)\n    selected_indexes = set\\(\\)\n    total_chars = 0\n    for ordered_indexes, _, _ in group_data\\[:14\\]:\n        group_text='\\\\n\\\\n'\\.join\\(blocks\\[index\\] for index in ordered_indexes\\)\n        if total_chars \\+ len\\(group_text\\) > min\\(max_output_chars, int\\(len\\(content\\) \\* 0\\.55\\)\\):\n            continue\n        selected_indexes\\.update\\(ordered_indexes\\)\n        total_chars \\+= len\\(group_text\\)\n    final_blocks = \\[blocks\\[index\\] for index in sorted\\(selected_indexes\\)\\]\n    return '\\\\n\\\\n'\\.join\\(final_blocks\\)\n\ndef extract_summary_text\\(result\\):\n    boardroom = result\\.get\\('boardroom_mode', \\{\\}\\) if isinstance\\(result, dict\\) else \\{\\}\n    if isinstance\\(boardroom, dict\\):\n        for key in \\('executive_summary', 'summary', 'narrative'\\):\n            value = boardroom\\.get\\(key\\)\n            if isinstance\\(value, str\\) and value\\.strip\\(\\):\n                return value\\.strip\\(\\)\n            if isinstance\\(value, list\\):\n                return ' '\\.join\\(str\\(item\\) for item in value if item\\)\n    ceo = result\\.get\\('ceo_view', \\{\\}\\) if isinstance\\(result, dict\\) else \\{\\}\n    for key in \\('executive_summary', 'summary'\\):\n        value = ceo\\.get\\(key\\)\n        if isinstance\\(value, str\\) and value\\.strip\\(\\):\n            return value\\.strip\\(\\)\n    insights = result\\.get\\('dashboard', \\{\\}\\)\\.get\\('insights', \\{\\}\\) if isinstance\\(result, dict\\) else \\{\\}\n    value = insights\\.get\\('summary', ''\\) if isinstance\\(insights, dict\\) else ''\n    return value\\.strip\\(\\) if isinstance\\(value, str\\) else ''\n\ndef dmaic_completeness\\(result\\):\n    dmaic = result\\.get\\('dashboard', \\{\\}\\)\\.get\\('sixSigma', \\{\\}\\)\\.get\\('dmaic', \\{\\}\\)\n    phases = \\['define', 'measure', 'analyze', 'improve', 'control'\\]\n    present = 0\n    for phase in phases:\n        phase_data = dmaic\\.get\\(phase\\)\n        if phase_data:\n            if isinstance\\(phase_data, dict\\):\n                if any\\(bool\\(v\\) for v in phase_data\\.values\\(\\)\\):\n                    present \\+= 1\n            else:\n                present \\+= 1\n    return present\n\ndef metrics\\(label, result, elapsed, context_text\\):\n    kpis = result\\.get\\('dashboard', \\{\\}\\)\\.get\\('kpis', \\[\\]\\)\n    recs = result\\.get\\('dashboard', \\{\\}\\)\\.get\\('optimizationSuggestions', \\[\\]\\)\n    validated_recs = validate_recommendations\\(recs, kpis\\)\n    value_mismatches = sum\\(1 for kpi in kpis if not _value_visible_in_text\\(kpi\\.get\\('value'\\), context_text\\)\\)\n    generic_recs = sum\\(1 for rec in validated_recs if not rec\\.get\\('kpi_linked'\\)\\)\n    low_conf_recs = sum\\(1 for rec in recs if float\\(rec\\.get\\('confidence', 1\\) or 1\\) < 0\\.55\\)\n    summary_text = extract_summary_text\\(result\\)\n    return \\{\n        'label': label,\n        'kpi_count': len\\(kpis\\),\n        'evidence_mismatches': value_mismatches,\n        'hallucination_signals': value_mismatches \\+ generic_recs \\+ low_conf_recs,\n        'dmaic_completeness': f'\\{dmaic_completeness\\(result\\)\\}/5',\n        'summary_length_chars': len\\(summary_text\\),\n        'approx_tokens': len\\(json\\.dumps\\(result\\)\\) // 4,\n        'latency_seconds': round\\(elapsed, 2\\),\n    \\}\n\ndef run\\(label, builder\\):\n    original = p\\.build_context\n    p\\.build_context = builder\n    try:\n        start = time\\.time\\(\\)\n        result = p\\.run_pipeline\\(content, 1, 'PDF', client, content_limit=500000\\)\n        elapsed = time\\.time\\(\\) - start\n        return metrics\\(label, result, elapsed, content\\)\n    finally:\n        p\\.build_context = original\n\nsummary = \\{\\}\ntry:\n    summary\\['A_phase1'\\] = run\\('A_phase1', phase1_build_context\\)\n    summary\\['B_phase2'\\] = run\\('B_phase2', p\\.build_context\\)\n    print\\(json\\.dumps\\(summary, indent=2\\)\\)\nexcept Exception as exc:\n    print\\(json\\.dumps\\(\\{'error': type\\(exc\\)\\.__name__, 'message': str\\(exc\\)\\}, indent=2\\)\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; \\$env:PYTHONPATH='\\.'; & \"c:/github-copiolot/1 A TransIQ/\\.venv/Scripts/python\\.exe\" -c \"import json, time; from llm import client; from app\\.intelligence import pipeline as p; from app\\.intelligence\\.context_builder import score_block, split_into_blocks; from app\\.intelligence\\.validation import validate_recommendations, _value_visible_in_text; chunks = \\['''Project Charter - Define Phase\nProblem Statement: Widget production line experiencing 8\\.2% defect rate, well above industry standard of 2%\\.\nProject Scope: Main assembly line, Building A, shifts 1-3\\.\nCTQ: Dimensional accuracy within \\+/- 0\\.05mm tolerance\\.\nVoice of Customer: 47 complaints in Q3 about widget fit issues\\.\nFinancial Exposure: Estimated COPQ of \\$1\\.8 million annually from scrap, rework, and warranty claims\\.\nProject Team: John \\(BB\\), Sarah \\(GB\\), Mike \\(Champion\\), Lisa \\(Process Owner\\)\\.\nTollgate Review: Approved by steering committee on Jan 15\\.''', '''Baseline Measurement - Measure Phase\nData Collection: 500 samples over 4 weeks from all 3 shifts\\.\nMeasurement System Analysis: Gage R&R = 12\\.5% \\(acceptable\\)\\.\nBaseline Sigma Level: 2\\.9 sigma \\(DPMO = 80,757\\)\\.\nProcess Capability: Cpk = 0\\.72, Ppk = 0\\.68\\.\nKey Metrics:\n- Defect Rate: 8\\.2% \\(target: < 2%\\)\n- Cycle Time: 45 sec/unit \\(target: 38 sec/unit\\)\n- First Pass Yield: 91\\.8% \\(target: > 98%\\)\n- Scrap Rate: 4\\.1% of total production\nSIPOC Map: Supplier -> Input\\(steel rods\\) -> Process\\(cutting,forming,assembly\\) -> Output\\(widgets\\) -> Customer\\(OEMs\\)\\.''', '''Root Cause Analysis - Analyze Phase\nFishbone Diagram identified 23 potential causes across 6M categories\\.\nPareto Analysis: Top 3 causes account for 78% of defects:\n1\\. Tool wear \\(42%\\) - cutting tools not replaced per schedule\n2\\. Material variation \\(21%\\) - incoming steel hardness varies \\+/- 15%\n3\\. Operator technique \\(15%\\) - inconsistent fixture clamping force\n\nStatistical Analysis:\n- ANOVA: Tool age vs defect rate, F=34\\.2, p<0\\.001 \\(significant\\)\n- Regression: R-squared = 0\\.82, hardness explains 82% of dimensional variation\n- Chi-square: Shift 2 defect rate significantly higher \\(p=0\\.003\\)\n- Correlation: fixture pressure vs tolerance deviation r = -0\\.76\n\n5-Why Analysis on tool wear:\nWhy 1: Tools not replaced -> Why 2: No tracking system -> Why 3: Manual logs lost\nWhy 4: No digital system -> Why 5: No budget allocated for tool management software\\.''', '''Improvement Actions - Improve Phase\nSolution 1: Implement digital tool life tracking system \\(\\$45,000 one-time\\)\n- Expected impact: Reduce tool-wear defects by 85%\n- Pilot results: Defect rate dropped from 8\\.2% to 3\\.1% in 2-week pilot\n\nSolution 2: Incoming material inspection with hardness testing \\(\\$12,000/year\\)\n- Expected impact: Reject out-of-spec material before production\n- Pilot: 95% of hardness-related defects eliminated\n\nSolution 3: Standardized clamping procedure with torque wrench \\(\\$8,000\\)\n- Training completed for all 45 operators across 3 shifts\n- Fixture-related defects reduced by 70% in pilot\n\nCombined pilot results \\(4 weeks\\):\n- Defect rate: 1\\.8% \\(from 8\\.2% - target achieved!\\)\n- Sigma level improved from 2\\.9 to 3\\.6\n- First Pass Yield: 98\\.2% \\(target: >98% - achieved!\\)\n- Projected annual savings: \\$1\\.52 million''', '''Control Plan - Control Phase\nStatistical Process Control:\n- X-bar and R charts for critical dimensions \\(hourly sampling, n=5\\)\n- P-chart for defect rate \\(daily, all units\\)\n- Alert threshold: 2 consecutive points outside 2-sigma\n\nControl Plan Items:\n1\\. Tool life monitoring: automated alerts at 80% tool life\n2\\. Material inspection: 100% hardness testing on incoming lots\n3\\. Operator certification: quarterly re-certification on clamping procedure\n4\\. Monthly management review of SPC dashboard\n\nResponse Plan:\n- Out of control signal -> Stop production -> Root cause -> Corrective action within 4 hours\n- KPI dashboard updated real-time for shift supervisors\n\nSustainment:\n- Training plan for new operators \\(2-day program\\)\n- Annual process audit by Quality team\n- Lessons learned documented in knowledge base''', '''Executive Summary and Conclusions\nThis Six Sigma DMAIC project successfully reduced the widget defect rate from 8\\.2% to 1\\.8%,\nachieving a sigma level improvement from 2\\.9 to 3\\.6\\.\n\nKey Results:\n- Defect rate: 8\\.2% -> 1\\.8% \\(78% reduction\\)\n- Sigma level: 2\\.9 -> 3\\.6 \\(0\\.7 sigma lift\\)\n- Annual savings: \\$1\\.52 million \\(ROI: 2,338% in year 1\\)\n- First Pass Yield: 91\\.8% -> 98\\.2%\n- Customer complaints: projected 75% reduction\n\nTotal investment: \\$65,000\nPayback period: 16 days\n\nProject completed on schedule\\. Control plan implemented and verified stable for 8 weeks\\.'''\\]; content='\\\\n\\\\n'\\.join\\(chunks\\);\n\ndef phase1_build_context\\(content, max_output_chars=150000\\):\n    blocks = split_into_blocks\\(content\\)\n    if not blocks:\n        return ''\n    scores = \\[score_block\\(block\\) for block in blocks\\]\n    anchors = \\[index for index, score in enumerate\\(scores\\) if score >= 2\\]\n    if not anchors:\n        first_block = blocks\\[0\\]\n        return first_block if len\\(first_block\\) <= max_output_chars else ''\n    def has_digits\\(block\\):\n        return any\\(char\\.isdigit\\(\\) for char in block\\)\n    def neighbor_allowed\\(index\\):\n        return scores\\[index\\] >= 1 or has_digits\\(blocks\\[index\\]\\)\n    def group_char_length\\(indexes\\):\n        return len\\('\\\\n\\\\n'\\.join\\(blocks\\[index\\] for index in indexes\\)\\)\n    def best_neighbor\\(anchor_indexes, candidate_indexes\\):\n        anchor_set = set\\(anchor_indexes\\)\n        neighbor_candidates = \\[index for index in sorted\\(candidate_indexes\\) if index not in anchor_set and neighbor_allowed\\(index\\)\\]\n        if not neighbor_candidates:\n            return \\[\\]\n        best_index = max\\(neighbor_candidates, key=lambda index: \\(scores\\[index\\], has_digits\\(blocks\\[index\\]\\), -len\\(blocks\\[index\\]\\), -abs\\(index - anchor_indexes\\[0\\]\\)\\)\\)\n        return \\[best_index\\]\n    def trim_group_indexes\\(group, anchors_in_group\\):\n        ordered_indexes = sorted\\(group\\)\n        if group_char_length\\(ordered_indexes\\) <= 3000:\n            return ordered_indexes\n        return sorted\\(set\\(anchors_in_group \\+ best_neighbor\\(anchors_in_group, group\\)\\)\\)\n    def merge_overlapping_groups\\(groups\\):\n        merged_groups = \\[\\]\n        for group in groups:\n            overlapping = \\[index for index, existing in enumerate\\(merged_groups\\) if not group\\.isdisjoint\\(existing\\)\\]\n            if not overlapping:\n                merged_groups\\.append\\(set\\(group\\)\\)\n                continue\n            base_group = merged_groups\\[overlapping\\[0\\]\\]\n            base_group\\.update\\(group\\)\n            for index in reversed\\(overlapping\\[1:\\]\\):\n                base_group\\.update\\(merged_groups\\[index\\]\\)\n                del merged_groups\\[index\\]\n        return merged_groups\n    groups = \\[\\]\n    for index in anchors:\n        group = \\{index\\}\n        if index - 1 >= 0 and neighbor_allowed\\(index - 1\\):\n            group\\.add\\(index - 1\\)\n        if index \\+ 1 < len\\(blocks\\) and neighbor_allowed\\(index \\+ 1\\):\n            group\\.add\\(index \\+ 1\\)\n        groups\\.append\\(group\\)\n    merged_groups = merge_overlapping_groups\\(groups\\)\n    group_data = \\[\\]\n    anchor_set = set\\(anchors\\)\n    for group in merged_groups:\n        anchors_in_group = sorted\\(index for index in group if index in anchor_set\\)\n        candidate_indexes = trim_group_indexes\\(group, anchors_in_group\\)\n        if not candidate_indexes:\n            continue\n        group_score = max\\(scores\\[index\\] for index in candidate_indexes\\)\n        group_chars = max\\(group_char_length\\(candidate_indexes\\), 1\\)\n        group_efficiency = group_score / group_chars\n        group_data\\.append\\(\\(candidate_indexes, group_score, group_efficiency\\)\\)\n    group_data\\.sort\\(key=lambda item: \\(-item\\[2\\], -item\\[1\\], item\\[0\\]\\[0\\]\\)\\)\n    selected_indexes = set\\(\\)\n    total_chars = 0\n    for ordered_indexes, _, _ in group_data\\[:14\\]:\n        group_text='\\\\n\\\\n'\\.join\\(blocks\\[index\\] for index in ordered_indexes\\)\n        if total_chars \\+ len\\(group_text\\) > min\\(max_output_chars, int\\(len\\(content\\) \\* 0\\.55\\)\\):\n            continue\n        selected_indexes\\.update\\(ordered_indexes\\)\n        total_chars \\+= len\\(group_text\\)\n    final_blocks = \\[blocks\\[index\\] for index in sorted\\(selected_indexes\\)\\]\n    return '\\\\n\\\\n'\\.join\\(final_blocks\\)\n\ndef metrics\\(label, result, elapsed, context_text\\):\n    kpis = result\\.get\\('dashboard', \\{\\}\\)\\.get\\('kpis', \\[\\]\\)\n    recs = result\\.get\\('dashboard', \\{\\}\\)\\.get\\('optimizationSuggestions', \\[\\]\\)\n    validated_recs = validate_recommendations\\(recs, kpis\\)\n    value_mismatches = sum\\(1 for kpi in kpis if not _value_visible_in_text\\(kpi\\.get\\('value'\\), context_text\\)\\)\n    generic_recs = sum\\(1 for rec in validated_recs if not rec\\.get\\('kpi_linked'\\)\\)\n    low_conf_recs = sum\\(1 for rec in recs if float\\(rec\\.get\\('confidence', 1\\) or 1\\) < 0\\.55\\)\n    stage1_context = p\\.build_context\\(context_text, max_output_chars=150000\\)\n    compression = 1 - \\(len\\(stage1_context\\) / len\\(context_text\\)\\)\n    return \\{\n        'label': label,\n        'kpi_count': len\\(kpis\\),\n        'evidence_mismatches': value_mismatches,\n        'hallucination_signals': value_mismatches \\+ generic_recs \\+ low_conf_recs,\n        'compression_percent': round\\(compression \\* 100, 2\\),\n        'latency_seconds': round\\(elapsed, 2\\),\n    \\}\n\ndef run\\(label, builder\\):\n    original = p\\.build_context\n    p\\.build_context = builder\n    try:\n        start = time\\.time\\(\\)\n        result = p\\.run_pipeline\\(content, 1, 'PDF', client, content_limit=500000\\)\n        elapsed = time\\.time\\(\\) - start\n        return metrics\\(label, result, elapsed, content\\)\n    finally:\n        p\\.build_context = original\n\nsummary = \\{\\}\ntry:\n    summary\\['A_phase1'\\] = run\\('A_phase1', phase1_build_context\\)\n    summary\\['B_phase2'\\] = run\\('B_phase2', p\\.build_context\\)\n    print\\(json\\.dumps\\(summary, indent=2\\)\\)\nexcept Exception as exc:\n    print\\(json\\.dumps\\(\\{'error': type\\(exc\\)\\.__name__, 'message': str\\(exc\\)\\}, indent=2\\)\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\TransIQ-backend-master\\\\TransIQ-backend-master\"; \\$env:PYTHONPATH='\\.'; & \"c:/github-copiolot/1 A TransIQ/\\.venv/Scripts/python\\.exe\" -c \"import json, time; from llm import client; from app\\.intelligence import pipeline as p; from app\\.intelligence\\.context_builder import score_block, split_into_blocks; from app\\.intelligence\\.validation import validate_recommendations, _value_visible_in_text; chunks = \\['''Project Charter - Define Phase\\\\nProblem Statement: Widget production line experiencing 8\\.2% defect rate, well above industry standard of 2%\\.\\\\nProject Scope: Main assembly line, Building A, shifts 1-3\\.\\\\nCTQ: Dimensional accuracy within \\+/- 0\\.05mm tolerance\\.\\\\nVoice of Customer: 47 complaints in Q3 about widget fit issues\\.\\\\nFinancial Exposure: Estimated COPQ of \\$1\\.8 million annually from scrap, rework, and warranty claims\\.\\\\nProject Team: John \\(BB\\), Sarah \\(GB\\), Mike \\(Champion\\), Lisa \\(Process Owner\\)\\.\\\\nTollgate Review: Approved by steering committee on Jan 15\\.''', '''Baseline Measurement - Measure Phase\\\\nData Collection: 500 samples over 4 weeks from all 3 shifts\\.\\\\nMeasurement System Analysis: Gage R&R = 12\\.5% \\(acceptable\\)\\.\\\\nBaseline Sigma Level: 2\\.9 sigma \\(DPMO = 80,757\\)\\.\\\\nProcess Capability: Cpk = 0\\.72, Ppk = 0\\.68\\.\\\\nKey Metrics:\\\\n- Defect Rate: 8\\.2% \\(target: < 2%\\)\\\\n- Cycle Time: 45 sec/unit \\(target: 38 sec/unit\\)\\\\n- First Pass Yield: 91\\.8% \\(target: > 98%\\)\\\\n- Scrap Rate: 4\\.1% of total production\\\\nSIPOC Map: Supplier -> Input\\(steel rods\\) -> Process\\(cutting,forming,assembly\\) -> Output\\(widgets\\) -> Customer\\(OEMs\\)\\.''', '''Root Cause Analysis - Analyze Phase\\\\nFishbone Diagram identified 23 potential causes across 6M categories\\.\\\\nPareto Analysis: Top 3 causes account for 78% of defects:\\\\n1\\. Tool wear \\(42%\\) - cutting tools not replaced per schedule\\\\n2\\. Material variation \\(21%\\) - incoming steel hardness varies \\+/- 15%\\\\n3\\. Operator technique \\(15%\\) - inconsistent fixture clamping force\\\\n\\\\nStatistical Analysis:\\\\n- ANOVA: Tool age vs defect rate, F=34\\.2, p<0\\.001 \\(significant\\)\\\\n- Regression: R-squared = 0\\.82, hardness explains 82% of dimensional variation\\\\n- Chi-square: Shift 2 defect rate significantly higher \\(p=0\\.003\\)\\\\n- Correlation: fixture pressure vs tolerance deviation r = -0\\.76\\\\n\\\\n5-Why Analysis on tool wear:\\\\nWhy 1: Tools not replaced -> Why 2: No tracking system -> Why 3: Manual logs lost\\\\nWhy 4: No digital system -> Why 5: No budget allocated for tool management software\\.''', '''Improvement Actions - Improve Phase\\\\nSolution 1: Implement digital tool life tracking system \\(\\$45,000 one-time\\)\\\\n- Expected impact: Reduce tool-wear defects by 85%\\\\n- Pilot results: Defect rate dropped from 8\\.2% to 3\\.1% in 2-week pilot\\\\n\\\\nSolution 2: Incoming material inspection with hardness testing \\(\\$12,000/year\\)\\\\n- Expected impact: Reject out-of-spec material before production\\\\n- Pilot: 95% of hardness-related defects eliminated\\\\n\\\\nSolution 3: Standardized clamping procedure with torque wrench \\(\\$8,000\\)\\\\n- Training completed for all 45 operators across 3 shifts\\\\n- Fixture-related defects reduced by 70% in pilot\\\\n\\\\nCombined pilot results \\(4 weeks\\):\\\\n- Defect rate: 1\\.8% \\(from 8\\.2% - target achieved!\\)\\\\n- Sigma level improved from 2\\.9 to 3\\.6\\\\n- First Pass Yield: 98\\.2% \\(target: >98% - achieved!\\)\\\\n- Projected annual savings: \\$1\\.52 million''', '''Control Plan - Control Phase\\\\nStatistical Process Control:\\\\n- X-bar and R charts for critical dimensions \\(hourly sampling, n=5\\)\\\\n- P-chart for defect rate \\(daily, all units\\)\\\\n- Alert threshold: 2 consecutive points outside 2-sigma\\\\n\\\\nControl Plan Items:\\\\n1\\. Tool life monitoring: automated alerts at 80% tool life\\\\n2\\. Material inspection: 100% hardness testing on incoming lots\\\\n3\\. Operator certification: quarterly re-certification on clamping procedure\\\\n4\\. Monthly management review of SPC dashboard\\\\n\\\\nResponse Plan:\\\\n- Out of control signal -> Stop production -> Root cause -> Corrective action within 4 hours\\\\n- KPI dashboard updated real-time for shift supervisors\\\\n\\\\nSustainment:\\\\n- Training plan for new operators \\(2-day program\\)\\\\n- Annual process audit by Quality team\\\\n- Lessons learned documented in knowledge base''', '''Executive Summary and Conclusions\\\\nThis Six Sigma DMAIC project successfully reduced the widget defect rate from 8\\.2% to 1\\.8%,\\\\nachieving a sigma level improvement from 2\\.9 to 3\\.6\\.\\\\n\\\\nKey Results:\\\\n- Defect rate: 8\\.2% -> 1\\.8% \\(78% reduction\\)\\\\n- Sigma level: 2\\.9 -> 3\\.6 \\(0\\.7 sigma lift\\)\\\\n- Annual savings: \\$1\\.52 million \\(ROI: 2,338% in year 1\\)\\\\n- First Pass Yield: 91\\.8% -> 98\\.2%\\\\n- Customer complaints: projected 75% reduction\\\\n\\\\nTotal investment: \\$65,000\\\\nPayback period: 16 days\\\\n\\\\nProject completed on schedule\\. Control plan implemented and verified stable for 8 weeks\\.'''\\]; content='\\\\n\\\\n'\\.join\\(chunks\\);\n\ndef phase1_build_context\\(content, max_output_chars=150000\\):\n    blocks = split_into_blocks\\(content\\)\n    if not blocks:\n        return ''\n    scores = \\[score_block\\(block\\) for block in blocks\\]\n    anchors = \\[index for index, score in enumerate\\(scores\\) if score >= 2\\]\n    if not anchors:\n        first_block = blocks\\[0\\]\n        return first_block if len\\(first_block\\) <= max_output_chars else ''\n    def has_digits\\(block\\):\n        return any\\(char\\.isdigit\\(\\) for char in block\\)\n    def neighbor_allowed\\(index\\):\n        return scores\\[index\\] >= 1 or has_digits\\(blocks\\[index\\]\\)\n    def group_char_length\\(indexes\\):\n        return len\\('\\\\n\\\\n'\\.join\\(blocks\\[index\\] for index in indexes\\)\\)\n    def best_neighbor\\(anchor_indexes, candidate_indexes\\):\n        anchor_set = set\\(anchor_indexes\\)\n        neighbor_candidates = \\[index for index in sorted\\(candidate_indexes\\) if index not in anchor_set and neighbor_allowed\\(index\\)\\]\n        if not neighbor_candidates:\n            return \\[\\]\n        best_index = max\\(neighbor_candidates, key=lambda index: \\(scores\\[index\\], has_digits\\(blocks\\[index\\]\\), -len\\(blocks\\[index\\]\\), -abs\\(index - anchor_indexes\\[0\\]\\)\\)\\)\n        return \\[best_index\\]\n    def trim_group_indexes\\(group, anchors_in_group\\):\n        ordered_indexes = sorted\\(group\\)\n        if group_char_length\\(ordered_indexes\\) <= 3000:\n            return ordered_indexes\n        return sorted\\(set\\(anchors_in_group \\+ best_neighbor\\(anchors_in_group, group\\)\\)\\)\n    def merge_overlapping_groups\\(groups\\):\n        merged_groups = \\[\\]\n        for group in groups:\n            overlapping = \\[index for index, existing in enumerate\\(merged_groups\\) if not group\\.isdisjoint\\(existing\\)\\]\n            if not overlapping:\n                merged_groups\\.append\\(set\\(group\\)\\)\n                continue\n            base_group = merged_groups\\[overlapping\\[0\\]\\]\n            base_group\\.update\\(group\\)\n            for index in reversed\\(overlapping\\[1:\\]\\):\n                base_group\\.update\\(merged_groups\\[index\\]\\)\n                del merged_groups\\[index\\]\n        return merged_groups\n    groups = \\[\\]\n    for index in anchors:\n        group = \\{index\\}\n        if index - 1 >= 0 and neighbor_allowed\\(index - 1\\):\n            group\\.add\\(index - 1\\)\n        if index \\+ 1 < len\\(blocks\\) and neighbor_allowed\\(index \\+ 1\\):\n            group\\.add\\(index \\+ 1\\)\n        groups\\.append\\(group\\)\n    merged_groups = merge_overlapping_groups\\(groups\\)\n    group_data = \\[\\]\n    anchor_set = set\\(anchors\\)\n    for group in merged_groups:\n        anchors_in_group = sorted\\(index for index in group if index in anchor_set\\)\n        candidate_indexes = trim_group_indexes\\(group, anchors_in_group\\)\n        if not candidate_indexes:\n            continue\n        group_score = max\\(scores\\[index\\] for index in candidate_indexes\\)\n        group_chars = max\\(group_char_length\\(candidate_indexes\\), 1\\)\n        group_efficiency = group_score / group_chars\n        group_data\\.append\\(\\(candidate_indexes, group_score, group_efficiency\\)\\)\n    group_data\\.sort\\(key=lambda item: \\(-item\\[2\\], -item\\[1\\], item\\[0\\]\\[0\\]\\)\\)\n    selected_indexes = set\\(\\)\n    total_chars = 0\n    for ordered_indexes, _, _ in group_data\\[:14\\]:\n        group_text='\\\\n\\\\n'\\.join\\(blocks\\[index\\] for index in ordered_indexes\\)\n        if total_chars \\+ len\\(group_text\\) > min\\(max_output_chars, int\\(len\\(content\\) \\* 0\\.55\\)\\):\n            continue\n        selected_indexes\\.update\\(ordered_indexes\\)\n        total_chars \\+= len\\(group_text\\)\n    final_blocks = \\[blocks\\[index\\] for index in sorted\\(selected_indexes\\)\\]\n    return '\\\\n\\\\n'\\.join\\(final_blocks\\)\n\ndef metrics\\(label, result, elapsed, context_text\\):\n    kpis = result\\.get\\('dashboard', \\{\\}\\)\\.get\\('kpis', \\[\\]\\)\n    recs = result\\.get\\('dashboard', \\{\\}\\)\\.get\\('optimizationSuggestions', \\[\\]\\)\n    validated_recs = validate_recommendations\\(recs, kpis\\)\n    value_mismatches = sum\\(1 for kpi in kpis if not _value_visible_in_text\\(kpi\\.get\\('value'\\), context_text\\)\\)\n    generic_recs = sum\\(1 for rec in validated_recs if not rec\\.get\\('kpi_linked'\\)\\)\n    low_conf_recs = sum\\(1 for rec in recs if float\\(rec\\.get\\('confidence', 1\\) or 1\\) < 0\\.55\\)\n    stage1_context = p\\.build_context\\(context_text, max_output_chars=150000\\)\n    compression = 1 - \\(len\\(stage1_context\\) / len\\(context_text\\)\\)\n    return \\{\n        'label': label,\n        'kpi_count': len\\(kpis\\),\n        'evidence_mismatches': value_mismatches,\n        'hallucination_signals': value_mismatches \\+ generic_recs \\+ low_conf_recs,\n        'compression_percent': round\\(compression \\* 100, 2\\),\n        'latency_seconds': round\\(elapsed, 2\\),\n    \\}\n\ndef run\\(label, builder\\):\n    original = p\\.build_context\n    p\\.build_context = builder\n    try:\n        start = time\\.time\\(\\)\n        result = p\\.run_pipeline\\(content, 1, 'PDF', client, content_limit=500000\\)\n        elapsed = time\\.time\\(\\) - start\n        return metrics\\(label, result, elapsed, content\\)\n    finally:\n        p\\.build_context = original\n\nsummary = \\{\\}\ntry:\n    summary\\['A_phase1'\\] = run\\('A_phase1', phase1_build_context\\)\n    summary\\['B_phase2'\\] = run\\('B_phase2', p\\.build_context\\)\n    print\\(json\\.dumps\\(summary, indent=2\\)\\)\nexcept Exception as exc:\n    print\\(json\\.dumps\\(\\{'error': type\\(exc\\)\\.__name__, 'message': str\\(exc\\)\\}, indent=2\\)\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^pytest test_phase5_deployment\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^\\$root='c:\\\\github-copiolot\\\\1 A TransIQ';\nfunction Show-Tree\\(\\$base\\) \\{\n  Write-Output \\(\"=== \" \\+ \\[IO\\.Path\\]::GetFileName\\(\\$base\\) \\+ \" ===\"\\);\n  Get-ChildItem -LiteralPath \\$base -Recurse -Force \\|\n    Where-Object \\{ \\$_\\.FullName -notmatch '\\\\\\\\node_modules\\\\\\\\\\|\\\\\\\\dist\\\\\\\\\\|\\\\\\\\\\.venv\\\\\\\\\\|\\\\\\\\__pycache__\\\\\\\\\\|\\\\\\\\\\.pytest_cache\\\\\\\\\\|\\\\\\\\\\.git\\\\\\\\\\|\\\\\\\\_wrapper_conflicts\\\\\\\\' \\} \\|\n    ForEach-Object \\{\n      \\$rel = \\$_\\.FullName\\.Substring\\(\\$base\\.Length\\)\\.TrimStart\\('\\\\\\\\'\\);\n      if \\(\\$_\\.PSIsContainer\\) \\{\n        \"\\[D\\] \\$rel\"\n      \\} else \\{\n        \"\\[F\\] \\$rel\"\n      \\}\n    \\}\n\\}\nShow-Tree \\(Join-Path \\$root 'Backend'\\);\n'';\nShow-Tree \\(Join-Path \\$root 'Frontend'\\);$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\pip install pdfplumber pytesseract \"statsmodels>=0\\.14\\.0\" \"scipy>=1\\.11\\.0\" \"Pillow>=10\\.0\\.0\" \"reportlab>=4\\.1\\.0\" \"slowapi>=0\\.1\\.9\" 2>&1 \\| Select-Object -Last 20$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -m pip install pdfplumber pytesseract \"statsmodels>=0\\.14\\.0\" \"scipy>=1\\.11\\.0\" \"Pillow>=10\\.0\\.0\" \"reportlab>=4\\.1\\.0\" \"slowapi>=0\\.1\\.9\" 2>&1 \\| Select-Object -Last 30$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"\n# Test all P1 module imports\nfrom app\\.ddr\\.ddr_parser import parse_ddr_pdf, parse_multiple_ddrs, DDRParseResult\nfrom app\\.ddr\\.spc_engine import compute_spc, compute_fleet_spc, SPCResult\nfrom app\\.ddr\\.models import DDRReport, DDRRig, DepthSummary, Timeline, NPTEvent, FormationTop, Survey, MudData, MudChemical, DrillString, Personnel, BulkLogistics, HSEData, ForemanRemark, KPIAudit, ExtractedMetric\nfrom app\\.ddr\\.citation_service import build_citation, save_extracted_metrics, update_metric, get_metric_audit_trail, get_report_metrics\nfrom app\\.ddr\\.report_detector import detect_report_type, detect_report_type_from_text, DetectionResult\nfrom app\\.llm\\.providers\\.anthropic import AnthropicProvider\nfrom app\\.llm\\.factory import LLMFactory\nfrom app\\.ddr\\.endpoints import router as ddr_router\nprint\\('All P1 imports OK'\\)\nprint\\(f'LLM providers: \\{LLMFactory\\.list_available_providers\\(\\)\\}'\\)\nprint\\(f'DDR models: 16 tables imported'\\)\nprint\\(f'DDR router prefix: \\{ddr_router\\.prefix\\}'\\)\nprint\\(f'DDR router routes: \\{len\\(ddr_router\\.routes\\)\\}'\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^\\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"\nfrom app\\.ddr\\.spc_engine import compute_spc\nimport json\n\n# Test SPC with sample ROP data\nrop_data = \\[45\\.2, 48\\.1, 42\\.8, 50\\.3, 47\\.6, 44\\.9, 46\\.2, 51\\.1, 43\\.7, 49\\.8, \n            46\\.5, 48\\.3, 45\\.0, 47\\.2, 44\\.6, 52\\.9, 41\\.3, 48\\.7, 46\\.1, 45\\.8\\]\n\nresult = compute_spc\\(rop_data, metric_name='ROP \\(ft/hr\\)', rig_ids=\\['RIG-1'\\]\\*20, usl=55\\.0, lsl=40\\.0\\)\nprint\\(f'Mean: \\{result\\.mean\\}'\\)\nprint\\(f'UCL:  \\{result\\.ucl\\}'\\)\nprint\\(f'LCL:  \\{result\\.lcl\\}'\\)\nprint\\(f'Cp:   \\{result\\.cp\\}'\\)\nprint\\(f'Cpk:  \\{result\\.cpk\\}'\\)\nprint\\(f'DPMO: \\{result\\.dpmo\\}'\\)\nprint\\(f'In control: \\{result\\.in_control\\}'\\)\nprint\\(f'Violations: \\{len\\(result\\.violations\\)\\}'\\)\nprint\\(f'Chart points: \\{len\\(result\\.control_chart\\)\\}'\\)\nprint\\('SPC engine OK'\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^\\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"\nfrom app\\.ddr\\.report_detector import detect_report_type_from_text\nfrom app\\.ddr\\.citation_service import build_citation\n\n# Test DDR detection\nddr_text = 'Daily Drilling Report - OPERLMTDMRREP - Rig Name: RIG-12 - Measured Depth: 12500 ft - Mud Weight: 10\\.5 ppg - NPT: 2\\.5 hrs - BHA assembly'\nresult = detect_report_type_from_text\\(ddr_text\\)\nprint\\(f'DDR text -> type=\\{result\\.report_type\\}, confidence=\\{result\\.confidence\\}, signals=\\{len\\(result\\.signals\\)\\}'\\)\n\ngeneric_text = 'Quarterly Financial Report for Q3 2025\\. Revenue increased by 15% compared to Q2\\. Operating expenses remained stable\\.'\nresult2 = detect_report_type_from_text\\(generic_text\\)\nprint\\(f'Generic text -> type=\\{result2\\.report_type\\}, confidence=\\{result2\\.confidence\\}'\\)\n\n# Test citation format\ncite = build_citation\\('RIG-12', 3, 'MudData', 'MudWeight'\\)\nprint\\(f'Citation: \\{cite\\}'\\)\nprint\\('Detection \\+ Citation OK'\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"\n# Validate all P2 module imports\nfrom app\\.ddr\\.fleet_endpoints import router as fleet_router\nfrom app\\.ddr\\.rig_endpoints import router as rig_router\nfrom app\\.ddr\\.audit_endpoints import router as audit_router\nfrom app\\.ddr\\.drilling_rag_prompt import DRILLING_RAG_SYSTEM_PROMPT, build_rag_context, build_full_prompt\n\nprint\\(f'Fleet router: \\{fleet_router\\.prefix\\} — \\{len\\(fleet_router\\.routes\\)\\} routes'\\)\nprint\\(f'Rig router:   \\{rig_router\\.prefix\\} — \\{len\\(rig_router\\.routes\\)\\} routes'\\)\nprint\\(f'Audit router: \\{audit_router\\.prefix\\} — \\{len\\(audit_router\\.routes\\)\\} routes'\\)\nprint\\(f'RAG prompt:   \\{len\\(DRILLING_RAG_SYSTEM_PROMPT\\)\\} chars'\\)\n\n# Verify route paths\nprint\\(\\)\nprint\\('Fleet routes:'\\)\nfor r in fleet_router\\.routes:\n    print\\(f'  \\{r\\.methods\\} \\{fleet_router\\.prefix\\}\\{r\\.path\\}'\\)\n\nprint\\('Rig routes:'\\)\nfor r in rig_router\\.routes:\n    print\\(f'  \\{r\\.methods\\} \\{rig_router\\.prefix\\}\\{r\\.path\\}'\\)\n\nprint\\('Audit routes:'\\)\nfor r in audit_router\\.routes:\n    print\\(f'  \\{r\\.methods\\} \\{audit_router\\.prefix\\}\\{r\\.path\\}'\\)\n\n# Verify RAG functions work\nctx = build_rag_context\\(\\{'rig_id': 'RIG-12', 'report_date': '2026-04-01', 'well_name': 'TEST-1', 'kpis': \\{'rop': \\{'value': 45, 'citation': '\\[RIG-12-Pg1-Drilling-ROP\\]', 'confidence': 0\\.95, 'extraction_method': 'regex'\\}\\}\\}\\)\nprompt = build_full_prompt\\('What is the ROP\\?', ctx\\)\nprint\\(f'RAG prompt built: \\{len\\(prompt\\)\\} chars'\\)\nprint\\(\\)\nprint\\('All P2 imports OK'\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^\\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"\nfrom app\\.main import app\nroutes = \\[r\\.path for r in app\\.routes if hasattr\\(r, 'path'\\)\\]\np2_routes = \\[r for r in routes if '/fleet/' in r or '/rigs' in r or '/audit/' in r\\]\nprint\\(f'Total app routes: \\{len\\(routes\\)\\}'\\)\nprint\\(f'P2 routes registered: \\{len\\(p2_routes\\)\\}'\\)\nfor r in sorted\\(p2_routes\\):\n    print\\(f'  \\{r\\}'\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"from app\\.main import app; routes = \\[r\\.path for r in app\\.routes if hasattr\\(r,'path'\\)\\]; p2 = \\[r for r in routes if '/fleet/' in r or r\\.startswith\\('/api/v2/rigs'\\) or '/audit/' in r\\]; print\\(f'Total: \\{len\\(routes\\)\\}, P2: \\{len\\(p2\\)\\}'\\); \\[print\\(f'  \\{r\\}'\\) for r in sorted\\(p2\\)\\]\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^\\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -m pip install passlib\\[bcrypt\\] 2>&1 \\| Select-Object -Last 5$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -m pip install passlib\\[bcrypt\\] 2>&1 \\| Select-Object -Last 5$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^\\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"from app\\.main import app; routes = \\[r\\.path for r in app\\.routes if hasattr\\(r,'path'\\)\\]; p2 = \\[r for r in routes if '/fleet/' in r or r\\.startswith\\('/api/v2/rigs'\\) or '/audit/' in r\\]; print\\(f'Total: \\{len\\(routes\\)\\}, P2: \\{len\\(p2\\)\\}'\\); \\[print\\(f'  \\{r\\}'\\) for r in sorted\\(p2\\)\\]\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^\\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -m pip install email-validator 2>&1 \\| Select-Object -Last 3$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^\\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -m pip install email-validator 2>&1 \\| Select-String \"Successfully\\|already\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^\\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"import email_validator; print\\('email_validator OK'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^\\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"\nfrom app\\.main import app\nroutes = \\[r\\.path for r in app\\.routes if hasattr\\(r,'path'\\)\\]\np2 = \\[r for r in routes if '/fleet/' in r or r\\.startswith\\('/api/v2/rigs'\\) or '/audit/' in r\\]\nprint\\(f'Total: \\{len\\(routes\\)\\}, P2: \\{len\\(p2\\)\\}'\\)\nfor r in sorted\\(p2\\):\n    print\\(f'  \\{r\\}'\\)\n\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\pip\\.exe install email-validator 2>&1 \\| Select-Object -Last 5$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"from app\\.main import app; routes=\\[r\\.path for r in app\\.routes if hasattr\\(r,'methods'\\)\\]; print\\(f'Total: \\{len\\(routes\\)\\}'\\); trend=\\[r for r in routes if 'trend' in r\\]; print\\(f'Trends: \\{len\\(trend\\)\\}'\\); \\[print\\(f'  \\{r\\}'\\) for r in sorted\\(trend\\)\\]\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"\nprint\\('=' \\* 70\\)\nprint\\('  TransIQ Full Verification: P0 through P3'\\)\nprint\\('=' \\* 70\\)\nprint\\(\\)\n\n# =====================================================================\n# P0: 7 FIXES\n# =====================================================================\nprint\\('PHASE 0 — Bug Fixes & Hardening'\\)\nprint\\('-' \\* 50\\)\nerrors = \\[\\]\n\n# P0-1: requirements\\.txt completeness\nimport importlib\nrequired = \\['fastapi','uvicorn','pydantic','sqlalchemy','sentence_transformers',\n            'numpy','faiss','pdfplumber','passlib','email_validator'\\]\nfor pkg in required:\n    try:\n        importlib\\.import_module\\(pkg\\)\n        print\\(f'  \\[OK\\] \\{pkg\\}'\\)\n    except ImportError:\n        # Try alternate names\n        alt = \\{'faiss': 'faiss-cpu', 'sentence_transformers': 'sentence-transformers'\\}\n        try:\n            importlib\\.import_module\\(alt\\.get\\(pkg, pkg\\)\\)\n            print\\(f'  \\[OK\\] \\{pkg\\} \\(alt\\)'\\)\n        except:\n            print\\(f'  \\[FAIL\\] \\{pkg\\}'\\)\n            errors\\.append\\(f'P0-1: missing \\{pkg\\}'\\)\n\n# P0-2: Predictive engine hardening\ntry:\n    from app\\.intelligence\\.predictive_engine import predict_kpi_trends\n    print\\(f'  \\[OK\\] predictive_engine imports'\\)\nexcept Exception as e:\n    print\\(f'  \\[FAIL\\] predictive_engine: \\{e\\}'\\)\n    errors\\.append\\(f'P0-2: \\{e\\}'\\)\n\n# P0-3: PDF/Excel export\ntry:\n    from app\\.api\\.v2\\.endpoints import router as v2_router\n    v2_paths = \\[r\\.path for r in v2_router\\.routes if hasattr\\(r,'path'\\)\\]\n    has_export = any\\('export' in p\\.lower\\(\\) for p in v2_paths\\)\n    print\\(f'  \\[OK\\] export endpoint exists: \\{has_export\\}'\\)\nexcept Exception as e:\n    print\\(f'  \\[FAIL\\] export: \\{e\\}'\\)\n    errors\\.append\\(f'P0-3: \\{e\\}'\\)\n\n# P0-4: Intelligence graph endpoints\ntry:\n    from app\\.api\\.v2\\.intelligence_graph_endpoints import router as ig_router\n    ig_paths = \\[r\\.path for r in ig_router\\.routes if hasattr\\(r,'path'\\)\\]\n    print\\(f'  \\[OK\\] intelligence_graph: \\{len\\(ig_paths\\)\\} endpoints'\\)\nexcept Exception as e:\n    print\\(f'  \\[FAIL\\] intelligence_graph: \\{e\\}'\\)\n    errors\\.append\\(f'P0-4: \\{e\\}'\\)\n\n# P0-5: Rate limiting\ntry:\n    from app\\.middleware\\.auth import RateLimiter, rate_limiter\n    rl = RateLimiter\\(max_requests=3, window_seconds=60\\)\n    assert rl\\.is_allowed\\('test'\\)\n    assert rl\\.is_allowed\\('test'\\)\n    assert rl\\.is_allowed\\('test'\\)\n    assert not rl\\.is_allowed\\('test'\\), 'Rate limit should block 4th request'\n    print\\(f'  \\[OK\\] rate_limiter works \\(3/3 allowed, 4th blocked\\)'\\)\nexcept Exception as e:\n    print\\(f'  \\[FAIL\\] rate_limiter: \\{e\\}'\\)\n    errors\\.append\\(f'P0-5: \\{e\\}'\\)\n\np0_ok = len\\(errors\\) == 0\nprint\\(f'  P0 RESULT: \\{\\\\\"PASS\\\\\" if p0_ok else \\\\\"FAIL\\\\\"\\} \\(\\{len\\(errors\\)\\} errors\\)'\\)\nprint\\(\\)\nprint\\(f'P0 errors: \\{errors\\}' if errors else ''\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe test_all_phases\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"\n# Discover actual exports for all failing modules\nimport importlib, inspect\n\nmodules_to_check = \\[\n    'app\\.intelligence\\.predictive_engine',\n    'app\\.intelligence\\.pipeline',\n    'app\\.ddr\\.ddr_parser',\n    'app\\.ddr\\.spc_engine',\n    'app\\.ddr\\.citation_service',\n    'app\\.ddr\\.report_detector',\n    'app\\.llm\\.anthropic_provider',\n    'app\\.ddr\\.drilling_rag_prompt',\n\\]\n\nfor mod_name in modules_to_check:\n    try:\n        mod = importlib\\.import_module\\(mod_name\\)\n        classes = \\[n for n, o in inspect\\.getmembers\\(mod\\) if inspect\\.isclass\\(o\\) and not n\\.startswith\\('_'\\)\\]\n        funcs = \\[n for n, o in inspect\\.getmembers\\(mod\\) if inspect\\.isfunction\\(o\\) and not n\\.startswith\\('_'\\)\\]\n        consts = \\[n for n in dir\\(mod\\) if n\\.isupper\\(\\) and not n\\.startswith\\('_'\\)\\]\n        print\\(f'\\{mod_name\\}:'\\)\n        if classes: print\\(f'  classes:   \\{classes\\}'\\)\n        if funcs:   print\\(f'  functions: \\{funcs\\}'\\)\n        if consts:  print\\(f'  constants: \\{consts\\[:10\\]\\}'\\)\n    except ImportError as e:\n        print\\(f'\\{mod_name\\}: MISSING \\(\\{e\\}\\)'\\)\n    print\\(\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"\n# Find predictive engine and anthropic provider\nimport os\nfor root, dirs, files in os\\.walk\\('app'\\):\n    for f in files:\n        if f\\.endswith\\('\\.py'\\):\n            path = os\\.path\\.join\\(root, f\\)\n            if 'predict' in f\\.lower\\(\\) or 'anthropic' in f\\.lower\\(\\):\n                print\\(path\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"\nimport importlib, inspect\n\n# Check actual locations\nfor mod_name in \\['app\\.kpi_engine\\.predictive_engine', 'app\\.llm\\.providers\\.anthropic'\\]:\n    mod = importlib\\.import_module\\(mod_name\\)\n    classes = \\[n for n, o in inspect\\.getmembers\\(mod\\) if inspect\\.isclass\\(o\\) and not n\\.startswith\\('_'\\)\\]\n    funcs = \\[n for n, o in inspect\\.getmembers\\(mod\\) if inspect\\.isfunction\\(o\\) and not n\\.startswith\\('_'\\)\\]\n    print\\(f'\\{mod_name\\}:'\\)\n    if classes: print\\(f'  classes:   \\{classes\\}'\\)\n    if funcs:   print\\(f'  functions: \\{funcs\\}'\\)\n    print\\(\\)\n\n# Also check whatif run_scenario output shape\nfrom app\\.kpi_engine\\.whatif_engine import run_scenario\nkpis = \\[\\{'title': 'ROP', 'value': 40, 'target': 50, 'unit': 'ft/hr', 'category': 'drilling'\\}\\]\nresult = run_scenario\\(kpis, \\{'rop_target': 10\\}, 'test'\\)\nsim = result\\['simulatedKpis'\\]\nprint\\(f'simulatedKpis type: \\{type\\(sim\\)\\}'\\)\nif sim:\n    print\\(f'  first item type: \\{type\\(sim\\[0\\]\\) if isinstance\\(sim, list\\) else type\\(list\\(sim\\.values\\(\\)\\)\\[0\\]\\)\\}'\\)\n    if isinstance\\(sim, list\\):\n        print\\(f'  first item: \\{sim\\[0\\]\\}'\\)\n    elif isinstance\\(sim, dict\\):\n        k = list\\(sim\\.keys\\(\\)\\)\\[0\\]\n        print\\(f'  first key: \\{k\\}, value type: \\{type\\(sim\\[k\\]\\)\\}'\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"\nfrom app\\.kpi_engine\\.whatif_engine import run_scenario\nkpis = \\[\\{'title': 'ROP', 'value': 40, 'target': 50, 'unit': 'ft/hr', 'category': 'drilling'\\}\\]\nresult = run_scenario\\(kpis, \\{'rop_target': 10\\}, 'test'\\)\nsim = result\\['simulatedKpis'\\]\nimport json\nprint\\(json\\.dumps\\(sim, indent=2, default=str\\)\\[:1000\\]\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"\n# Check DDR route count more carefully\nfrom app\\.main import app\nroutes = \\[r\\.path for r in app\\.routes if hasattr\\(r, 'methods'\\)\\]\nddr = \\[r for r in routes if '/ddr/' in r\\]\nprint\\(f'DDR routes: \\{len\\(ddr\\)\\}'\\)\nfor r in sorted\\(ddr\\):\n    print\\(f'  \\{r\\}'\\)\nprint\\(\\)\nprint\\(f'Total routes: \\{len\\(routes\\)\\}'\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -m uvicorn app\\.main:app --host 127\\.0\\.0\\.1 --port 8099$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"\nimport urllib\\.request, json, sys\n\nBASE = 'http://127\\.0\\.0\\.1:8099'\nresults = \\[\\]\n\ndef hit\\(method, path, expect_codes=\\(200,\\), label=None\\):\n    url = BASE \\+ path\n    tag = label or path\n    try:\n        req = urllib\\.request\\.Request\\(url, method=method\\)\n        resp = urllib\\.request\\.urlopen\\(req, timeout=10\\)\n        code = resp\\.getcode\\(\\)\n        body = json\\.loads\\(resp\\.read\\(\\)\\.decode\\(\\)\\)\n        ok = code in expect_codes\n        results\\.append\\(\\(tag, code, ok\\)\\)\n        return body\n    except urllib\\.error\\.HTTPError as e:\n        code = e\\.code\n        ok = code in expect_codes\n        results\\.append\\(\\(tag, code, ok\\)\\)\n        return None\n    except Exception as e:\n        results\\.append\\(\\(tag, str\\(e\\), False\\)\\)\n        return None\n\nprint\\('=' \\* 70\\)\nprint\\('  LIVE HTTP ENDPOINT SMOKE TEST'\\)\nprint\\('=' \\* 70\\)\nprint\\(\\)\n\n# ---- Root & Health ----\nprint\\('--- Root & Health ---'\\)\nbody = hit\\('GET', '/'\\)\nif body: print\\(f'  Root: name=\\{body\\.get\\(\\\\\"name\\\\\"\\)\\}, version=\\{body\\.get\\(\\\\\"version\\\\\"\\)\\}'\\)\n\nbody = hit\\('GET', '/health'\\)\nif body: print\\(f'  Health: status=\\{body\\.get\\(\\\\\"status\\\\\"\\)\\}'\\)\n\nbody = hit\\('GET', '/api/v2/health', label='/api/v2/health'\\)\nif body: print\\(f'  V2 Health: status=\\{body\\.get\\(\\\\\"status\\\\\"\\)\\}'\\)\n\n# ---- OpenAPI docs ----\nprint\\('--- Docs ---'\\)\nhit\\('GET', '/openapi\\.json', label='OpenAPI spec'\\)\nhit\\('GET', '/docs', label='Swagger UI', expect_codes=\\(200,\\)\\)\n\n# ---- Dashboard ----\nprint\\('--- Dashboard ---'\\)\nhit\\('GET', '/api/v2/dashboard/latest', label='Dashboard latest', expect_codes=\\(200, 404\\)\\)\n\n# ---- Fleet endpoints \\(P2\\) ----\nprint\\('--- Fleet \\(P2\\) ---'\\)\nhit\\('GET', '/api/v2/fleet/summary', label='Fleet summary', expect_codes=\\(200,\\)\\)\nhit\\('GET', '/api/v2/fleet/npt-pareto', label='Fleet NPT Pareto', expect_codes=\\(200,\\)\\)\nhit\\('GET', '/api/v2/fleet/spc/rop', label='Fleet SPC ROP', expect_codes=\\(200,\\)\\)\n\n# ---- Rig endpoints \\(P2\\) ----\nprint\\('--- Rigs \\(P2\\) ---'\\)\nhit\\('GET', '/api/v2/rigs', label='Rig list', expect_codes=\\(200,\\)\\)\nhit\\('GET', '/api/v2/rigs/test-rig', label='Rig detail', expect_codes=\\(200, 404\\)\\)\nhit\\('GET', '/api/v2/rigs/test-rig/timeline', label='Rig timeline', expect_codes=\\(200, 404\\)\\)\nhit\\('GET', '/api/v2/rigs/test-rig/npt', label='Rig NPT', expect_codes=\\(200, 404\\)\\)\nhit\\('GET', '/api/v2/rigs/test-rig/survey', label='Rig survey', expect_codes=\\(200, 404\\)\\)\nhit\\('GET', '/api/v2/rigs/test-rig/mud', label='Rig mud', expect_codes=\\(200, 404\\)\\)\nhit\\('GET', '/api/v2/rigs/test-rig/personnel', label='Rig personnel', expect_codes=\\(200, 404\\)\\)\nhit\\('GET', '/api/v2/rigs/test-rig/bha', label='Rig BHA', expect_codes=\\(200, 404\\)\\)\nhit\\('GET', '/api/v2/rigs/test-rig/hse', label='Rig HSE', expect_codes=\\(200, 404\\)\\)\nhit\\('GET', '/api/v2/rigs/test-rig/foreman-remarks', label='Rig foreman', expect_codes=\\(200, 404\\)\\)\n\n# ---- Audit \\(P2\\) ----\nprint\\('--- Audit \\(P2\\) ---'\\)\nhit\\('GET', '/api/v2/audit/test-rig/depth', label='Audit trail', expect_codes=\\(200, 404\\)\\)\n\n# ---- DDR Core \\(P1/P2\\) ----\nprint\\('--- DDR Core ---'\\)\nhit\\('GET', '/api/v2/ddr/spc/fleet', label='DDR SPC Fleet', expect_codes=\\(200,\\)\\)\n\n# ---- Trend endpoints \\(P3\\) ----\nprint\\('--- Trends \\(P3\\) ---'\\)\nhit\\('GET', '/api/ddr/trends/depth-progress', label='Trend depth-progress', expect_codes=\\(200,\\)\\)\nhit\\('GET', '/api/ddr/trends/npt', label='Trend NPT', expect_codes=\\(200,\\)\\)\nhit\\('GET', '/api/ddr/trends/rop', label='Trend ROP', expect_codes=\\(200,\\)\\)\nhit\\('GET', '/api/ddr/trends/mud-weight', label='Trend mud-weight', expect_codes=\\(200,\\)\\)\nhit\\('GET', '/api/ddr/trends/hse', label='Trend HSE', expect_codes=\\(200,\\)\\)\nhit\\('GET', '/api/ddr/trends/compare\\?rig_ids=rig1,rig2', label='Trend compare', expect_codes=\\(200,\\)\\)\n\n# ---- Intelligence \\(P0\\) ----\nprint\\('--- Intelligence \\(P0\\) ---'\\)\nhit\\('GET', '/api/v2/intelligence/status', label='Intelligence status', expect_codes=\\(200,\\)\\)\n\n# ---- Summary ----\nprint\\(\\)\nprint\\('=' \\* 70\\)\nprint\\('  RESULTS'\\)\nprint\\('=' \\* 70\\)\npassed = sum\\(1 for _, _, ok in results if ok\\)\nfailed = \\[\\(t, c\\) for t, c, ok in results if not ok\\]\nfor tag, code, ok in results:\n    status = 'PASS' if ok else 'FAIL'\n    print\\(f'  \\[\\{status\\}\\] \\{code:>4\\}  \\{tag\\}'\\)\n\nprint\\(\\)\nprint\\(f'  HTTP Smoke Test: \\{passed\\}/\\{len\\(results\\)\\} endpoints responding correctly'\\)\nif failed:\n    print\\(f'  FAILURES: \\{len\\(failed\\)\\}'\\)\n    for t, c in failed:\n        print\\(f'    - \\{t\\}: \\{c\\}'\\)\n    sys\\.exit\\(1\\)\nelse:\n    print\\('  ALL ENDPOINTS LIVE AND RESPONDING\\.'\\)\n    sys\\.exit\\(0\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe test_http_smoke\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Frontend\" ; npx tsc --noEmit 2>&1 \\| Select-Object -First 60$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Frontend\" ; npx vite build 2>&1 \\| Select-Object -Last 30$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Frontend\" ; npx vite build 2>&1 \\| Select-Object -Last 20$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"\nfrom app\\.main import app\nroutes = \\[\\(r\\.path, list\\(r\\.methods - \\{'HEAD','OPTIONS'\\}\\)\\) for r in app\\.routes if hasattr\\(r, 'methods'\\)\\]\nroutes\\.sort\\(key=lambda x: x\\[0\\]\\)\nfor path, methods in routes:\n    print\\(f'\\{\",\"\\.join\\(methods\\):6s\\} \\{path\\}'\\)\nprint\\(f'\\\\nTotal: \\{len\\(routes\\)\\} routes'\\)\n\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"\nfrom app\\.main import app\nroutes = \\[\\]\nfor r in app\\.routes:\n    if hasattr\\(r, 'methods'\\):\n        ms = list\\(r\\.methods - \\{'HEAD','OPTIONS'\\}\\)\n        routes\\.append\\(\\(r\\.path, ms\\)\\)\nroutes\\.sort\\(key=lambda x: x\\[0\\]\\)\nfor path, methods in routes:\n    m = ','\\.join\\(methods\\)\n    print\\(f'\\{m:6s\\} \\{path\\}'\\)\nprint\\(\\)\nprint\\(f'Total: \\{len\\(routes\\)\\} routes'\\)\n\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"\nimport sys, os\nsys\\.path\\.insert\\(0, '\\.'\\)\nos\\.environ\\.setdefault\\('SUPABASE_URL', 'x'\\)\nos\\.environ\\.setdefault\\('SUPABASE_KEY', 'x'\\)\nfrom app\\.main import app\nroutes = \\[\\]\nfor route in app\\.routes:\n    if hasattr\\(route, 'methods'\\) and hasattr\\(route, 'path'\\):\n        methods = ','\\.join\\(sorted\\(route\\.methods - \\{'HEAD', 'OPTIONS'\\}\\)\\)\n        routes\\.append\\(f'\\{methods:6s\\} \\{route\\.path\\}'\\)\nroutes\\.sort\\(key=lambda x: x\\[6:\\]\\)\nfor r in routes:\n    print\\(r\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"\nimport sys, os\nsys\\.path\\.insert\\(0, '\\.'\\)\nos\\.environ\\.setdefault\\('SUPABASE_URL', 'x'\\)\nos\\.environ\\.setdefault\\('SUPABASE_KEY', 'x'\\)\nfrom app\\.main import app\ncount = 0\nfor route in app\\.routes:\n    if hasattr\\(route, 'methods'\\) and hasattr\\(route, 'path'\\):\n        count \\+= 1\nprint\\(f'Total routes: \\{count\\}'\\)\n# Check new endpoints\nnew_paths = \\['/api/v2/fleet/top-performers', '/api/v2/fleet/heatmap', '/api/v2/fleet/export',\n             '/api/v2/rigs/\\{rig_id\\}/kpis', '/api/v2/rigs/\\{rig_id\\}/bulk', '/api/v2/rigs/\\{rig_id\\}/well-design',\n             '/api/v2/rigs/\\{rig_id\\}/export', '/api/v2/audit/changelog', '/api/v2/ddr/reports'\\]\nfor p in new_paths:\n    found = any\\(hasattr\\(r, 'path'\\) and r\\.path == p for r in app\\.routes\\)\n    print\\(f'  \\{\\\\\"OK\\\\\" if found else \\\\\"MISSING\\\\\"\\}: \\{p\\}'\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"import sys,os;sys\\.path\\.insert\\(0,'\\.'\\);os\\.environ\\.setdefault\\('SUPABASE_URL','x'\\);os\\.environ\\.setdefault\\('SUPABASE_KEY','x'\\);from app\\.main import app;new_paths=\\['/api/v2/fleet/top-performers','/api/v2/fleet/heatmap','/api/v2/fleet/export','/api/v2/rigs/\\{rig_id\\}/kpis','/api/v2/rigs/\\{rig_id\\}/bulk','/api/v2/rigs/\\{rig_id\\}/well-design','/api/v2/rigs/\\{rig_id\\}/export','/api/v2/audit/changelog','/api/v2/ddr/reports'\\];\\[print\\(\\('OK' if any\\(hasattr\\(r,'path'\\) and r\\.path==p for r in app\\.routes\\) else 'MISS'\\)\\+' '\\+p\\) for p in new_paths\\]\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Frontend\" ; npx tsc --noEmit 2>&1 \\| Select-Object -First 50$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Frontend\" ; npx vite build 2>&1 \\| Select-Object -Last 40$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe test_all_phases\\.py 2>&1 \\| Select-Object -Last 20$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe test_http_smoke\\.py 2>&1 \\| Select-Object -Last 35$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -m uvicorn app\\.main:app --host 0\\.0\\.0\\.0 --port 8000 --no-access-log$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"import urllib\\.request; r=urllib\\.request\\.urlopen\\('http://127\\.0\\.0\\.1:8000/', timeout=5\\); print\\(r\\.read\\(\\)\\.decode\\(\\)\\[:200\\]\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\$env:TEST_BASE_URL='http://127\\.0\\.0\\.1:8000' ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe test_http_smoke\\.py 2>&1 \\| Select-Object -Last 40$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -m uvicorn app\\.main:app --host 0\\.0\\.0\\.0 --port 8099 --no-access-log$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"\nimport urllib\\.request, json\n\nbase = 'http://127\\.0\\.0\\.1:8099'\nendpoints = \\[\n    \\('GET', '/api/v2/fleet/top-performers', 'Fleet top performers'\\),\n    \\('GET', '/api/v2/fleet/heatmap', 'Fleet heatmap'\\),\n    \\('GET', '/api/v2/fleet/export', 'Fleet export'\\),\n    \\('GET', '/api/v2/audit/changelog', 'Audit changelog'\\),\n    \\('GET', '/api/v2/ddr/reports', 'Reports list'\\),\n\\]\nfor method, path, label in endpoints:\n    try:\n        req = urllib\\.request\\.Request\\(base \\+ path\\)\n        resp = urllib\\.request\\.urlopen\\(req, timeout=10\\)\n        body = json\\.loads\\(resp\\.read\\(\\)\\.decode\\(\\)\\)\n        tp = type\\(body\\)\\.__name__\n        print\\(f'  \\[OK\\]  \\{resp\\.getcode\\(\\)\\}  \\{label\\} -> \\{tp\\}'\\)\n    except urllib\\.error\\.HTTPError as e:\n        print\\(f'  \\[ERR\\] \\{e\\.code\\}  \\{label\\}'\\)\n    except Exception as e:\n        print\\(f'  \\[FAIL\\] \\{label\\}: \\{e\\}'\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"import urllib\\.request; r=urllib\\.request\\.urlopen\\('http://127\\.0\\.0\\.1:8099/', timeout=3\\); print\\('BACKEND UP:', r\\.read\\(\\)\\.decode\\(\\)\\[:80\\]\\)\" 2>&1; if \\(\\$LASTEXITCODE -ne 0\\) \\{ Write-Host 'BACKEND DOWN' \\}$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"import urllib\\.request; urllib\\.request\\.urlopen\\('http://127\\.0\\.0\\.1:8099/', timeout=2\\)\" 2>\\$null; if \\(\\$\\?\\) \\{ Write-Host 'Port 8099 in use - need to kill it' \\} else \\{ Write-Host 'Port 8099 free' \\}; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"import urllib\\.request; urllib\\.request\\.urlopen\\('http://127\\.0\\.0\\.1:8001/', timeout=2\\)\" 2>\\$null; if \\(\\$\\?\\) \\{ Write-Host 'Port 8001 in use' \\} else \\{ Write-Host 'Port 8001 free' \\}$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -m uvicorn app\\.main:app --host 0\\.0\\.0\\.0 --port 8001$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"\nimport urllib\\.request, json\nbase = 'http://127\\.0\\.0\\.1:8001'\ntests = \\[\n    \\('/api/v2/fleet/summary', 'Fleet summary'\\),\n    \\('/api/v2/rigs', 'Rig list'\\),\n    \\('/api/v2/fleet/heatmap', 'Heatmap'\\),\n    \\('/api/v2/fleet/top-performers', 'Top performers'\\),\n    \\('/api/v2/ddr/reports', 'Reports list'\\),\n    \\('/api/v2/audit/changelog', 'Audit changelog'\\),\n    \\('/api/ddr/trends/npt', 'Trend NPT'\\),\n    \\('/api/v2/dashboard/latest', 'Dashboard latest'\\),\n\\]\nfor path, label in tests:\n    try:\n        r = urllib\\.request\\.urlopen\\(base \\+ path, timeout=10\\)\n        d = json\\.loads\\(r\\.read\\(\\)\\.decode\\(\\)\\)\n        preview = str\\(d\\)\\[:100\\]\n        print\\(f'  \\[OK\\] \\{label\\}: \\{preview\\}'\\)\n    except urllib\\.error\\.HTTPError as e:\n        print\\(f'  \\[\\{e\\.code\\}\\] \\{label\\}: \\{e\\.read\\(\\)\\.decode\\(\\)\\[:80\\]\\}'\\)\n    except Exception as e:\n        print\\(f'  \\[ERR\\] \\{label\\}: \\{e\\}'\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Frontend\" ; npx tsc --noEmit --pretty 2>&1 \\| Select-Object -First 20$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^\\(Get-Item \"C:\\\\Users\\\\Akshay\\\\Downloads\\\\TransIQ Data\\\\LimitedMR10022024\\.pdf\"\\)\\.Length / 1MB$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\python\\.exe\" -c \"from app\\.main import app; print\\('Import OK'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\python\\.exe\" -m uvicorn app\\.main:app --host localhost --port 8001 --reload$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\python\\.exe\" -c \"\nimport requests, json\n\nurl = 'http://localhost:8001/api/v2/generate'\nfile_path = r'C:\\\\Users\\\\Akshay\\\\Downloads\\\\TransIQ Data\\\\LimitedMR10022024\\.pdf'\n\nwith open\\(file_path, 'rb'\\) as f:\n    files = \\{'file': \\('LimitedMR10022024\\.pdf', f, 'application/pdf'\\)\\}\n    print\\('Uploading PDF\\.\\.\\.'\\)\n    resp = requests\\.post\\(url, files=files, timeout=120\\)\n    print\\(f'Status: \\{resp\\.status_code\\}'\\)\n    data = resp\\.json\\(\\)\n    print\\(json\\.dumps\\(data, indent=2\\)\\)\n\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; & \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\\\.venv\\\\Scripts\\\\python\\.exe\" -c \"\nimport requests, json\n\ndoc_id = '1d04635a-66d0-4d45-ae4c-161ea8aafbac'\n\n# Get dashboard\nr = requests\\.get\\(f'http://localhost:8001/api/v2/documents/\\{doc_id\\}/dashboard', timeout=30\\)\nprint\\(f'Status: \\{r\\.status_code\\}'\\)\ndata = r\\.json\\(\\)\n\n# Save full response to file for inspection\nwith open\\('dashboard_output\\.json', 'w'\\) as f:\n    json\\.dump\\(data, f, indent=2\\)\nprint\\(f'Saved full response to dashboard_output\\.json'\\)\n\n# Print summary\nif isinstance\\(data, dict\\):\n    print\\(f'Keys: \\{list\\(data\\.keys\\(\\)\\)\\}'\\)\n    meta = data\\.get\\('meta', \\{\\}\\)\n    print\\(f'Meta: \\{json\\.dumps\\(meta, indent=2\\)\\}'\\)\n    kpis = data\\.get\\('kpis', \\[\\]\\)\n    print\\(f'KPI count: \\{len\\(kpis\\)\\}'\\)\n    if kpis:\n        print\\(f'First 3 KPIs:'\\)\n        for k in kpis\\[:3\\]:\n            name = k\\.get\\('name','\\?'\\)\n            val = k\\.get\\('value','\\?'\\)\n            unit = k\\.get\\('unit',''\\)\n            print\\(f'  - \\{name\\}: \\{val\\} \\{unit\\}'\\)\n    charts = data\\.get\\('charts', \\[\\]\\)\n    print\\(f'Charts count: \\{len\\(charts\\)\\}'\\)\n    ss = data\\.get\\('sixSigma', \\{\\}\\)\n    print\\(f'Six Sigma level: \\{ss\\.get\\(\\\\\"sigmaLevel\\\\\",\\\\\"\\?\\\\\"\\)\\}'\\)\n    insights = data\\.get\\('insights', \\{\\}\\)\n    print\\(f'Alerts: \\{len\\(insights\\.get\\(\\\\\"alerts\\\\\",\\[\\]\\)\\)\\}'\\)\n    print\\(f'Recommendations: \\{len\\(insights\\.get\\(\\\\\"recommendations\\\\\",\\[\\]\\)\\)\\}'\\)\n    opt = data\\.get\\('optimizationSuggestions', \\[\\]\\)\n    print\\(f'Optimization suggestions: \\{len\\(opt\\)\\}'\\)\nelse:\n    print\\(f'Response: \\{str\\(data\\)\\[:500\\]\\}'\\)\n\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -c \"from app\\.six_sigma import run_six_sigma; print\\('Six Sigma \\+ transiq wired OK'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -c \"from app\\.six_sigma\\.capability import assess_capability; r = assess_capability\\(\\[10\\.1, 10\\.0, 9\\.9, 10\\.2, 9\\.8, 10\\.05, 9\\.95, 10\\.1, 10\\.0, 9\\.9\\], 'rop', usl=10\\.5, lsl=9\\.5\\); print\\(r\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; \\$env:PYTHONPATH=\"\\.\"; python examples/example_analysis\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; & \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -c \"import json; print\\(json\\.loads\\('\\{\"\"data\"\": \\[1, null, 3\\]\\}'\\)\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; & \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -m pytest tests\\\\test_analyze_api\\.py -v 2>&1$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; & \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -m pytest tests/test_dashboard\\.py tests/test_statistics\\.py tests/test_process_capability\\.py -v 2>&1$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; & \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -m pytest tests/test_analyze_api\\.py tests/test_dashboard\\.py tests/test_statistics\\.py tests/test_process_capability\\.py tests/test_spc_charts\\.py tests/test_hypothesis\\.py tests/test_regression\\.py tests/test_doe\\.py tests/test_msa\\.py tests/test_lean_tools\\.py tests/test_fmea\\.py tests/test_voc\\.py -v --tb=short 2>&1 \\| Select-Object -Last 15$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; & \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe -m pytest tests/test_analyze_api\\.py -v --tb=short 2>&1$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; git init; git add -A; git commit -m \"PRE-REFACTOR: snapshot before restructuring\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python migrate_structure\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -m pytest tests/test_chat_orchestrator\\.py -v --tb=short 2>&1 \\| Select-Object -First 60$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -m pytest tests/test_chat_orchestrator\\.py --tb=line 2>&1 \\| Select-String \"passed\\|failed\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -m pytest tests/test_memory_system\\.py -v --tb=short 2>&1 \\| Select-Object -First 50$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -m pytest tests/test_streaming\\.py tests/test_tool_registry\\.py tests/test_chat_orchestrator\\.py tests/test_agent_orchestrator\\.py tests/test_memory_system\\.py --tb=line 2>&1 \\| Select-String \"passed\\|failed\\|ERROR\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -m pytest tests/test_response_composer\\.py tests/test_agent_orchestrator\\.py tests/test_streaming\\.py --tb=short 2>&1 \\| Select-Object -Last 30$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; python -m pytest tests/test_sandbox\\.py -v --tb=short 2>&1 \\| Select-Object -Last 80$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^mkdir \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\\\\tests\\\\e2e\" 2>\\$null; New-Item -Path \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\\\\tests\\\\e2e\\\\__init__\\.py\" -ItemType File -Force \\| Out-Null; echo \"done\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\" ; python -m pytest tests/test_phase2_phase3\\.py tests/e2e/test_integration\\.py tests/test_sandbox\\.py tests/test_observability\\.py tests/test_response_composer\\.py tests/test_streaming\\.py tests/test_tool_registry\\.py tests/test_chat_orchestrator\\.py tests/test_agent_orchestrator\\.py tests/test_memory_system\\.py --tb=line 2>&1 \\| Select-Object -Last 10$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -m pytest tests/test_optimized_pipeline\\.py -v --tb=short 2>&1 \\| Select-Object -First 80$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -m pytest tests/ -v --tb=short -x -q 2>&1 \\| Select-Object -Last 30$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -m pytest tests/test_optimized_pipeline\\.py tests/test_phase2_phase3\\.py tests/e2e/test_integration\\.py -v --tb=short -q 2>&1 \\| Select-Object -Last 20$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -m pytest tests/test_optimized_pipeline\\.py tests/test_phase2_phase3\\.py tests/e2e/test_integration\\.py -v --tb=short -q 2>&1$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -m pytest tests/test_optimized_pipeline\\.py -v --tb=short 2>&1$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -c \"import sqlite3; conn=sqlite3\\.connect\\('storage/local_storage\\.db'\\); print\\(\\[r for r in conn\\.execute\\('PRAGMA table_info\\(content_cache\\)'\\)\\.fetchall\\(\\)\\]\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -m pytest tests/test_optimized_pipeline\\.py -v --tb=short 2>&1 \\| Select-Object -Last 40$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -m pytest tests/test_optimized_pipeline\\.py -v --tb=short 2>&1 \\| Select-Object -Last 50$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -m pytest tests/test_optimized_pipeline\\.py::TestParallelEmbedding -v --tb=short 2>&1$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -m pytest tests/test_optimized_pipeline\\.py -v --tb=short 2>&1 \\| Select-Object -Last 60$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -m pytest tests/test_optimized_pipeline\\.py tests/test_phase2_phase3\\.py tests/e2e/test_integration\\.py -v --tb=short -q 2>&1 \\| Select-Object -Last 15$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -m pytest tests/test_optimized_pipeline\\.py tests/test_phase2_phase3\\.py tests/e2e/test_integration\\.py -v --tb=short -q 2>&1 \\| Select-Object -Last 60$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -m pytest tests/test_e2e_pipeline_validation\\.py -v --tb=short 2>&1$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -m pytest tests/test_e2e_pipeline_validation\\.py -v --tb=short 2>&1 \\| Select-Object -Last 80$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -m pytest tests/test_optimized_pipeline\\.py tests/test_phase2_phase3\\.py tests/e2e/test_integration\\.py tests/test_e2e_pipeline_validation\\.py -v --tb=short -q 2>&1 \\| Select-Object -Last 30$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -m pytest tests/test_e2e_pipeline_validation\\.py::TestReportGenerator -v -s --tb=short 2>&1 \\| Select-Object -Last 30$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -m pytest tests/test_e2e_pipeline_validation\\.py::TestReportGenerator -v -s --tb=long 2>&1 \\| Select-String \"FAILED\\|Error\\|assert\\|raise\" \\| Select-Object -First 10$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -m pytest tests/test_e2e_pipeline_validation\\.py::TestReportGenerator -v -s --tb=short 2>&1 \\| Select-String \"PASS\\|FAIL\\|READY\\|====\\|report\\|E2E\" -CaseSensitive$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -m pytest tests/test_optimized_pipeline\\.py tests/test_phase2_phase3\\.py tests/e2e/test_integration\\.py tests/test_e2e_pipeline_validation\\.py -q --tb=short 2>&1 \\| Select-Object -Last 5$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python scripts/health_check_quick\\.py 2>&1$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python main\\.py --port 8001 2>&1$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -c \"\nimport requests, json\n\nBASE = 'http://localhost:8001'\n\n# 1\\. Health check\nprint\\('=== 1\\. Health Check ==='\\)\ntry:\n    r = requests\\.get\\(f'\\{BASE\\}/api/v2/health', timeout=5\\)\n    print\\(f'  Status: \\{r\\.status_code\\}'\\)\n    print\\(f'  Body: \\{r\\.json\\(\\)\\}'\\)\nexcept Exception as e:\n    print\\(f'  FAIL: \\{e\\}'\\)\n\n# 2\\. Check API key in \\.env\nprint\\(\\)\nprint\\('=== 2\\. Auth Check ==='\\)\ntry:\n    from core\\.config\\.settings import settings\n    key = settings\\.API_KEY\n    print\\(f'  API Key configured: \\{\\\\\"yes\\\\\" if key else \\\\\"NO\\\\\"\\}'\\)\n    headers = \\{'X-API-Key': key\\} if key else \\{\\}\n    r = requests\\.get\\(f'\\{BASE\\}/api/v2/health', headers=headers, timeout=5\\)\n    print\\(f'  Auth status: \\{r\\.status_code\\}'\\)\nexcept Exception as e:\n    print\\(f'  FAIL: \\{e\\}'\\)\n\n# 3\\. Available docs\nprint\\(\\)\nprint\\('=== 3\\. Existing Documents ==='\\)\ntry:\n    r = requests\\.get\\(f'\\{BASE\\}/api/v2/documents', headers=headers, timeout=5\\)\n    print\\(f'  Status: \\{r\\.status_code\\}'\\)\n    if r\\.status_code == 200:\n        docs = r\\.json\\(\\)\n        if isinstance\\(docs, list\\):\n            print\\(f'  Documents: \\{len\\(docs\\)\\}'\\)\n            for d in docs\\[:3\\]:\n                doc_id = d\\.get\\('id', d\\.get\\('doc_id', '\\?'\\)\\)\n                status = d\\.get\\('status', '\\?'\\)\n                print\\(f'    - \\{doc_id\\} \\(\\{status\\}\\)'\\)\n        else:\n            print\\(f'  Response: \\{str\\(docs\\)\\[:200\\]\\}'\\)\nexcept Exception as e:\n    print\\(f'  FAIL: \\{e\\}'\\)\n\" 2>&1$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -c \"import uvicorn; uvicorn\\.run\\('app\\.main:app', host='localhost', port=8001, workers=1, log_level='warning'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python scripts/isolation_test\\.py 2>&1$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -c \"import requests; r = requests\\.get\\('http://localhost:8001/health'\\); print\\(r\\.status_code, r\\.json\\(\\)\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python scripts/isolation_test\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -c \"import requests, json; headers = \\{'X-API-Key': 'transiq-dev-key-change-in-production-2026'\\}; r = requests\\.get\\('http://localhost:8001/api/v2/fleet/summary', headers=headers\\); d = r\\.json\\(\\); print\\('FLEET STATUS:', r\\.status_code\\); print\\('Keys:', list\\(d\\.keys\\(\\)\\)\\); rop = d\\.get\\('avg_rop_ft_hr', \\{\\}\\); print\\('avg_rop_ft_hr:', type\\(rop\\)\\.__name__, '- value:', rop\\.get\\('value'\\) if isinstance\\(rop, dict\\) else rop\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^python -c \"import json; d=json\\.load\\(open\\(r'c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\\\\dashboard_output\\.json'\\)\\); dash=d\\.get\\('dashboard',\\{\\}\\); inner=dash\\.get\\('dashboard',dash\\); print\\('TOP KEYS:', list\\(dash\\.keys\\(\\)\\)\\); print\\('INNER KEYS:', list\\(inner\\.keys\\(\\)\\) if isinstance\\(inner,dict\\) else 'N/A'\\); print\\('HAS title:', 'title' in inner\\); print\\('HAS description:', 'description' in inner\\); print\\('HAS kpis:', 'kpis' in inner, 'count:', len\\(inner\\.get\\('kpis',\\[\\]\\)\\)\\); print\\('HAS charts:', 'charts' in inner, 'count:', len\\(inner\\.get\\('charts',\\[\\]\\)\\)\\); print\\('HAS tables:', 'tables' in inner, 'count:', len\\(inner\\.get\\('tables',\\[\\]\\)\\)\\); print\\('HAS sections:', 'sections' in inner, 'count:', len\\(inner\\.get\\('sections',\\[\\]\\)\\)\\); print\\(\\); kpi0=inner\\.get\\('kpis',\\[\\{\\}\\]\\)\\[0\\]; print\\('FIRST KPI KEYS:', list\\(kpi0\\.keys\\(\\)\\)\\); print\\('FIRST KPI:', json\\.dumps\\(kpi0,indent=2\\)\\[:600\\]\\); print\\(\\); ch0=inner\\.get\\('charts',\\[\\{\\}\\]\\)\\[0\\] if inner\\.get\\('charts'\\) else \\{\\}; print\\('FIRST CHART KEYS:', list\\(ch0\\.keys\\(\\)\\)\\); print\\('FIRST CHART type:', ch0\\.get\\('type'\\)\\); print\\('FIRST CHART has chartConfig:', 'chartConfig' in ch0\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

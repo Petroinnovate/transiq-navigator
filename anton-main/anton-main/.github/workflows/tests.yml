@@ -1,0 +1,28 @@
+name: CI
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Run unit tests
+        run: uv run --extra dev pytest tests/ -v --ignore=tests/e2e
+
+      - name: Run E2E tests (stub)
+        run: uv run --extra dev pytest tests/e2e/ -v

@@ -1,0 +1,43 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "anton"
+dynamic = ["version"]
+description = "Autonomous coding copilot"
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic>=0.42.0",
+    "openai>=1.0",
+    "pydantic>=2.0",
+    "pydantic-settings>=2.0",
+    "typer>=0.12.4",
+    "rich>=13.0",
+    "prompt-toolkit>=3.0",
+    "packaging>=21.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+]
+clipboard = [
+    "Pillow>=9.0",
+]
+
+[project.scripts]
+anton = "anton.cli:app"
+
+[tool.hatch.version]
+source = "regex"
+path = "anton/__init__.py"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+pythonpath = ["."]
+markers = [
+    "stub_only: test requires stub server (skipped when --live is passed)",
+]

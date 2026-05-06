@@ -1,0 +1,144 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@layer base {
+  :root {
+    --background: 222 47% 5%;
+    --foreground: 210 40% 96%;
+
+    --card: 222 40% 8%;
+    --card-foreground: 210 40% 96%;
+
+    --popover: 222 40% 6%;
+    --popover-foreground: 210 40% 96%;
+
+    --primary: 152 100% 33%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 30% 14%;
+    --secondary-foreground: 210 40% 96%;
+
+    --muted: 220 25% 12%;
+    --muted-foreground: 218 20% 55%;
+
+    --accent: 220 30% 16%;
+    --accent-foreground: 210 40% 96%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 25% 20%;
+    --input: 220 25% 18%;
+    --ring: 152 100% 33%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 222 45% 6%;
+    --sidebar-foreground: 218 20% 70%;
+    --sidebar-primary: 152 100% 33%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 30% 12%;
+    --sidebar-accent-foreground: 210 40% 96%;
+    --sidebar-border: 220 25% 16%;
+    --sidebar-ring: 152 100% 33%;
+
+    /* DDR Custom Tokens */
+    --ddr-aramco-green: 152 100% 33%;
+    --ddr-aramco-dark: 210 100% 20%;
+    --ddr-status-excellent: 156 100% 41%;
+    --ddr-status-normal: 204 100% 62%;
+    --ddr-status-warning: 32 100% 62%;
+    --ddr-status-critical: 0 100% 62%;
+    --ddr-status-standby: 0 0% 55%;
+    --ddr-status-drilling: 96 69% 43%;
+    --ddr-status-completion: 263 46% 60%;
+    --ddr-status-derived: 37 91% 55%;
+    --ddr-citation: 195 100% 73%;
+    --ddr-surface-1: 220 31% 18%;
+    --ddr-surface-2: 220 28% 21%;
+    --ddr-surface-glow: 152 100% 33%;
+    --ddr-glass: 222 40% 8%;
+
+    --font-display: 'Inter', 'SF Pro Display', -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    --font-data: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-display);
+  }
+}
+
+@layer utilities {
+  .text-hero {
+    font-size: 72px;
+    font-weight: 700;
+    font-family: var(--font-data);
+  }
+  .text-kpi {
+    font-size: 48px;
+    font-weight: 700;
+    font-family: var(--font-data);
+  }
+  .text-kpi-sm {
+    font-size: 32px;
+    font-weight: 700;
+    font-family: var(--font-data);
+  }
+  .font-mono-data {
+    font-family: var(--font-data);
+  }
+  .font-mono-citation {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: hsl(var(--ddr-citation));
+  }
+  .glass-panel {
+    background: hsl(var(--ddr-glass) / 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--border));
+  }
+  .glow-green {
+    box-shadow: 0 0 20px hsl(var(--ddr-surface-glow) / 0.15);
+  }
+  .glow-red {
+    box-shadow: 0 0 20px hsl(var(--ddr-status-critical) / 0.2);
+  }
+  .glow-amber {
+    box-shadow: 0 0 20px hsl(var(--ddr-status-warning) / 0.2);
+  }
+  .card-surface {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+  }
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+  .citation-badge {
+    background: hsl(220 30% 14%);
+    border: 1px solid hsl(var(--ddr-citation) / 0.4);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 10px;
+    font-family: var(--font-mono);
+    color: hsl(var(--ddr-citation));
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .citation-badge:hover {
+    border-color: hsl(var(--ddr-citation));
+    box-shadow: 0 0 12px hsl(var(--ddr-citation) / 0.2);
+  }
+}

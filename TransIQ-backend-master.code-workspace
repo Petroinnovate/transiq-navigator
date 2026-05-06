@@ -1,0 +1,76 @@
+{
+	"folders": [
+		{
+			"path": "Backend"
+		},
+		{
+			"path": "Frontend"
+		}
+	],
+	"settings": {
+		"powershell.cwd": "Backend",
+		"makefile.configureOnOpen": false,
+		"chat.tools.terminal.autoApprove": {
+			"/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Frontend\"; npx vite build 2>&1 \\| Select-Object -Last 30$/": {
+				"approve": true,
+				"matchCommandLine": true
+			},
+			"/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Frontend\"; npx tsc --noEmit 2>&1 \\| Select-Object -First 30$/": {
+				"approve": true,
+				"matchCommandLine": true
+			},
+			"/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Frontend\"; npx tsc --noEmit 2>&1 \\| Select-Object -Last 30$/": {
+				"approve": true,
+				"matchCommandLine": true
+			},
+			"/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Frontend\"; npx vite build 2>&1 \\| Select-Object -Last 20$/": {
+				"approve": true,
+				"matchCommandLine": true
+			},
+			"/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; \\$content = Get-Content \"app\\\\api\\\\v2\\\\graph_endpoints\\.py\" -Raw; \\[System\\.IO\\.File\\]::WriteAllText\\(\"\\$\\(Resolve-Path 'app\\\\api\\\\v2\\\\graph_endpoints\\.py'\\)\", \\$content, \\[System\\.Text\\.UTF8Encoding\\]::new\\(\\$false\\)\\); python -c \"import ast; ast\\.parse\\(open\\('app/api/v2/graph_endpoints\\.py'\\)\\.read\\(\\)\\); print\\('Syntax OK'\\)\"$/": {
+				"approve": true,
+				"matchCommandLine": true
+			},
+			"/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -c \"from app\\.main import app; print\\(f'Routes: \\{len\\(app\\.routes\\)\\}'\\); print\\('App loaded successfully'\\)\"$/": {
+				"approve": true,
+				"matchCommandLine": true
+			},
+			"/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -c \"\nfrom app\\.main import app\nroutes = \\[\\(sorted\\(list\\(r\\.methods\\)\\), r\\.path\\) for r in app\\.routes if hasattr\\(r,'methods'\\)\\]\nintel = \\[\\(m,p\\) for m,p in routes if '/intelligence/' in p\\]\ngraph = \\[\\(m,p\\) for m,p in routes if '/graph/' in p\\]\nprint\\('=== INTELLIGENCE ROUTES ==='\\)\nfor m,p in intel: print\\(f'  \\{m\\} \\{p\\}'\\)\nprint\\(\\)\nprint\\('=== GRAPH ROUTES ==='\\)\nfor m,p in graph: print\\(f'  \\{m\\} \\{p\\}'\\)\n\"$/": {
+				"approve": true,
+				"matchCommandLine": true
+			},
+			"/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -c \"from core\\.security\\.jwt import SECRET_KEY, create_access_token, decode_access_token; print\\('SECRET_KEY set:', bool\\(SECRET_KEY\\)\\); t = create_access_token\\(\\{'sub': 'test-user'\\}\\); uid = decode_access_token\\(t\\); print\\('Token roundtrip sub:', uid\\)\"$/": {
+				"approve": true,
+				"matchCommandLine": true
+			},
+			"/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -c \"\nfrom core\\.security\\.jwt import SECRET_KEY, decode_access_token, ALGORITHM\nfrom jose import jwt\n# Expired token\nexpired = jwt\\.encode\\(\\{'sub':'x','exp':0\\}, SECRET_KEY, algorithm=ALGORITHM\\)\nprint\\('Expired rejected:', decode_access_token\\(expired\\) is None\\)\n# Missing sub \\(require_sub should catch this\\)\nnosub = jwt\\.encode\\(\\{'exp':9999999999\\}, SECRET_KEY, algorithm=ALGORITHM\\)\nprint\\('Missing sub rejected:', decode_access_token\\(nosub\\) is None\\)\n# Valid token\nvalid = jwt\\.encode\\(\\{'sub':'user1','exp':9999999999\\}, SECRET_KEY, algorithm=ALGORITHM\\)\nprint\\('Valid accepted:', decode_access_token\\(valid\\) == 'user1'\\)\n\"$/": {
+				"approve": true,
+				"matchCommandLine": true
+			},
+			"/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Frontend\"; npx tsc --noEmit 2>&1 \\| Select-Object -Last 10$/": {
+				"approve": true,
+				"matchCommandLine": true
+			},
+			"/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -c \"from app\\.main import app; routes = \\[\\(sorted\\(list\\(r\\.methods\\)\\), r\\.path\\) for r in app\\.routes if hasattr\\(r,'methods'\\) and \\('metric' in r\\.path\\.lower\\(\\) or 'ddr' in r\\.path\\.lower\\(\\)\\)\\]; \\[print\\(f'\\{m\\} \\{p\\}'\\) for m,p in routes\\]\"$/": {
+				"approve": true,
+				"matchCommandLine": true
+			},
+			"/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Frontend\"; npx tsc --noEmit 2>&1 \\| Select-Object -Last 20$/": {
+				"approve": true,
+				"matchCommandLine": true
+			},
+			"/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Frontend\"; npx vite build 2>&1 \\| Select-Object -Last 10$/": {
+				"approve": true,
+				"matchCommandLine": true
+			},
+			"/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Backend\"; python -c \"\nfrom app\\.main import app\nroutes = \\[\\(sorted\\(list\\(r\\.methods\\)\\), r\\.path\\) for r in app\\.routes if hasattr\\(r,'methods'\\)\\]\nprint\\(f'Total routes: \\{len\\(routes\\)\\}'\\)\nprefixes = \\{\\}\nfor m,p in routes:\n    prefix = '/'\\.join\\(p\\.split\\('/'\\)\\[:4\\]\\)\n    prefixes\\[prefix\\] = prefixes\\.get\\(prefix, 0\\) \\+ 1\nprint\\('\\\\nRoute groups:'\\)\nfor p in sorted\\(prefixes\\.keys\\(\\)\\):\n    print\\(f'  \\{p\\}: \\{prefixes\\[p\\]\\} endpoints'\\)\nprint\\('\\\\nApp loaded: OK'\\)\n\"$/": {
+				"approve": true,
+				"matchCommandLine": true
+			},
+			"/^cd \"c:\\\\github-copiolot\\\\1 A TransIQ\\\\Frontend\"; npx tsc --noEmit 2>&1; if \\(\\$LASTEXITCODE -eq 0\\) \\{ Write-Output \"TypeScript: ZERO errors\" \\} else \\{ Write-Output \"TypeScript: HAS ERRORS\" \\}$/": {
+				"approve": true,
+				"matchCommandLine": true
+			}
+		}
+	}
+}
