@@ -103,6 +103,7 @@ export function DocumentHistory() {
         const seen = new Set(prev.map((p) => p.id));
         return [...prev, ...items.filter((i) => !seen.has(i.id))];
       });
+      if (replace) setPendingNew(0);
     } catch (e: any) {
       toast({ title: "Failed to load history", description: e.message, variant: "destructive" });
     } finally {
