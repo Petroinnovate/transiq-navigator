@@ -1,12 +1,13 @@
 import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { FileText, RefreshCw, Trash2, BarChart3, Loader2, Clock, CheckCircle2, AlertCircle } from "lucide-react";
+import { FileText, RefreshCw, Trash2, BarChart3, Loader2, Clock, CheckCircle2, AlertCircle, Info } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { api } from "@/services/api";
 import { supabase } from "@/integrations/supabase/client";
+import { DocumentDetailsDialog } from "./DocumentDetailsDialog";
 
 type Doc = Awaited<ReturnType<typeof api.listDocuments>>[number];
 
@@ -30,6 +31,7 @@ export function DocumentHistory() {
   const [docs, setDocs] = useState<Doc[]>([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [detailsId, setDetailsId] = useState<string | null>(null);
   const { toast } = useToast();
 
   const refresh = useCallback(async () => {
@@ -118,6 +120,15 @@ export function DocumentHistory() {
                   </div>
                 </div>
                 <div className="flex items-center gap-1 flex-shrink-0">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setDetailsId(d.id)}
+                    className="text-slate-300 hover:text-white hover:bg-slate-600"
+                    title="View details"
+                  >
+                    <Info className="h-4 w-4" />
+                  </Button>
                   {d.has_dashboard && (
                     <Button
                       asChild
@@ -156,6 +167,11 @@ export function DocumentHistory() {
           </div>
         )}
       </CardContent>
+      <DocumentDetailsDialog
+        docId={detailsId}
+        open={detailsId !== null}
+        onOpenChange={(o) => !o && setDetailsId(null)}
+      />
     </Card>
   );
 }
