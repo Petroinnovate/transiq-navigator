@@ -95,11 +95,11 @@ const UserAvatar: React.FC = () => {
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
 
-  const initials = user?.name
-    ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+  const initials = user?.user_metadata?.display_name
+    ? (user.user_metadata?.display_name as string).split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
     : user?.email?.[0]?.toUpperCase() ?? 'U';
 
-  const displayName = user?.name || user?.email || 'User';
+  const displayName = user?.user_metadata?.display_name || user?.email || 'User';
 
   return (
     <div className="relative" ref={ref}>

@@ -89,7 +89,7 @@ const Index = () => {
                                     <Avatar className="h-6 w-6">
                                         <AvatarImage src="" alt="Profile" />
                                         <AvatarFallback className="text-xs bg-cyan-500 text-white">
-                                            {getInitials(user?.name, user?.email)}
+                                            {getInitials(user?.user_metadata?.display_name, user?.email)}
                                         </AvatarFallback>
                                     </Avatar>
                                     <span>Profile</span>
