@@ -54,8 +54,8 @@ export function DocumentDetailsDialog({ docId, open, onOpenChange }: Props) {
           .slice(0, 2000);
 
         // Pull updated_at via listDocuments fallback
-        const rows = await api.listDocuments(50);
-        const row = rows.find((r) => r.id === docId);
+        const { items } = await api.listDocuments(50);
+        const row = items.find((r) => r.id === docId);
 
         setDetails({
           fileName: doc.document.file_name,
