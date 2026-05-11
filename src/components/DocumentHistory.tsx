@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import { FileText, RefreshCw, Trash2, BarChart3, Loader2, Clock, CheckCircle2, AlertCircle, Info, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -11,7 +11,9 @@ import { api } from "@/services/api";
 import { supabase } from "@/integrations/supabase/client";
 import { DocumentDetailsDialog } from "./DocumentDetailsDialog";
 
-type Doc = Awaited<ReturnType<typeof api.listDocuments>>[number];
+type Doc = Awaited<ReturnType<typeof api.listDocuments>>["items"][number];
+
+const PAGE_SIZE = 20;
 
 function statusBadge(status: string) {
   const map: Record<string, { cls: string; icon: JSX.Element; label: string }> = {
@@ -31,12 +33,15 @@ function statusBadge(status: string) {
 
 export function DocumentHistory() {
   const [docs, setDocs] = useState<Doc[]>([]);
+  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [detailsId, setDetailsId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const { toast } = useToast();
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   const filtered = docs.filter((d) => {
     const matchesQuery = !query || d.file_name.toLowerCase().includes(query.toLowerCase());
@@ -44,30 +49,67 @@ export function DocumentHistory() {
     return matchesQuery && matchesStatus;
   });
 
-  const refresh = useCallback(async () => {
+  const loadPage = useCallback(async (offset: number, replace: boolean) => {
+    if (offset === 0) setLoading(true);
+    else setLoadingMore(true);
     try {
-      const rows = await api.listDocuments(50);
-      setDocs(rows);
+      const { items, total } = await api.listDocuments(PAGE_SIZE, offset);
+      setTotal(total);
+      setDocs((prev) => {
+        if (replace) return items;
+        // Append, de-duped
+        const seen = new Set(prev.map((p) => p.id));
+        return [...prev, ...items.filter((i) => !seen.has(i.id))];
+      });
     } catch (e: any) {
       toast({ title: "Failed to load history", description: e.message, variant: "destructive" });
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   }, [toast]);
 
+  const refresh = useCallback(() => loadPage(0, true), [loadPage]);
+
   useEffect(() => {
     refresh();
-    // realtime updates for tenant's documents
+    // realtime: patch in place rather than reset scroll
     const channel = supabase
       .channel("documents-history")
-      .on("postgres_changes", { event: "*", schema: "public", table: "documents" }, () => {
-        refresh();
+      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "documents" }, (payload) => {
+        const row = payload.new as Doc;
+        setDocs((prev) => prev.map((d) => (d.id === row.id ? { ...d, ...row } : d)));
+      })
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "documents" }, (payload) => {
+        const row = payload.new as Doc;
+        setDocs((prev) => (prev.some((d) => d.id === row.id) ? prev : [row, ...prev]));
+        setTotal((t) => t + 1);
+      })
+      .on("postgres_changes", { event: "DELETE", schema: "public", table: "documents" }, (payload) => {
+        const row = payload.old as { id: string };
+        setDocs((prev) => prev.filter((d) => d.id !== row.id));
+        setTotal((t) => Math.max(0, t - 1));
       })
       .subscribe();
     return () => {
       supabase.removeChannel(channel);
     };
   }, [refresh]);
+
+  // Infinite scroll via IntersectionObserver
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const hasMore = docs.length < total;
+    if (!hasMore) return;
+    const io = new IntersectionObserver((entries) => {
+      if (entries[0]?.isIntersecting && !loading && !loadingMore) {
+        loadPage(docs.length, false);
+      }
+    }, { rootMargin: "100px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [docs.length, total, loading, loadingMore, loadPage]);
 
   const handleReprocess = async (id: string) => {
     setBusyId(id);
@@ -87,6 +129,7 @@ export function DocumentHistory() {
     try {
       await api.deleteDocument(id);
       setDocs((d) => d.filter((x) => x.id !== id));
+      setTotal((t) => Math.max(0, t - 1));
       toast({ title: "Document deleted" });
     } catch (e: any) {
       toast({ title: "Delete failed", description: e.message, variant: "destructive" });
@@ -95,10 +138,14 @@ export function DocumentHistory() {
     }
   };
 
+  const hasMore = docs.length < total;
+
   return (
     <Card className="bg-slate-800/50 border-slate-700 backdrop-blur-sm">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-white text-lg">Document History</CardTitle>
+        <CardTitle className="text-white text-lg">
+          Document History {total > 0 && <span className="text-xs text-slate-400 font-normal">({docs.length} of {total})</span>}
+        </CardTitle>
         <Button variant="ghost" size="sm" onClick={refresh} className="text-slate-400 hover:text-white">
           <RefreshCw className="h-4 w-4" />
         </Button>
@@ -199,6 +246,25 @@ export function DocumentHistory() {
                 </div>
               </div>
             ))}
+            {hasMore && (
+              <div ref={sentinelRef} className="flex items-center justify-center py-3 text-slate-400 text-xs">
+                {loadingMore ? (
+                  <><Loader2 className="h-4 w-4 animate-spin mr-2" /> Loading more…</>
+                ) : (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => loadPage(docs.length, false)}
+                    className="text-slate-400 hover:text-white"
+                  >
+                    Load more
+                  </Button>
+                )}
+              </div>
+            )}
+            {!hasMore && docs.length > PAGE_SIZE && (
+              <p className="text-center text-slate-500 text-xs py-2">End of history</p>
+            )}
           </div>
         )}
       </CardContent>
