@@ -226,22 +226,25 @@ export const api = {
     throw new Error("Agent runs not implemented in Supabase backend yet");
   },
 
-  async listDocuments(limit = 50): Promise<Array<{
-    id: string;
-    file_name: string;
-    status: string;
-    mime: string | null;
-    has_dashboard: boolean;
-    created_at: string;
-    updated_at: string;
-  }>> {
-    const { data, error } = await supabase
+  async listDocuments(limit = 20, offset = 0): Promise<{
+    items: Array<{
+      id: string;
+      file_name: string;
+      status: string;
+      mime: string | null;
+      has_dashboard: boolean;
+      created_at: string;
+      updated_at: string;
+    }>;
+    total: number;
+  }> {
+    const { data, error, count } = await supabase
       .from("documents")
-      .select("id,file_name,status,mime,has_dashboard,created_at,updated_at")
+      .select("id,file_name,status,mime,has_dashboard,created_at,updated_at", { count: "exact" })
       .order("created_at", { ascending: false })
-      .limit(limit);
+      .range(offset, offset + limit - 1);
     if (error) throw new Error(error.message);
-    return data ?? [];
+    return { items: data ?? [], total: count ?? 0 };
   },
 
   async reprocessDocument(docId: string): Promise<void> {
