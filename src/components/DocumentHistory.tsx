@@ -358,7 +358,23 @@ export function DocumentHistory() {
         ) : filtered.length === 0 ? (
           <p className="text-slate-400 text-sm py-6 text-center">No documents match your filters.</p>
         ) : (
-          <div className="space-y-2 max-h-[480px] overflow-y-auto pr-1">
+          <div ref={scrollRef} className="space-y-2 max-h-[480px] overflow-y-auto pr-1 relative">
+            {pendingNew > 0 && (
+              <div className="sticky top-0 z-10 flex justify-center pb-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="bg-cyan-500/20 border-cyan-500/40 text-cyan-200 hover:bg-cyan-500/30"
+                  onClick={async () => {
+                    setPendingNew(0);
+                    await refresh();
+                    scrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                >
+                  Show {pendingNew} new document{pendingNew === 1 ? "" : "s"}
+                </Button>
+              </div>
+            )}
             <div className="flex items-center gap-2 px-3 py-1 text-xs text-slate-400">
               <Checkbox
                 checked={allFilteredSelected}
