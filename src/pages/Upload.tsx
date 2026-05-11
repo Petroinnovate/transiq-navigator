@@ -14,6 +14,8 @@ import { useDashboard, DashboardData } from '@/contexts/DashboardContext';
 import { api, streamDashboard, DashboardStreamEvent } from '@/services/api';
 import { ProcessingProgress } from '@/components/ProcessingProgress';
 import { DocumentHistory } from '@/components/DocumentHistory';
+import { BackendStatusBanner } from '@/components/BackendStatusBanner';
+import { useHealthCheck } from '@/hooks/useHealthCheck';
 
 /**
  * Flatten a nested dashboard response into a single-level object.
@@ -78,6 +80,7 @@ const UploadPage = () => {
     const { toast } = useToast();
     const { user, isAuthenticated, token } = useAuth();
     const navigate = useNavigate();
+    const { isCritical: isBackendCritical } = useHealthCheck();
     const {
         dashboardData,
         setDashboardData,
@@ -393,6 +396,10 @@ const UploadPage = () => {
                             <p className="text-slate-400">Upload your Excel or PDF files to create stunning dashboards</p>
                         </div>
 
+                        <div className="mb-4">
+                            <BackendStatusBanner />
+                        </div>
+
                         {/* Upload Card */}
                         <Card className="bg-slate-800/50 border-slate-700 backdrop-blur-sm">
                             <CardContent className="p-8">
@@ -557,7 +564,8 @@ const UploadPage = () => {
                                     <div className="mt-6 flex justify-center">
                                         <Button
                                             onClick={handleUpload}
-                                            disabled={isLoading}
+                                            disabled={isLoading || isBackendCritical}
+                                            title={isBackendCritical ? 'Processing backend is offline' : undefined}
                                             className="bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white px-8 py-3 rounded-lg font-medium"
                                         >
                                             {isLoading ? (
