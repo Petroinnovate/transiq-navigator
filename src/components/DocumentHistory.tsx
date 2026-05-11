@@ -31,6 +31,7 @@ export function DocumentHistory() {
   const [docs, setDocs] = useState<Doc[]>([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [detailsId, setDetailsId] = useState<string | null>(null);
   const { toast } = useToast();
 
   const refresh = useCallback(async () => {
