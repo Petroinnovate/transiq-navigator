@@ -14,6 +14,89 @@ export type Database = {
   }
   public: {
     Tables: {
+      agent_runs: {
+        Row: {
+          context: Json
+          final_result: Json | null
+          finished_at: string | null
+          goal: string
+          id: string
+          owner_id: string
+          started_at: string
+          status: string
+          tenant_id: string
+        }
+        Insert: {
+          context?: Json
+          final_result?: Json | null
+          finished_at?: string | null
+          goal: string
+          id?: string
+          owner_id: string
+          started_at?: string
+          status?: string
+          tenant_id: string
+        }
+        Update: {
+          context?: Json
+          final_result?: Json | null
+          finished_at?: string | null
+          goal?: string
+          id?: string
+          owner_id?: string
+          started_at?: string
+          status?: string
+          tenant_id?: string
+        }
+        Relationships: []
+      }
+      agent_steps: {
+        Row: {
+          action: string | null
+          error: string | null
+          id: string
+          input: Json | null
+          observation: Json | null
+          run_id: string
+          step_index: number
+          tenant_id: string
+          thought: string | null
+          ts: string
+        }
+        Insert: {
+          action?: string | null
+          error?: string | null
+          id?: string
+          input?: Json | null
+          observation?: Json | null
+          run_id: string
+          step_index: number
+          tenant_id: string
+          thought?: string | null
+          ts?: string
+        }
+        Update: {
+          action?: string | null
+          error?: string | null
+          id?: string
+          input?: Json | null
+          observation?: Json | null
+          run_id?: string
+          step_index?: number
+          tenant_id?: string
+          thought?: string | null
+          ts?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_steps_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "agent_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_logs: {
         Row: {
           action: string
@@ -61,6 +144,530 @@ export type Database = {
           },
         ]
       }
+      capability_studies: {
+        Row: {
+          computed_at: string
+          cp: number | null
+          cpk: number | null
+          id: string
+          metadata: Json
+          pp: number | null
+          ppk: number | null
+          sample_size: number | null
+          series_id: string
+          tenant_id: string
+        }
+        Insert: {
+          computed_at?: string
+          cp?: number | null
+          cpk?: number | null
+          id?: string
+          metadata?: Json
+          pp?: number | null
+          ppk?: number | null
+          sample_size?: number | null
+          series_id: string
+          tenant_id: string
+        }
+        Update: {
+          computed_at?: string
+          cp?: number | null
+          cpk?: number | null
+          id?: string
+          metadata?: Json
+          pp?: number | null
+          ppk?: number | null
+          sample_size?: number | null
+          series_id?: string
+          tenant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "capability_studies_series_id_fkey"
+            columns: ["series_id"]
+            isOneToOne: false
+            referencedRelation: "spc_series"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      confusion_matrix_cells: {
+        Row: {
+          actual_label: string
+          count: number
+          evaluation_id: string
+          id: string
+          predicted_label: string
+          tenant_id: string
+        }
+        Insert: {
+          actual_label: string
+          count?: number
+          evaluation_id: string
+          id?: string
+          predicted_label: string
+          tenant_id: string
+        }
+        Update: {
+          actual_label?: string
+          count?: number
+          evaluation_id?: string
+          id?: string
+          predicted_label?: string
+          tenant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "confusion_matrix_cells_evaluation_id_fkey"
+            columns: ["evaluation_id"]
+            isOneToOne: false
+            referencedRelation: "model_evaluations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dashboards: {
+        Row: {
+          charts: Json
+          created_at: string
+          document_id: string
+          id: string
+          insights: Json
+          kpis: Json
+          six_sigma: Json | null
+          status: string
+          tenant_id: string
+          updated_at: string
+        }
+        Insert: {
+          charts?: Json
+          created_at?: string
+          document_id: string
+          id?: string
+          insights?: Json
+          kpis?: Json
+          six_sigma?: Json | null
+          status?: string
+          tenant_id: string
+          updated_at?: string
+        }
+        Update: {
+          charts?: Json
+          created_at?: string
+          document_id?: string
+          id?: string
+          insights?: Json
+          kpis?: Json
+          six_sigma?: Json | null
+          status?: string
+          tenant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dashboards_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: true
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ddr_audit_events: {
+        Row: {
+          action: string
+          actor_id: string
+          after: Json | null
+          before: Json | null
+          ddr_id: string
+          id: string
+          note: string | null
+          tenant_id: string
+          ts: string
+        }
+        Insert: {
+          action: string
+          actor_id: string
+          after?: Json | null
+          before?: Json | null
+          ddr_id: string
+          id?: string
+          note?: string | null
+          tenant_id: string
+          ts?: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string
+          after?: Json | null
+          before?: Json | null
+          ddr_id?: string
+          id?: string
+          note?: string | null
+          tenant_id?: string
+          ts?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ddr_audit_events_ddr_id_fkey"
+            columns: ["ddr_id"]
+            isOneToOne: false
+            referencedRelation: "ddr_reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ddr_metrics: {
+        Row: {
+          category: string | null
+          confidence: number | null
+          created_at: string
+          ddr_id: string
+          id: string
+          metadata: Json
+          name: string
+          source: string | null
+          tenant_id: string
+          unit: string | null
+          updated_at: string
+          value_num: number | null
+          value_text: string | null
+        }
+        Insert: {
+          category?: string | null
+          confidence?: number | null
+          created_at?: string
+          ddr_id: string
+          id?: string
+          metadata?: Json
+          name: string
+          source?: string | null
+          tenant_id: string
+          unit?: string | null
+          updated_at?: string
+          value_num?: number | null
+          value_text?: string | null
+        }
+        Update: {
+          category?: string | null
+          confidence?: number | null
+          created_at?: string
+          ddr_id?: string
+          id?: string
+          metadata?: Json
+          name?: string
+          source?: string | null
+          tenant_id?: string
+          unit?: string | null
+          updated_at?: string
+          value_num?: number | null
+          value_text?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ddr_metrics_ddr_id_fkey"
+            columns: ["ddr_id"]
+            isOneToOne: false
+            referencedRelation: "ddr_reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ddr_reports: {
+        Row: {
+          created_at: string
+          document_id: string | null
+          id: string
+          metadata: Json
+          prepared_by: string | null
+          report_date: string
+          report_no: string | null
+          rig_id: string | null
+          shift: string | null
+          status: string
+          summary: string | null
+          tenant_id: string
+          updated_at: string
+          well_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          document_id?: string | null
+          id?: string
+          metadata?: Json
+          prepared_by?: string | null
+          report_date: string
+          report_no?: string | null
+          rig_id?: string | null
+          shift?: string | null
+          status?: string
+          summary?: string | null
+          tenant_id: string
+          updated_at?: string
+          well_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          document_id?: string | null
+          id?: string
+          metadata?: Json
+          prepared_by?: string | null
+          report_date?: string
+          report_no?: string | null
+          rig_id?: string | null
+          shift?: string | null
+          status?: string
+          summary?: string | null
+          tenant_id?: string
+          updated_at?: string
+          well_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ddr_reports_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ddr_reports_rig_id_fkey"
+            columns: ["rig_id"]
+            isOneToOne: false
+            referencedRelation: "rigs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ddr_reports_well_id_fkey"
+            columns: ["well_id"]
+            isOneToOne: false
+            referencedRelation: "wells"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_chunks: {
+        Row: {
+          chunk_index: number
+          created_at: string
+          document_id: string
+          embedding: string | null
+          id: string
+          metadata: Json
+          tenant_id: string
+          text: string
+        }
+        Insert: {
+          chunk_index: number
+          created_at?: string
+          document_id: string
+          embedding?: string | null
+          id?: string
+          metadata?: Json
+          tenant_id: string
+          text: string
+        }
+        Update: {
+          chunk_index?: number
+          created_at?: string
+          document_id?: string
+          embedding?: string | null
+          id?: string
+          metadata?: Json
+          tenant_id?: string
+          text?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_chunks_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_edges: {
+        Row: {
+          created_at: string
+          document_id: string | null
+          edge_type: string
+          id: string
+          metadata: Json
+          source_id: string
+          target_id: string
+          tenant_id: string
+          weight: number | null
+        }
+        Insert: {
+          created_at?: string
+          document_id?: string | null
+          edge_type: string
+          id?: string
+          metadata?: Json
+          source_id: string
+          target_id: string
+          tenant_id: string
+          weight?: number | null
+        }
+        Update: {
+          created_at?: string
+          document_id?: string | null
+          edge_type?: string
+          id?: string
+          metadata?: Json
+          source_id?: string
+          target_id?: string
+          tenant_id?: string
+          weight?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_edges_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      documents: {
+        Row: {
+          created_at: string
+          file_id: string | null
+          file_name: string
+          has_dashboard: boolean
+          id: string
+          metadata: Json
+          mime: string | null
+          owner_id: string
+          processing_time_ms: number | null
+          provider: string | null
+          status: string
+          tenant_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          file_id?: string | null
+          file_name: string
+          has_dashboard?: boolean
+          id?: string
+          metadata?: Json
+          mime?: string | null
+          owner_id: string
+          processing_time_ms?: number | null
+          provider?: string | null
+          status?: string
+          tenant_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          file_id?: string | null
+          file_name?: string
+          has_dashboard?: boolean
+          id?: string
+          metadata?: Json
+          mime?: string | null
+          owner_id?: string
+          processing_time_ms?: number | null
+          provider?: string | null
+          status?: string
+          tenant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "documents_file_id_fkey"
+            columns: ["file_id"]
+            isOneToOne: false
+            referencedRelation: "uploaded_files"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      entities: {
+        Row: {
+          canonical_id: string | null
+          created_at: string
+          id: string
+          metadata: Json
+          name: string
+          tenant_id: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          canonical_id?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json
+          name: string
+          tenant_id: string
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          canonical_id?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json
+          name?: string
+          tenant_id?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      entity_relations: {
+        Row: {
+          created_at: string
+          id: string
+          metadata: Json
+          relation: string
+          source_entity: string
+          target_entity: string
+          tenant_id: string
+          weight: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          metadata?: Json
+          relation: string
+          source_entity: string
+          target_entity: string
+          tenant_id: string
+          weight?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          metadata?: Json
+          relation?: string
+          source_entity?: string
+          target_entity?: string
+          tenant_id?: string
+          weight?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "entity_relations_source_entity_fkey"
+            columns: ["source_entity"]
+            isOneToOne: false
+            referencedRelation: "entities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "entity_relations_target_entity_fkey"
+            columns: ["target_entity"]
+            isOneToOne: false
+            referencedRelation: "entities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       fleets: {
         Row: {
           created_at: string
@@ -92,6 +699,63 @@ export type Database = {
             columns: ["tenant_id"]
             isOneToOne: false
             referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      insights: {
+        Row: {
+          body: string | null
+          created_at: string
+          document_id: string | null
+          entity_id: string | null
+          id: string
+          metadata: Json
+          severity: string
+          tags: string[]
+          tenant_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          document_id?: string | null
+          entity_id?: string | null
+          id?: string
+          metadata?: Json
+          severity?: string
+          tags?: string[]
+          tenant_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          document_id?: string | null
+          entity_id?: string | null
+          id?: string
+          metadata?: Json
+          severity?: string
+          tags?: string[]
+          tenant_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "insights_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "insights_entity_id_fkey"
+            columns: ["entity_id"]
+            isOneToOne: false
+            referencedRelation: "entities"
             referencedColumns: ["id"]
           },
         ]
@@ -157,6 +821,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      model_evaluations: {
+        Row: {
+          accuracy: number | null
+          computed_at: string
+          f1: number | null
+          id: string
+          metrics: Json
+          model_name: string
+          precision: number | null
+          recall: number | null
+          task: string | null
+          tenant_id: string
+          version: string | null
+        }
+        Insert: {
+          accuracy?: number | null
+          computed_at?: string
+          f1?: number | null
+          id?: string
+          metrics?: Json
+          model_name: string
+          precision?: number | null
+          recall?: number | null
+          task?: string | null
+          tenant_id: string
+          version?: string | null
+        }
+        Update: {
+          accuracy?: number | null
+          computed_at?: string
+          f1?: number | null
+          id?: string
+          metrics?: Json
+          model_name?: string
+          precision?: number | null
+          recall?: number | null
+          task?: string | null
+          tenant_id?: string
+          version?: string | null
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -243,6 +949,110 @@ export type Database = {
             columns: ["tenant_id"]
             isOneToOne: false
             referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      spc_points: {
+        Row: {
+          id: string
+          metadata: Json
+          out_of_control: boolean
+          rule_flags: string[]
+          series_id: string
+          tenant_id: string
+          ts: string
+          value: number
+        }
+        Insert: {
+          id?: string
+          metadata?: Json
+          out_of_control?: boolean
+          rule_flags?: string[]
+          series_id: string
+          tenant_id: string
+          ts: string
+          value: number
+        }
+        Update: {
+          id?: string
+          metadata?: Json
+          out_of_control?: boolean
+          rule_flags?: string[]
+          series_id?: string
+          tenant_id?: string
+          ts?: string
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "spc_points_series_id_fkey"
+            columns: ["series_id"]
+            isOneToOne: false
+            referencedRelation: "spc_series"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      spc_series: {
+        Row: {
+          chart_type: string
+          created_at: string
+          id: string
+          lcl: number | null
+          metadata: Json
+          metric_name: string
+          rig_id: string | null
+          target: number | null
+          tenant_id: string
+          ucl: number | null
+          unit: string | null
+          updated_at: string
+          well_id: string | null
+        }
+        Insert: {
+          chart_type?: string
+          created_at?: string
+          id?: string
+          lcl?: number | null
+          metadata?: Json
+          metric_name: string
+          rig_id?: string | null
+          target?: number | null
+          tenant_id: string
+          ucl?: number | null
+          unit?: string | null
+          updated_at?: string
+          well_id?: string | null
+        }
+        Update: {
+          chart_type?: string
+          created_at?: string
+          id?: string
+          lcl?: number | null
+          metadata?: Json
+          metric_name?: string
+          rig_id?: string | null
+          target?: number | null
+          tenant_id?: string
+          ucl?: number | null
+          unit?: string | null
+          updated_at?: string
+          well_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "spc_series_rig_id_fkey"
+            columns: ["rig_id"]
+            isOneToOne: false
+            referencedRelation: "rigs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "spc_series_well_id_fkey"
+            columns: ["well_id"]
+            isOneToOne: false
+            referencedRelation: "wells"
             referencedColumns: ["id"]
           },
         ]
