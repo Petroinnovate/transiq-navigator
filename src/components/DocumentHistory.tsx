@@ -120,6 +120,15 @@ export function DocumentHistory() {
                   </div>
                 </div>
                 <div className="flex items-center gap-1 flex-shrink-0">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setDetailsId(d.id)}
+                    className="text-slate-300 hover:text-white hover:bg-slate-600"
+                    title="View details"
+                  >
+                    <Info className="h-4 w-4" />
+                  </Button>
                   {d.has_dashboard && (
                     <Button
                       asChild
