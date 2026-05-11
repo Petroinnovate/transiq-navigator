@@ -123,8 +123,14 @@ export function DocumentHistory() {
       })
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "documents" }, (payload) => {
         const row = payload.new as Doc;
-        setDocs((prev) => (prev.some((d) => d.id === row.id) ? prev : [row, ...prev]));
         setTotal((t) => t + 1);
+        // Only inject inline if user is at the top of the list; otherwise
+        // queue a "new items" notice so the scroll position doesn't jump.
+        if (isAtTop()) {
+          setDocs((prev) => (prev.some((d) => d.id === row.id) ? prev : [row, ...prev]));
+        } else {
+          setPendingNew((n) => n + 1);
+        }
       })
       .on("postgres_changes", { event: "DELETE", schema: "public", table: "documents" }, (payload) => {
         const row = payload.old as { id: string };
