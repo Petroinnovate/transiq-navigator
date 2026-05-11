@@ -218,11 +218,11 @@ export const api = {
     };
   },
 
-  async getBatchStatus() {
+  async getBatchStatus(_batchId: string): Promise<BatchStatus> {
     throw new Error("Batch status not implemented in Supabase backend yet");
   },
 
-  async runAgent() {
+  async runAgent(_goal: string, _context: Record<string, unknown>): Promise<AgentRunResponse> {
     throw new Error("Agent runs not implemented in Supabase backend yet");
   },
 
