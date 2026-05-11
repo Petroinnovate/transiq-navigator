@@ -80,6 +80,7 @@ const UploadPage = () => {
     const { toast } = useToast();
     const { user, isAuthenticated, token } = useAuth();
     const navigate = useNavigate();
+    const { isCritical: isBackendCritical } = useHealthCheck();
     const {
         dashboardData,
         setDashboardData,
