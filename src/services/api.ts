@@ -36,6 +36,31 @@ export interface SearchRequest {
   query: string;
   top_k?: number;
   document_id?: string;
+  /** @deprecated kept for compat with legacy UI */
+  use_hybrid?: boolean;
+}
+
+export interface BatchStatus {
+  batch_id: string;
+  status: "queued" | "processing" | "completed" | "failed";
+  total_files: number;
+  completed_files: number;
+  failed_files: number;
+  progress: number;
+  documents: Array<{ doc_id: string; task_id: string; file_name: string; status: string }>;
+}
+
+export interface AgentRunResponse {
+  status: "success" | "failed";
+  steps: Array<{
+    step: number;
+    thought?: string;
+    action?: string;
+    input?: Record<string, unknown>;
+    result?: Record<string, unknown>;
+    error?: string;
+  }>;
+  final_result: Record<string, unknown>;
 }
 
 export interface SearchResult {
