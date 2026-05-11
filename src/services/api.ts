@@ -1,97 +1,20 @@
-import axios from '@/lib/axios';
-
-const API_V2_BASE = '/api/v2';
+// Supabase-native API client. Replaces the FastAPI-based one.
+// Uploads go directly to the `raw` storage bucket; processing/dashboard/search happen via edge functions.
+import { supabase } from "@/integrations/supabase/client";
 
 export interface UploadResponse {
   doc_id: string;
   task_id: string;
-  status: 'processing' | 'completed' | 'failed';
+  status: "processing" | "completed" | "failed";
   message: string;
-  dashboard?: DashboardData;
-  processing_time?: number;
   files_processed?: number;
 }
 
-export interface DocumentInfo {
-  document: {
-    id: string;
-    file_name: string;
-    status: string;
-    created_at: string;
-    has_dashboard?: boolean;
-  };
-  chunks_count: number;
-  edges_count: number;
-}
-
-export interface DocumentChunk {
-  id: string;
-  text: string;
-  index: number;
-  metadata?: Record<string, unknown>;
-}
-
-export interface SearchRequest {
-  query: string;
-  top_k?: number;
-  use_hybrid?: boolean;
-}
-
-export interface SearchResult {
-  query: string;
-  results: Array<{
-    index: number;
-    text: string;
-    bm25_score: number;
-    semantic_score: number;
-    combined_score: number;
-  }>;
-  count: number;
-}
-
-export interface AgentRunResponse {
-  status: 'success' | 'failed';
-  steps: Array<{
-    step: number;
-    thought?: string;
-    action?: string;
-    input?: Record<string, unknown>;
-    result?: Record<string, unknown>;
-    error?: string;
-  }>;
-  final_result: Record<string, unknown>;
-}
-
-export interface TaskStatus {
-  task_id: string;
-  status: 'queued' | 'processing' | 'completed' | 'failed';
-  progress?: number;
-  message?: string;
-  result?: Record<string, unknown>;
-  error?: string;
-}
-
-export interface BatchStatus {
-  batch_id: string;
-  status: 'queued' | 'processing' | 'completed' | 'failed';
-  total_files: number;
-  completed_files: number;
-  failed_files: number;
-  progress: number;
-  documents: Array<{
-    doc_id: string;
-    task_id: string;
-    file_name: string;
-    status: string;
-  }>;
-}
-
-// Dashboard types
 export interface KPIBlock {
   label: string;
   value: string | number;
   unit?: string;
-  trend?: 'up' | 'down' | 'neutral';
+  trend?: "up" | "down" | "neutral";
 }
 
 export interface ChartBlock {
@@ -105,263 +28,226 @@ export interface DashboardData {
   status?: string;
   kpis: KPIBlock[];
   charts: ChartBlock[];
+  insights?: string[];
   [key: string]: unknown;
 }
 
+export interface SearchRequest {
+  query: string;
+  top_k?: number;
+  document_id?: string;
+  /** @deprecated kept for compat with legacy UI */
+  use_hybrid?: boolean;
+}
+
+export interface BatchStatus {
+  batch_id: string;
+  status: "queued" | "processing" | "completed" | "failed";
+  total_files: number;
+  completed_files: number;
+  failed_files: number;
+  progress: number;
+  documents: Array<{ doc_id: string; task_id: string; file_name: string; status: string }>;
+}
+
+export interface AgentRunResponse {
+  status: "success" | "failed";
+  steps: Array<{
+    step: number;
+    thought?: string;
+    action?: string;
+    input?: Record<string, unknown>;
+    result?: Record<string, unknown>;
+    error?: string;
+  }>;
+  final_result: Record<string, unknown>;
+}
+
+export interface SearchResult {
+  query: string;
+  count: number;
+  results: Array<{
+    index: number;
+    chunk_id: string;
+    document_id: string;
+    chunk_index: number;
+    text: string;
+    bm25_score: number;
+    semantic_score: number;
+    combined_score: number;
+  }>;
+}
+
+async function getTenantId(): Promise<{ userId: string; tenantId: string }> {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error("Not authenticated");
+  const { data: profile, error } = await supabase
+    .from("profiles").select("tenant_id").eq("id", user.id).single();
+  if (error || !profile) throw new Error("No tenant for user");
+  return { userId: user.id, tenantId: profile.tenant_id };
+}
+
+async function uploadOne(file: File): Promise<{ doc_id: string }> {
+  const { userId, tenantId } = await getTenantId();
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+  const path = `${tenantId}/${userId}/${crypto.randomUUID()}-${safeName}`;
+
+  const { error: upErr } = await supabase.storage.from("raw").upload(path, file, {
+    contentType: file.type || "application/octet-stream",
+    upsert: false,
+  });
+  if (upErr) throw new Error(`Upload failed: ${upErr.message}`);
+
+  const { data: fileRow, error: fileErr } = await supabase.from("uploaded_files").insert({
+    tenant_id: tenantId,
+    owner_id: userId,
+    bucket: "raw",
+    path,
+    mime: file.type,
+    size: file.size,
+  }).select("id").single();
+  if (fileErr || !fileRow) throw new Error(`Register file failed: ${fileErr?.message}`);
+
+  const { data: doc, error: docErr } = await supabase.from("documents").insert({
+    tenant_id: tenantId,
+    owner_id: userId,
+    file_id: fileRow.id,
+    file_name: file.name,
+    mime: file.type,
+    status: "queued",
+  }).select("id").single();
+  if (docErr || !doc) throw new Error(`Register document failed: ${docErr?.message}`);
+
+  // Fire-and-forget processing
+  void supabase.functions.invoke("process-document", { body: { document_id: doc.id } });
+
+  return { doc_id: doc.id };
+}
+
 export const api = {
-  // Upload document
-  async uploadDocument(
-    file: File,
-    options?: {
-      provider?: 'gemini' | 'openai';
-      enable_deduction?: boolean;
-      enable_patterns?: boolean;
-    }
-  ): Promise<UploadResponse> {
-    const formData = new FormData();
-    formData.append('file', file);
-    
-    const params = new URLSearchParams();
-    if (options?.provider) params.append('provider', options.provider);
-    if (options?.enable_deduction !== undefined) {
-      params.append('enable_deduction', String(options.enable_deduction));
-    }
-    if (options?.enable_patterns !== undefined) {
-      params.append('enable_patterns', String(options.enable_patterns));
-    }
-    
-    const response = await axios.post<UploadResponse>(
-      `${API_V2_BASE}/generate?${params.toString()}`,
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
-    );
-    
-    return response.data;
-  },
-  
-  // Upload multiple documents for batch analysis (max 5 files)
-  async uploadDocuments(
-    files: File[],
-    options?: {
-      provider?: 'gemini' | 'openai';
-      enable_deduction?: boolean;
-      enable_patterns?: boolean;
-    }
-  ): Promise<UploadResponse> {
-    const formData = new FormData();
-    files.forEach(f => formData.append('files', f));
-
-    const params = new URLSearchParams();
-    if (options?.provider) params.append('provider', options.provider);
-    if (options?.enable_deduction !== undefined) {
-      params.append('enable_deduction', String(options.enable_deduction));
-    }
-    if (options?.enable_patterns !== undefined) {
-      params.append('enable_patterns', String(options.enable_patterns));
-    }
-
-    const response = await axios.post<UploadResponse>(
-      `${API_V2_BASE}/generate-batch?${params.toString()}`,
-      formData,
-      { headers: { 'Content-Type': 'multipart/form-data' } }
-    );
-    return response.data;
+  async uploadDocument(file: File): Promise<UploadResponse> {
+    const { doc_id } = await uploadOne(file);
+    return { doc_id, task_id: doc_id, status: "processing", message: "Processing started" };
   },
 
-  // Upload a project (6–20 files, auto-batched via generate-batch)
-  async uploadProject(
-    files: File[],
-    options?: {
-      provider?: 'gemini' | 'openai';
-      enable_deduction?: boolean;
-      enable_patterns?: boolean;
-    }
-  ): Promise<UploadResponse> {
-    const formData = new FormData();
-    files.forEach(f => formData.append('files', f));
-
-    const params = new URLSearchParams();
-    if (options?.provider) params.append('provider', options.provider);
-    if (options?.enable_deduction !== undefined) {
-      params.append('enable_deduction', String(options.enable_deduction));
-    }
-    if (options?.enable_patterns !== undefined) {
-      params.append('enable_patterns', String(options.enable_patterns));
-    }
-
-    const response = await axios.post<UploadResponse>(
-      `${API_V2_BASE}/generate-batch?${params.toString()}`,
-      formData,
-      { headers: { 'Content-Type': 'multipart/form-data' } }
-    );
-    return response.data;
+  async uploadDocuments(files: File[]): Promise<UploadResponse> {
+    const results = await Promise.all(files.map(uploadOne));
+    return {
+      doc_id: results[0]?.doc_id ?? "",
+      task_id: results[0]?.doc_id ?? "",
+      status: "processing",
+      message: `Processing ${results.length} files`,
+      files_processed: results.length,
+    };
   },
 
-  // Get document info
-  async getDocument(docId: string): Promise<DocumentInfo> {
-    const response = await axios.get<DocumentInfo>(`${API_V2_BASE}/documents/${docId}`);
-    return response.data;
+  async uploadProject(files: File[]): Promise<UploadResponse> {
+    return this.uploadDocuments(files);
   },
-  
-  // Get document chunks
-  async getDocumentChunks(docId: string): Promise<DocumentChunk[]> {
-    const response = await axios.get<DocumentChunk[]>(`${API_V2_BASE}/documents/${docId}/chunks`);
-    return response.data;
+
+  async getDocument(docId: string) {
+    const { data, error } = await supabase
+      .from("documents").select("*").eq("id", docId).single();
+    if (error || !data) throw new Error(error?.message ?? "Document not found");
+    const { count: chunksCount } = await supabase
+      .from("document_chunks").select("*", { count: "exact", head: true }).eq("document_id", docId);
+    return {
+      document: {
+        id: data.id,
+        file_name: data.file_name,
+        status: data.status,
+        created_at: data.created_at,
+        has_dashboard: data.has_dashboard,
+      },
+      chunks_count: chunksCount ?? 0,
+      edges_count: 0,
+    };
   },
-  
-  // Search documents
+
+  async getDocumentChunks(docId: string) {
+    const { data, error } = await supabase
+      .from("document_chunks").select("id,chunk_index,text,metadata")
+      .eq("document_id", docId).order("chunk_index", { ascending: true });
+    if (error) throw new Error(error.message);
+    return (data ?? []).map((c) => ({ id: c.id, index: c.chunk_index, text: c.text, metadata: c.metadata as Record<string, unknown> }));
+  },
+
   async searchDocuments(request: SearchRequest): Promise<SearchResult> {
-    const response = await axios.post<SearchResult>(`${API_V2_BASE}/search`, request);
-    return response.data;
+    const { data, error } = await supabase.functions.invoke("search-hybrid", { body: request });
+    if (error) throw new Error(error.message);
+    return data as SearchResult;
   },
 
-  async runAgent(goal: string, context: Record<string, unknown>): Promise<AgentRunResponse> {
-    const response = await axios.post<AgentRunResponse>(`${API_V2_BASE}/agent/run`, {
-      goal,
-      context,
-    });
-    return response.data;
-  },
-  
-  // Health check
-  async healthCheck(): Promise<{ status: string }> {
-    const response = await axios.get<{ status: string }>(`${API_V2_BASE}/health`);
-    return response.data;
-  },
-
-  // Get dashboard data for a document
   async getDashboardData(docId: string): Promise<DashboardData> {
-    try {
-      const response = await axios.get<DashboardData>(
-        `${API_V2_BASE}/documents/${docId}/dashboard`
-      );
-      return response.data;
-    } catch (error: unknown) {
-      const status = (error as { response?: { status?: number } })?.response?.status;
+    const { data, error } = await supabase
+      .from("dashboards").select("*").eq("document_id", docId).maybeSingle();
 
-      if (status === 404) {
-        try {
-          const docInfo = await this.getDocument(docId);
-          if (docInfo.document.has_dashboard) {
-            // Race condition — retry once
-            const retry = await axios.get<DashboardData>(
-              `${API_V2_BASE}/documents/${docId}/dashboard`
-            );
-            return retry.data;
-          }
-          return {
-            status: docInfo.document.status ?? 'processing',
-            kpis: [],
-            charts: [],
-          };
-        } catch {
-          return { status: 'processing', kpis: [], charts: [] };
-        }
-      }
-      throw new Error('Failed to fetch dashboard data');
+    if (data) {
+      return {
+        status: data.status,
+        kpis: (data.kpis as unknown as KPIBlock[]) ?? [],
+        charts: (data.charts as unknown as ChartBlock[]) ?? [],
+        insights: (data.insights as unknown as string[]) ?? [],
+      };
     }
+
+    // No dashboard yet → check doc state
+    const doc = await this.getDocument(docId);
+    if (doc.document.status === "processed" && !data) {
+      // Trigger generation, return empty for now
+      void supabase.functions.invoke("generate-dashboard", { body: { document_id: docId } });
+    }
+    if (error) console.warn("[dashboard] fetch:", error.message);
+    return { status: doc.document.status, kpis: [], charts: [] };
   },
 
-  // Get task/job status for polling
-  async getTaskStatus(taskId: string): Promise<TaskStatus> {
-    const response = await axios.get<TaskStatus>(`${API_V2_BASE}/task/${taskId}`);
-    return response.data;
+  async getTaskStatus(taskId: string) {
+    // taskId == doc_id in the new model
+    const { data, error } = await supabase
+      .from("documents").select("id,status,has_dashboard").eq("id", taskId).single();
+    if (error || !data) throw new Error(error?.message ?? "Task not found");
+    const status =
+      data.status === "queued" ? "queued" :
+      data.status === "processing" ? "processing" :
+      data.status === "processed" ? "completed" : "failed";
+    return {
+      task_id: data.id,
+      status: status as "queued" | "processing" | "completed" | "failed",
+      progress: data.status === "processed" ? 100 : data.status === "processing" ? 50 : 0,
+      message: `Status: ${data.status}`,
+    };
   },
 
-  // Get batch processing status
-  async getBatchStatus(batchId: string): Promise<BatchStatus> {
-    const response = await axios.get<BatchStatus>(`${API_V2_BASE}/batch/${batchId}`);
-    return response.data;
+  async getBatchStatus(_batchId: string): Promise<BatchStatus> {
+    throw new Error("Batch status not implemented in Supabase backend yet");
+  },
+
+  async runAgent(_goal: string, _context: Record<string, unknown>): Promise<AgentRunResponse> {
+    throw new Error("Agent runs not implemented in Supabase backend yet");
+  },
+
+  async healthCheck() {
+    return { status: "ok" };
   },
 };
 
-// ---------------------------------------------------------------------------
-// SSE Dashboard Streaming
-// ---------------------------------------------------------------------------
-
-export interface DashboardStreamEvent {
-  stage: 'context_ready' | 'kpis' | 'charts' | 'insights' | 'sixSigma' | 'complete' | 'error';
-  data?: Record<string, any>;
-  error?: string;
-}
-
 /**
- * Connect to the dashboard SSE stream.  Calls ``onEvent`` for each
- * stage as it arrives and returns a close function.
- *
- * Usage:
- * ```ts
- * const close = streamDashboard(docId, (event) => {
- *   if (event.stage === 'kpis') setKpis(event.data.kpis);
- *   if (event.stage === 'complete') close();
- * });
- * ```
+ * Subscribe to live document status changes via realtime.
+ * Returns an unsubscribe function.
  */
-export function streamDashboard(
+export function streamDocumentStatus(
   docId: string,
-  onEvent: (event: DashboardStreamEvent) => void,
-  onError?: (err: Event) => void,
+  onUpdate: (status: { status: string; has_dashboard: boolean }) => void,
 ): () => void {
-  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8001';
-  const url = `${apiUrl}${API_V2_BASE}/documents/${docId}/dashboard/stream`;
-
-  const es = new EventSource(url);
-
-  es.onmessage = (msg) => {
-    try {
-      const event: DashboardStreamEvent = JSON.parse(msg.data);
-      onEvent(event);
-      if (event.stage === 'complete' || event.stage === 'error') {
-        es.close();
-      }
-    } catch (err) {
-      console.error('[SSE] Parse error:', err);
-    }
-  };
-
-  es.onerror = (err) => {
-    console.error('[SSE] Connection error:', err);
-    if (onError) onError(err);
-    es.close();
-  };
-
-  return () => es.close();
+  const channel = supabase
+    .channel(`doc-${docId}`)
+    .on("postgres_changes",
+      { event: "UPDATE", schema: "public", table: "documents", filter: `id=eq.${docId}` },
+      (payload) => {
+        const row = payload.new as { status: string; has_dashboard: boolean };
+        onUpdate({ status: row.status, has_dashboard: row.has_dashboard });
+      },
+    )
+    .subscribe();
+  return () => { supabase.removeChannel(channel); };
 }
-
-// WebSocket helper
-export class ProgressWebSocket {
-  private ws: WebSocket | null = null;
-  
-  connect(taskId: string, onMessage: (data: TaskStatus) => void) {
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8001';
-    const wsProtocol = apiUrl.startsWith('https') ? 'wss' : 'ws';
-    const wsHost = apiUrl.replace(/^https?:\/\//, '');
-    const wsUrl = `${wsProtocol}://${wsHost}${API_V2_BASE}/ws/${taskId}`;
-    this.ws = new WebSocket(wsUrl);
-    
-    this.ws.onmessage = (event) => {
-      const data: TaskStatus = JSON.parse(event.data);
-      onMessage(data);
-    };
-    
-    this.ws.onerror = (error) => {
-      console.error('[WebSocket] error:', error);
-    };
-    
-    this.ws.onclose = () => {
-      console.log('[WebSocket] closed');
-    };
-  }
-  
-  disconnect() {
-    if (this.ws) {
-      this.ws.close();
-      this.ws = null;
-    }
-  }
-}
-
