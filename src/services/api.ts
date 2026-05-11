@@ -160,9 +160,9 @@ export const api = {
     if (data) {
       return {
         status: data.status,
-        kpis: (data.kpis as KPIBlock[]) ?? [],
-        charts: (data.charts as ChartBlock[]) ?? [],
-        insights: (data.insights as string[]) ?? [],
+        kpis: (data.kpis as unknown as KPIBlock[]) ?? [],
+        charts: (data.charts as unknown as ChartBlock[]) ?? [],
+        insights: (data.insights as unknown as string[]) ?? [],
       };
     }
 
