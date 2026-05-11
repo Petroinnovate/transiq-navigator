@@ -1243,6 +1243,20 @@ export type Database = {
         Args: { _role: Database["public"]["Enums"]["app_role"] }
         Returns: boolean
       }
+      match_document_chunks: {
+        Args: {
+          filter_document_id?: string
+          match_count?: number
+          query_embedding: string
+        }
+        Returns: {
+          chunk_index: number
+          document_id: string
+          id: string
+          similarity: number
+          text: string
+        }[]
+      }
     }
     Enums: {
       app_role:
