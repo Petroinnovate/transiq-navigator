@@ -167,6 +167,11 @@ export function DocumentHistory() {
           </div>
         )}
       </CardContent>
+      <DocumentDetailsDialog
+        docId={detailsId}
+        open={detailsId !== null}
+        onOpenChange={(o) => !o && setDetailsId(null)}
+      />
     </Card>
   );
 }
