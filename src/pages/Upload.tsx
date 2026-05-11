@@ -13,6 +13,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useDashboard, DashboardData } from '@/contexts/DashboardContext';
 import { api, streamDashboard, DashboardStreamEvent } from '@/services/api';
 import { ProcessingProgress } from '@/components/ProcessingProgress';
+import { DocumentHistory } from '@/components/DocumentHistory';
 
 /**
  * Flatten a nested dashboard response into a single-level object.
@@ -646,6 +647,9 @@ const UploadPage = () => {
                                 </div>
                             </CardContent>
                         </Card>
+
+                        {/* Document History */}
+                        <DocumentHistory />
                     </div>
                 </div>
             </div>
