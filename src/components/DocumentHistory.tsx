@@ -34,7 +34,15 @@ export function DocumentHistory() {
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [detailsId, setDetailsId] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
   const { toast } = useToast();
+
+  const filtered = docs.filter((d) => {
+    const matchesQuery = !query || d.file_name.toLowerCase().includes(query.toLowerCase());
+    const matchesStatus = statusFilter === "all" || d.status === statusFilter;
+    return matchesQuery && matchesStatus;
+  });
 
   const refresh = useCallback(async () => {
     try {
