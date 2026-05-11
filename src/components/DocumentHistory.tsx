@@ -104,15 +104,40 @@ export function DocumentHistory() {
         </Button>
       </CardHeader>
       <CardContent>
+        <div className="flex gap-2 mb-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400 pointer-events-none" />
+            <Input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search by file name…"
+              className="pl-8 bg-slate-700/40 border-slate-600 text-white placeholder:text-slate-500"
+            />
+          </div>
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-[140px] bg-slate-700/40 border-slate-600 text-white">
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All statuses</SelectItem>
+              <SelectItem value="queued">Queued</SelectItem>
+              <SelectItem value="processing">Processing</SelectItem>
+              <SelectItem value="processed">Processed</SelectItem>
+              <SelectItem value="failed">Failed</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
         {loading ? (
           <div className="flex items-center justify-center py-8 text-slate-400">
             <Loader2 className="h-5 w-5 animate-spin mr-2" /> Loading…
           </div>
         ) : docs.length === 0 ? (
           <p className="text-slate-400 text-sm py-6 text-center">No documents uploaded yet.</p>
+        ) : filtered.length === 0 ? (
+          <p className="text-slate-400 text-sm py-6 text-center">No documents match your filters.</p>
         ) : (
           <div className="space-y-2 max-h-[480px] overflow-y-auto pr-1">
-            {docs.map((d) => (
+            {filtered.map((d) => (
               <div
                 key={d.id}
                 className="flex items-center justify-between p-3 bg-slate-700/40 rounded-lg border border-slate-600 hover:border-slate-500 transition-colors"
