@@ -1,386 +1,171 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect, useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { z } from 'zod';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { supabase } from '@/integrations/supabase/client';
+import { lovable } from '@/integrations/lovable';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
-import { Eye, EyeOff, Mail, Lock, User, ArrowLeft, BarChart3 } from 'lucide-react';
-import axios from '@/lib/axios';
+import { toast } from 'sonner';
+import { Loader2 } from 'lucide-react';
 
-// Validation schemas
-const loginSchema = z.object({
-    email: z.string().email('Please enter a valid email address'),
-    password: z.string().min(6, 'Password must be at least 6 characters'),
-});
+const emailSchema = z.string().trim().email('Enter a valid email');
+const passwordSchema = z.string().min(8, 'Password must be at least 8 characters').max(72);
 
-const signupSchema = z.object({
-    name: z.string().min(2, 'Name must be at least 2 characters'),
-    email: z.string().email('Please enter a valid email address'),
-    password: z.string().min(8, 'Password must be at least 8 characters'),
-    confirmPassword: z.string().min(8, 'Please confirm your password'),
-}).refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-});
+const GoogleIcon = () => (
+  <svg className="h-4 w-4" viewBox="0 0 24 24" aria-hidden="true">
+    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.75h3.57c2.08-1.92 3.28-4.74 3.28-8.07z"/>
+    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.75c-.99.66-2.26 1.06-3.71 1.06-2.86 0-5.28-1.93-6.14-4.53H2.18v2.84A11 11 0 0 0 12 23z"/>
+    <path fill="#FBBC05" d="M5.86 14.12A6.6 6.6 0 0 1 5.5 12c0-.74.13-1.46.36-2.12V7.04H2.18A11 11 0 0 0 1 12c0 1.77.43 3.45 1.18 4.96l3.68-2.84z"/>
+    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.65l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.04l3.68 2.84C6.72 7.31 9.14 5.38 12 5.38z"/>
+  </svg>
+);
 
-type LoginFormData = z.infer<typeof loginSchema>;
-type SignupFormData = z.infer<typeof signupSchema>;
+export default function Auth() {
+  const navigate = useNavigate();
+  const { isAuthenticated, isLoading } = useAuth();
+  const [mode, setMode] = useState<'signin' | 'signup'>('signin');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [displayName, setDisplayName] = useState('');
+  const [busy, setBusy] = useState(false);
 
-// Backend response shape (matches Token model in auth.py)
-interface AuthTokenResponse {
-    access_token: string;
-    token_type: string;
-    user_id: string;
-    email: string;
-}
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) navigate('/dashboard', { replace: true });
+  }, [isAuthenticated, isLoading, navigate]);
 
-const Auth = () => {
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const { toast } = useToast();
-    const { login, isAuthenticated } = useAuth();
-    const navigate = useNavigate();
+  const handleEmailAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      emailSchema.parse(email);
+      passwordSchema.parse(password);
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        toast.error(err.issues[0].message);
+        return;
+      }
+    }
+    setBusy(true);
+    try {
+      if (mode === 'signup') {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/`,
+            data: { display_name: displayName || email.split('@')[0] },
+          },
+        });
+        if (error) throw error;
+        toast.success('Check your email to confirm your account.');
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        toast.success('Welcome back!');
+        navigate('/dashboard', { replace: true });
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Authentication failed';
+      toast.error(msg);
+    } finally {
+      setBusy(false);
+    }
+  };
 
-    // Redirect to home if already authenticated
-    useEffect(() => {
-        if (isAuthenticated) {
-            navigate('/');
-        }
-    }, [isAuthenticated, navigate]);
+  const handleGoogle = async () => {
+    setBusy(true);
+    try {
+      const result = await lovable.auth.signInWithOAuth('google', { redirect_uri: window.location.origin });
+      if (result.error) {
+        toast.error(result.error.message || 'Google sign-in failed');
+        return;
+      }
+      if (result.redirected) return;
+      navigate('/dashboard', { replace: true });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Google sign-in failed');
+    } finally {
+      setBusy(false);
+    }
+  };
 
-    const loginForm = useForm<LoginFormData>({
-        resolver: zodResolver(loginSchema),
-        defaultValues: {
-            email: '',
-            password: '',
-        },
+  const handleForgot = async () => {
+    try {
+      emailSchema.parse(email);
+    } catch {
+      toast.error('Enter your email above first');
+      return;
+    }
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
     });
+    if (error) toast.error(error.message);
+    else toast.success('Password reset email sent.');
+  };
 
-    const signupForm = useForm<SignupFormData>({
-        resolver: zodResolver(signupSchema),
-        defaultValues: {
-            name: '',
-            email: '',
-            password: '',
-            confirmPassword: '',
-        },
-    });
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl">TransIQ Navigator</CardTitle>
+          <CardDescription>Drilling intelligence platform</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Tabs value={mode} onValueChange={(v) => setMode(v as 'signin' | 'signup')}>
+            <TabsList className="grid w-full grid-cols-2 mb-4">
+              <TabsTrigger value="signin">Sign in</TabsTrigger>
+              <TabsTrigger value="signup">Sign up</TabsTrigger>
+            </TabsList>
 
-    const onLogin = async (data: LoginFormData) => {
-        setIsLoading(true);
-        try {
-            // FIX A: correct endpoint  /auth/signin → /auth/login
-            // FIX B: send JSON, not FormData (backend expects Pydantic UserLogin model)
-            const response = await axios.post<AuthTokenResponse>('/auth/login', {
-                email: data.email,
-                password: data.password,
-            });
+            <Button variant="outline" className="w-full mb-4" onClick={handleGoogle} disabled={busy}>
+              <GoogleIcon />
+              <span className="ml-2">Continue with Google</span>
+            </Button>
 
-            const result = response.data;
-
-            // Backend returns flat { access_token, user_id, email } — no nested user object
-            if (!result?.access_token || !result?.user_id) {
-                throw new Error('Invalid response format from server');
-            }
-
-            const user = {
-                user_id: result.user_id,
-                email: result.email,
-                name: result.email, // backend doesn't store name; use email as fallback
-            };
-
-            toast({
-                title: "Login successful!",
-                description: "Welcome back to TransIQ",
-            });
-
-            login(user, result.access_token);
-            navigate('/');
-        } catch (error: unknown) {
-            console.error('Login error:', error);
-            const message =
-                (error as { response?: { data?: { detail?: string } } })
-                    ?.response?.data?.detail ?? 'Invalid credentials. Please try again.';
-            toast({
-                title: "Login failed",
-                description: message,
-                variant: "destructive",
-            });
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const onSignup = async (data: SignupFormData) => {
-        setIsLoading(true);
-        try {
-            // FIX A: correct endpoint  /auth/signup → /auth/register
-            // FIX B: send JSON, not FormData (backend expects Pydantic UserRegister model)
-            // Note: backend UserRegister only accepts { email, password } — name is client-only
-            const response = await axios.post<AuthTokenResponse>('/auth/register', {
-                email: data.email,
-                password: data.password,
-            });
-
-            const result = response.data;
-
-            if (!result?.access_token || !result?.user_id) {
-                throw new Error('Invalid response format from server');
-            }
-
-            const user = {
-                user_id: result.user_id,
-                email: result.email,
-                name: data.name, // include name from form since backend doesn't store it yet
-            };
-
-            toast({
-                title: "Account created!",
-                description: "Welcome to TransIQ.",
-            });
-
-            login(user, result.access_token);
-            navigate('/');
-        } catch (error: unknown) {
-            console.error('Signup error:', error);
-            const message =
-                (error as { response?: { data?: { detail?: string } } })
-                    ?.response?.data?.detail ?? 'Something went wrong. Please try again.';
-            toast({
-                title: "Signup failed",
-                description: message,
-                variant: "destructive",
-            });
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-6">
-            <div className="w-full max-w-md space-y-6">
-                {/* Logo */}
-                <div className="text-center">
-                    <div className="flex items-center justify-center mb-6">
-                        <div className="w-12 h-12 bg-gradient-to-r from-cyan-400 to-teal-400 rounded-lg flex items-center justify-center mr-3">
-                            <BarChart3 className="h-6 w-6 text-white" />
-                        </div>
-                        <span className="text-2xl font-bold text-white">TransIQ</span>
-                    </div>
-                    <h1 className="text-2xl font-semibold tracking-tight text-white mb-2">
-                        Welcome to TransIQ
-                    </h1>
-                    <p className="text-sm text-slate-400">
-                        Sign in to your account or create a new one
-                    </p>
-                </div>
-
-                {/* Back to Dashboard link */}
-                <Link to="/" className="flex items-center justify-center text-sm text-slate-400 hover:text-white">
-                    <ArrowLeft className="h-4 w-4 mr-2" />
-                    Back to Dashboard
-                </Link>
-
-                <Tabs defaultValue="login" className="w-full">
-                    <TabsList className="grid w-full grid-cols-2 bg-slate-800 border-slate-700">
-                        <TabsTrigger value="login" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-teal-500 data-[state=active]:text-white text-slate-300">Login</TabsTrigger>
-                        <TabsTrigger value="signup" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-teal-500 data-[state=active]:text-white text-slate-300">Sign Up</TabsTrigger>
-                    </TabsList>
-
-                    <TabsContent value="login" className="space-y-4">
-                        <Card className="bg-slate-800/50 border-slate-700">
-                            <CardHeader>
-                                <CardTitle className="text-white">Login</CardTitle>
-                                <CardDescription className="text-slate-400">
-                                    Enter your email and password to access your account
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <Form {...loginForm}>
-                                    <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-4">
-                                        <FormField
-                                            control={loginForm.control}
-                                            name="email"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel className="text-white">Email</FormLabel>
-                                                    <FormControl>
-                                                        <div className="relative">
-                                                            <Mail className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-                                                            <Input
-                                                                placeholder="Enter your email"
-                                                                className="pl-10 bg-slate-700 border-slate-600 text-white placeholder:text-slate-400"
-                                                                {...field}
-                                                            />
-                                                        </div>
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                        <FormField
-                                            control={loginForm.control}
-                                            name="password"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel className="text-white">Password</FormLabel>
-                                                    <FormControl>
-                                                        <div className="relative">
-                                                            <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-                                                            <Input
-                                                                type={showPassword ? "text" : "password"}
-                                                                placeholder="Enter your password"
-                                                                className="pl-10 pr-10 bg-slate-700 border-slate-600 text-white placeholder:text-slate-400"
-                                                                {...field}
-                                                            />
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => setShowPassword(!showPassword)}
-                                                                className="absolute right-3 top-3 h-4 w-4 text-slate-400 hover:text-white"
-                                                            >
-                                                                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                                                            </button>
-                                                        </div>
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                        <Button type="submit" className="w-full bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white" disabled={isLoading}>
-                                            {isLoading ? "Signing in..." : "Sign In"}
-                                        </Button>
-                                    </form>
-                                </Form>
-                            </CardContent>
-                        </Card>
-                    </TabsContent>
-
-                    <TabsContent value="signup" className="space-y-4">
-                        <Card className="bg-slate-800/50 border-slate-700">
-                            <CardHeader>
-                                <CardTitle className="text-white">Create Account</CardTitle>
-                                <CardDescription className="text-slate-400">
-                                    Create a new account to get started
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <Form {...signupForm}>
-                                    <form onSubmit={signupForm.handleSubmit(onSignup)} className="space-y-4">
-                                        <FormField
-                                            control={signupForm.control}
-                                            name="name"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel className="text-white">Full Name</FormLabel>
-                                                    <FormControl>
-                                                        <div className="relative">
-                                                            <User className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-                                                            <Input
-                                                                placeholder="Enter your full name"
-                                                                className="pl-10 bg-slate-700 border-slate-600 text-white placeholder:text-slate-400"
-                                                                {...field}
-                                                            />
-                                                        </div>
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                        <FormField
-                                            control={signupForm.control}
-                                            name="email"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel className="text-white">Email</FormLabel>
-                                                    <FormControl>
-                                                        <div className="relative">
-                                                            <Mail className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-                                                            <Input
-                                                                placeholder="Enter your email"
-                                                                className="pl-10 bg-slate-700 border-slate-600 text-white placeholder:text-slate-400"
-                                                                {...field}
-                                                            />
-                                                        </div>
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                        <FormField
-                                            control={signupForm.control}
-                                            name="password"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel className="text-white">Password</FormLabel>
-                                                    <FormControl>
-                                                        <div className="relative">
-                                                            <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-                                                            <Input
-                                                                type={showPassword ? "text" : "password"}
-                                                                placeholder="Create a password"
-                                                                className="pl-10 pr-10 bg-slate-700 border-slate-600 text-white placeholder:text-slate-400"
-                                                                {...field}
-                                                            />
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => setShowPassword(!showPassword)}
-                                                                className="absolute right-3 top-3 h-4 w-4 text-slate-400 hover:text-white"
-                                                            >
-                                                                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                                                            </button>
-                                                        </div>
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                        <FormField
-                                            control={signupForm.control}
-                                            name="confirmPassword"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel className="text-white">Confirm Password</FormLabel>
-                                                    <FormControl>
-                                                        <div className="relative">
-                                                            <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-                                                            <Input
-                                                                type={showConfirmPassword ? "text" : "password"}
-                                                                placeholder="Confirm your password"
-                                                                className="pl-10 pr-10 bg-slate-700 border-slate-600 text-white placeholder:text-slate-400"
-                                                                {...field}
-                                                            />
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                                                className="absolute right-3 top-3 h-4 w-4 text-slate-400 hover:text-white"
-                                                            >
-                                                                {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                                                            </button>
-                                                        </div>
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                        <Button type="submit" className="w-full bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white" disabled={isLoading}>
-                                            {isLoading ? "Creating account..." : "Create Account"}
-                                        </Button>
-                                    </form>
-                                </Form>
-                            </CardContent>
-                        </Card>
-                    </TabsContent>
-                </Tabs>
+            <div className="relative my-4">
+              <div className="absolute inset-0 flex items-center"><span className="w-full border-t" /></div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">or</span>
+              </div>
             </div>
-        </div>
-    );
-};
 
-export default Auth;
+            <form onSubmit={handleEmailAuth} className="space-y-4">
+              <TabsContent value="signup" className="space-y-4 mt-0">
+                <div className="space-y-2">
+                  <Label htmlFor="displayName">Name</Label>
+                  <Input id="displayName" value={displayName} onChange={(e) => setDisplayName(e.target.value)} placeholder="Jane Doe" />
+                </div>
+              </TabsContent>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" />
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <Label htmlFor="password">Password</Label>
+                  {mode === 'signin' && (
+                    <button type="button" onClick={handleForgot} className="text-xs text-muted-foreground hover:text-primary">
+                      Forgot?
+                    </button>
+                  )}
+                </div>
+                <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete={mode === 'signup' ? 'new-password' : 'current-password'} minLength={8} />
+              </div>
+              <Button type="submit" className="w-full" disabled={busy}>
+                {busy && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {mode === 'signup' ? 'Create account' : 'Sign in'}
+              </Button>
+            </form>
+          </Tabs>
+          <p className="text-xs text-center text-muted-foreground mt-4">
+            By continuing you agree to the terms.{' '}
+            <Link to="/" className="underline hover:text-primary">Home</Link>
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
