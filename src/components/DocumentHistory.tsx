@@ -1,12 +1,13 @@
 import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { FileText, RefreshCw, Trash2, BarChart3, Loader2, Clock, CheckCircle2, AlertCircle } from "lucide-react";
+import { FileText, RefreshCw, Trash2, BarChart3, Loader2, Clock, CheckCircle2, AlertCircle, Info } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { api } from "@/services/api";
 import { supabase } from "@/integrations/supabase/client";
+import { DocumentDetailsDialog } from "./DocumentDetailsDialog";
 
 type Doc = Awaited<ReturnType<typeof api.listDocuments>>[number];
 
