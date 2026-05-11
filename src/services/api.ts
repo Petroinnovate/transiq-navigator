@@ -226,6 +226,41 @@ export const api = {
     throw new Error("Agent runs not implemented in Supabase backend yet");
   },
 
+  async listDocuments(limit = 50): Promise<Array<{
+    id: string;
+    file_name: string;
+    status: string;
+    mime: string | null;
+    has_dashboard: boolean;
+    created_at: string;
+    updated_at: string;
+  }>> {
+    const { data, error } = await supabase
+      .from("documents")
+      .select("id,file_name,status,mime,has_dashboard,created_at,updated_at")
+      .order("created_at", { ascending: false })
+      .limit(limit);
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  },
+
+  async reprocessDocument(docId: string): Promise<void> {
+    const { error: updErr } = await supabase
+      .from("documents")
+      .update({ status: "queued", has_dashboard: false })
+      .eq("id", docId);
+    if (updErr) throw new Error(updErr.message);
+    const { error } = await supabase.functions.invoke("process-document", {
+      body: { document_id: docId },
+    });
+    if (error) throw new Error(error.message);
+  },
+
+  async deleteDocument(docId: string): Promise<void> {
+    const { error } = await supabase.from("documents").delete().eq("id", docId);
+    if (error) throw new Error(error.message);
+  },
+
   async healthCheck() {
     return { status: "ok" };
   },
