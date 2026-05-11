@@ -67,8 +67,15 @@ export function DocumentHistory() {
   const [detailsId, setDetailsId] = useState<string | null>(null);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [bulkBusy, setBulkBusy] = useState(false);
+  const [pendingNew, setPendingNew] = useState(0);
   const { toast } = useToast();
   const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  const isAtTop = () => {
+    const el = scrollRef.current;
+    return !el || el.scrollTop <= 8;
+  };
 
   const filtered = useMemo(() => {
     const q = query.toLowerCase();
@@ -96,6 +103,7 @@ export function DocumentHistory() {
         const seen = new Set(prev.map((p) => p.id));
         return [...prev, ...items.filter((i) => !seen.has(i.id))];
       });
+      if (replace) setPendingNew(0);
     } catch (e: any) {
       toast({ title: "Failed to load history", description: e.message, variant: "destructive" });
     } finally {
@@ -116,8 +124,14 @@ export function DocumentHistory() {
       })
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "documents" }, (payload) => {
         const row = payload.new as Doc;
-        setDocs((prev) => (prev.some((d) => d.id === row.id) ? prev : [row, ...prev]));
         setTotal((t) => t + 1);
+        // Only inject inline if user is at the top of the list; otherwise
+        // queue a "new items" notice so the scroll position doesn't jump.
+        if (isAtTop()) {
+          setDocs((prev) => (prev.some((d) => d.id === row.id) ? prev : [row, ...prev]));
+        } else {
+          setPendingNew((n) => n + 1);
+        }
       })
       .on("postgres_changes", { event: "DELETE", schema: "public", table: "documents" }, (payload) => {
         const row = payload.old as { id: string };
@@ -345,7 +359,23 @@ export function DocumentHistory() {
         ) : filtered.length === 0 ? (
           <p className="text-slate-400 text-sm py-6 text-center">No documents match your filters.</p>
         ) : (
-          <div className="space-y-2 max-h-[480px] overflow-y-auto pr-1">
+          <div ref={scrollRef} className="space-y-2 max-h-[480px] overflow-y-auto pr-1 relative">
+            {pendingNew > 0 && (
+              <div className="sticky top-0 z-10 flex justify-center pb-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="bg-cyan-500/20 border-cyan-500/40 text-cyan-200 hover:bg-cyan-500/30"
+                  onClick={async () => {
+                    setPendingNew(0);
+                    await refresh();
+                    scrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                >
+                  Show {pendingNew} new document{pendingNew === 1 ? "" : "s"}
+                </Button>
+              </div>
+            )}
             <div className="flex items-center gap-2 px-3 py-1 text-xs text-slate-400">
               <Checkbox
                 checked={allFilteredSelected}
