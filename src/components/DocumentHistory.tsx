@@ -67,8 +67,15 @@ export function DocumentHistory() {
   const [detailsId, setDetailsId] = useState<string | null>(null);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [bulkBusy, setBulkBusy] = useState(false);
+  const [pendingNew, setPendingNew] = useState(0);
   const { toast } = useToast();
   const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  const isAtTop = () => {
+    const el = scrollRef.current;
+    return !el || el.scrollTop <= 8;
+  };
 
   const filtered = useMemo(() => {
     const q = query.toLowerCase();
