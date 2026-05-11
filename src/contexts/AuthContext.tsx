@@ -1,127 +1,63 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import axios from '@/lib/axios';
-
-interface User {
-    user_id: string;
-    email: string;
-    name?: string;
-}
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import type { Session, User as SupaUser } from '@supabase/supabase-js';
+import { supabase } from '@/integrations/supabase/client';
 
 interface AuthContextType {
-    user: User | null;
-    isAuthenticated: boolean;
-    isLoading: boolean;
-    login: (userData: User, token: string) => void;
-    logout: () => Promise<void>;
-    token: string | null;
+  user: SupaUser | null;
+  session: Session | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  signOut: () => Promise<void>;
+  /** @deprecated kept for compatibility with legacy callers */
+  logout: () => Promise<void>;
+  /** @deprecated kept for compatibility with legacy callers */
+  token: string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (context === undefined) {
-        throw new Error('useAuth must be used within an AuthProvider');
-    }
-    return context;
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error('useAuth must be used within an AuthProvider');
+  return ctx;
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [user, setUser] = useState<User | null>(null);
-    const [token, setToken] = useState<string | null>(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
+  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<SupaUser | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        const storedToken = localStorage.getItem('auth_token');
-        const storedUser = localStorage.getItem('user_data');
+  useEffect(() => {
+    // Set up listener FIRST, then read existing session
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession);
+      setUser(newSession?.user ?? null);
+    });
 
-        if (!storedToken || !storedUser) {
-            setIsLoading(false);
-            return;
-        }
+    supabase.auth.getSession().then(({ data: { session: existing } }) => {
+      setSession(existing);
+      setUser(existing?.user ?? null);
+      setIsLoading(false);
+    });
 
-        let parsedUser: User;
-        try {
-            parsedUser = JSON.parse(storedUser);
-        } catch {
-            localStorage.removeItem('auth_token');
-            localStorage.removeItem('user_data');
-            setIsLoading(false);
-            return;
-        }
+    return () => subscription.unsubscribe();
+  }, []);
 
-        // Validate token against backend before trusting it
-        axios.get('/auth/me', {
-            headers: { Authorization: `Bearer ${storedToken}` },
-        })
-            .then(() => {
-                setToken(storedToken);
-                setUser(parsedUser);
-                setIsAuthenticated(true);
-            })
-            .catch(() => {
-                // Token expired or invalid — clear everything
-                localStorage.removeItem('auth_token');
-                localStorage.removeItem('user_data');
-                setToken(null);
-                setUser(null);
-                setIsAuthenticated(false);
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
-    }, []);
+  const signOut = async () => {
+    await supabase.auth.signOut();
+    setSession(null);
+    setUser(null);
+  };
 
-    const login = (userData: User, authToken: string) => {
+  const value: AuthContextType = {
+    user,
+    session,
+    isAuthenticated: !!session,
+    isLoading,
+    signOut,
+    logout: signOut,
+    token: session?.access_token ?? null,
+  };
 
-        setUser(userData);
-        setToken(authToken);
-        setIsAuthenticated(true);
-
-        // Store in localStorage
-        localStorage.setItem('auth_token', authToken);
-        localStorage.setItem('user_data', JSON.stringify(userData));
-    };
-
-    const logout = async () => {
-        // Call logout endpoint if token exists
-        if (token) {
-            try {
-                await axios.post('/auth/logout', {}, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                })
-            } catch (error) {
-                console.error('Error during logout:', error);
-                // Continue with logout even if logout API fails
-            }
-        }
-
-        // Clear local state and storage
-        setUser(null);
-        setToken(null);
-        setIsAuthenticated(false);
-
-        // Remove from localStorage
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('user_data');
-    };
-
-    const value = {
-        user,
-        isAuthenticated,
-        isLoading,
-        login,
-        logout,
-        token
-    };
-
-    return (
-        <AuthContext.Provider value={value}>
-            {children}
-        </AuthContext.Provider>
-    );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

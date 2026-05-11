@@ -9,6 +9,7 @@ import { DDRDataProvider } from "@/contexts/DDRContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
+import ResetPassword from "./pages/ResetPassword";
 import Upload from "./pages/Upload";
 import Dashboard from "./pages/Dashboard";
 import DemoPage from "./pages/DemoPage";
@@ -38,6 +39,7 @@ const App = () => (
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/upload" element={<ProtectedRoute><Upload /></ProtectedRoute>} />
                 <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                 <Route path="/search" element={<SearchPage />} />
