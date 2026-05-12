@@ -1,73 +1,93 @@
-import axios from "axios";
+// ============================================================================
+// Legacy FastAPI axios client.
+// ----------------------------------------------------------------------------
+// HISTORY: This used to point at a FastAPI service running on localhost:8001
+// during local dev. In Lovable / production that host is unreachable, so any
+// call through this client fails with "Network Error".
+//
+// CURRENT STATE (Lovable Cloud port):
+//   - The CORE pipeline (upload, processing, dashboard generation, search,
+//     document history) has been ported to Supabase edge functions and is
+//     consumed via `@/services/api` — see that file.
+//   - The FOLLOWING modules still call this axios client and remain UNPORTED:
+//       • src/api/ddrClient.ts          — DDR fleet/rig analytics (~30 endpoints)
+//       • src/api/intelligenceClient.ts — entity intelligence
+//       • src/api/sixSigmaClient.ts     — SPC analysis
+//       • src/api/graphClient.ts        — graph RAG
+//       • src/api/observabilityClient.ts — system health/MLOps
+//       • src/api/dashboardApi.ts       — legacy dashboard endpoints
+//
+// FUTURE: When the FastAPI service is deployed (Google Cloud Run / Render /
+// Railway), set the `VITE_API_URL` env var to its public HTTPS URL and these
+// modules light up automatically — no further code changes needed.
+//
+// See MIGRATION.md at the repo root for the full migration plan.
+// ============================================================================
+import axios, { AxiosError } from "axios";
 
-// Create an axios instance with a prefilled base API URL
+const RAW_API_URL = import.meta.env.VITE_API_URL?.trim();
+
+/**
+ * Returns true if VITE_API_URL is set to something that is actually reachable
+ * from the browser (i.e. NOT localhost when the app is hosted on lovable.app).
+ */
+function isApiUrlUsable(): boolean {
+  if (!RAW_API_URL) return false;
+  // Localhost is only reachable when the frontend is also on localhost.
+  const isLocalApi = /^https?:\/\/(localhost|127\.0\.0\.1)/i.test(RAW_API_URL);
+  const isLocalHost = typeof window !== "undefined" &&
+    /^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname);
+  if (isLocalApi && !isLocalHost) return false;
+  return true;
+}
+
+export const isLegacyApiAvailable = isApiUrlUsable();
+
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:8001", // Base API URL - backend runs on port 8001
-  timeout: 600000, // 10 minutes — pipeline makes many Gemini API calls per document
+  baseURL: RAW_API_URL || "http://localhost:8001",
+  timeout: 600000,
 });
 
-// Add request interceptor to include auth token
-axiosInstance.interceptors.request.use(
-  (config) => {
-    // Get token from localStorage
-    const token = localStorage.getItem('auth_token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
+// Auth header injection (kept for forward compat — when FastAPI is deployed
+// it may or may not honor this token; the source of truth for auth is now
+// Supabase Auth).
+axiosInstance.interceptors.request.use((config) => {
+  if (!isLegacyApiAvailable) {
+    // Short-circuit: don't even attempt the network call. Throw a clear,
+    // user-meaningful error so feature pages can show "feature pending
+    // Google Cloud migration" rather than confusing "Network Error".
+    const url = `${config.baseURL ?? ""}${config.url ?? ""}`;
+    const err = new AxiosError(
+      `Legacy backend endpoint not available: ${url}. ` +
+        `This module has not been ported to Lovable Cloud yet. ` +
+        `Set VITE_API_URL to a deployed FastAPI service to enable it.`,
+      "LEGACY_BACKEND_UNAVAILABLE",
+      config as any,
+    );
+    return Promise.reject(err);
   }
-);
+  const token = localStorage.getItem("auth_token");
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
 
-// Add response interceptor: global error handling + 429 retry
+// Response interceptor: keep existing error mapping for when the backend IS up.
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const status = error.response?.status;
-
     if (status === 401) {
-      // Token invalid or expired — clear storage and redirect to login
-      localStorage.removeItem('auth_token');
-      localStorage.removeItem('user_data');
-      if (window.location.pathname !== '/auth') {
-        window.location.href = '/auth';
-      }
-    } else if (status === 403) {
-      // Insufficient role — log for debugging; components surface this via toast
-      console.error(
-        `[API] 403 Forbidden — insufficient role for: ${error.config?.url}`
-      );
-    } else if (status === 404) {
-      const url = error.config?.url ?? 'unknown';
-      // Silence expected 404s from task-status polling (no Celery/Redis)
-      if (!/\/task\//.test(url)) {
-        console.error(
-          `[API] 404 Not Found — requested resource not found: ${url}`
-        );
-      }
-      error.message = `Requested resource not found. Please verify backend endpoint: ${url}`;
-    } else if (status === 422) {
-      // Validation error — log full detail so devs can see which field failed
-      console.error('[API] 422 Validation Error:', error.response?.data);
+      localStorage.removeItem("auth_token");
+      localStorage.removeItem("user_data");
+      if (window.location.pathname !== "/auth") window.location.href = "/auth";
     } else if (status === 429) {
-      // Rate limited — wait for Retry-After header (or default 2 s) then retry once
-      const retryAfter = Number(
-        error.response?.headers?.['retry-after'] ?? 2
-      );
-      console.warn(`[API] 429 Rate limited — retrying after ${retryAfter}s`);
+      const retryAfter = Number(error.response?.headers?.["retry-after"] ?? 2);
       await new Promise((r) => setTimeout(r, retryAfter * 1000));
       return axiosInstance.request(error.config);
-    } else if (status >= 500) {
-      console.error('[API] Server error:', error.response?.data);
     }
-
     return Promise.reject(error);
-  }
+  },
 );
 
-// Add API version prefix helper
-export const API_V2_BASE = '/api/v2';
-
+export const API_V2_BASE = "/api/v2";
 export default axiosInstance;
