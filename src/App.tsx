@@ -24,6 +24,7 @@ import GraphExplorer from "./pages/GraphExplorer";
 import SixSigmaPage from "./pages/SixSigmaPage";
 import IntelligenceInsightsPage from "./pages/IntelligenceInsightsPage";
 import DDRMetricEditPage from "./pages/DDRMetricEditPage";
+import ApiDiagnostics from "./pages/ApiDiagnostics";
 
 const queryClient = new QueryClient();
 
