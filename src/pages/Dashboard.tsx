@@ -13,6 +13,7 @@ import { useDashboard } from '@/contexts/DashboardContext'
 import { useDDR, type DashboardMode } from '@/contexts/DDRContext'
 import DDRDashboard from '@/components/ddr/DDRDashboard'
 import { fetchDashboardData, fetchLatestDashboard } from '@/api/dashboardApi'
+import { BackendStatusBanner } from '@/components/BackendStatusBanner'
 
 // ── Error Boundary to catch rendering crashes ─────────────────────────────
 interface EBState { hasError: boolean; error: string }
@@ -168,14 +169,20 @@ export const Dashboard: React.FC<DashboardProps> = ({ reportId }) => {
   }
 
   if (fetchError) {
+    const isNetwork = /network|fetch|failed to fetch|ECONNREFUSED|timeout|not found/i.test(fetchError);
     return (
       <DashboardLayout>
         <ModeSwitcher />
-        <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="text-center space-y-4">
-            <AlertTriangle className="h-16 w-16 mx-auto text-red-400 opacity-70" />
-            <h2 className="text-2xl font-bold">Failed to load dashboard</h2>
-            <p className="text-muted-foreground text-sm font-mono bg-muted px-3 py-1.5 rounded">{fetchError}</p>
+        <div className="max-w-2xl mx-auto mt-10 space-y-6 px-4">
+          <BackendStatusBanner />
+          <div className="text-center space-y-4 pt-4">
+            <TrendingUp className="h-14 w-14 mx-auto text-muted-foreground opacity-50" />
+            <h2 className="text-xl font-bold">No dashboard available</h2>
+            <p className="text-muted-foreground text-sm">
+              {isNetwork
+                ? 'The processing backend is unreachable, so no dashboards can be loaded right now. Once the backend is online, your uploaded reports will appear here.'
+                : fetchError}
+            </p>
             <div className="flex gap-3 justify-center">
               <Button onClick={loadDashboard}>
                 <RefreshCw className="h-4 w-4 mr-2" />
