@@ -49,6 +49,12 @@ export function BackendStatusBanner({ compact = false }: { compact?: boolean }) 
             Uploads, document history, and dashboard generation are disabled until the
             backend is reachable. Authentication still works.
           </div>
+          <a
+            href="/api-diagnostics"
+            className="inline-block mt-1 text-xs underline text-amber-200 hover:text-amber-100"
+          >
+            Run API diagnostics →
+          </a>
         </div>
       </div>
     </div>
