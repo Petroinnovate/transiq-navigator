@@ -24,6 +24,7 @@ import GraphExplorer from "./pages/GraphExplorer";
 import SixSigmaPage from "./pages/SixSigmaPage";
 import IntelligenceInsightsPage from "./pages/IntelligenceInsightsPage";
 import DDRMetricEditPage from "./pages/DDRMetricEditPage";
+import ApiDiagnostics from "./pages/ApiDiagnostics";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,7 @@ const App = () => (
                 <Route path="/six-sigma" element={<ProtectedRoute><SixSigmaPage /></ProtectedRoute>} />
                 <Route path="/intelligence-insights" element={<ProtectedRoute><IntelligenceInsightsPage /></ProtectedRoute>} />
                 <Route path="/ddr-metric-edit" element={<ProtectedRoute><DDRMetricEditPage /></ProtectedRoute>} />
+                <Route path="/api-diagnostics" element={<ProtectedRoute><ApiDiagnostics /></ProtectedRoute>} />
                 <Route path="/profile" element={
                   <ProtectedRoute>
                     <UserProfile />
