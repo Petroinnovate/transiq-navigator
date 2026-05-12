@@ -13,6 +13,7 @@ import { useDashboard } from '@/contexts/DashboardContext'
 import { useDDR, type DashboardMode } from '@/contexts/DDRContext'
 import DDRDashboard from '@/components/ddr/DDRDashboard'
 import { fetchDashboardData, fetchLatestDashboard } from '@/api/dashboardApi'
+import { BackendStatusBanner } from '@/components/BackendStatusBanner'
 
 // ── Error Boundary to catch rendering crashes ─────────────────────────────
 interface EBState { hasError: boolean; error: string }
