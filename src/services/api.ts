@@ -289,3 +289,36 @@ export function streamDocumentStatus(
     .subscribe();
   return () => { supabase.removeChannel(channel); };
 }
+
+// ============================================================================
+// SSE streaming dashboard — DEPRECATED
+// ----------------------------------------------------------------------------
+// The original FastAPI backend supported Server-Sent Events for progressive
+// dashboard rendering (KPIs first, then charts, then insights). The Lovable
+// Cloud edge functions don't stream; they return the whole dashboard once
+// processing completes.
+//
+// This stub immediately invokes the error callback so consumers fall through
+// to their non-streaming fallback path (which uses `getDashboardData`).
+//
+// FUTURE: when DDR/intelligence pipelines are ported, real streaming can be
+// reintroduced via Supabase Realtime + a `dashboards` row that grows in
+// stages, or via a long-running edge function with chunked transfer encoding.
+// ============================================================================
+export interface DashboardStreamEvent {
+  stage: "kpis" | "charts" | "insights" | "sixSigma" | "complete" | "error";
+  data?: Record<string, unknown>;
+}
+
+export function streamDashboard(
+  _docId: string,
+  _onEvent: (e: DashboardStreamEvent) => void,
+  onError?: (e: unknown) => void,
+): () => void {
+  // Defer so caller has time to wire up `streamCloseRef` etc.
+  queueMicrotask(() => {
+    onError?.(new Error("Streaming not available on Lovable Cloud — falling back to REST"));
+  });
+  return () => { /* no-op */ };
+}
+
