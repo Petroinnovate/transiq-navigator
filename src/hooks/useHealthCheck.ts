@@ -28,12 +28,12 @@ async function fetchHealth(): Promise<{
 }> {
   let cloud: HealthStatus = "critical";
   try {
-    // Cheapest possible ping — fetches at most one row from a public table.
-    const { error } = await supabase
-      .from("tenants")
-      .select("id", { head: true, count: "exact" })
-      .limit(1);
-    cloud = error ? "critical" : "healthy";
+    // Unauthenticated health probe — works regardless of RLS / login state.
+    const url = import.meta.env.VITE_SUPABASE_URL;
+    const res = await fetch(`${url}/auth/v1/health`, {
+      headers: { apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY },
+    });
+    cloud = res.ok ? "healthy" : "critical";
   } catch {
     cloud = "critical";
   }
