@@ -1,95 +1,106 @@
 // ============================================================================
-// Dashboard API - Backend Integration Layer
-// React Query / TanStack Query Compatible
+// Dashboard API — Lovable Cloud (Supabase) implementation
+// ----------------------------------------------------------------------------
+// The dashboards table is the source of truth for generated dashboards.
+// Each row is keyed by document_id and scoped to the user's tenant via RLS.
+//
+// Legacy axios calls to FastAPI (/api/v2/dashboard/*) have been removed —
+// uploads, processing and dashboards live entirely in Lovable Cloud now.
+// PDF/Excel export endpoints have not been ported yet; they throw a clear
+// "pending migration" error so callers can show a friendly message.
 // ============================================================================
 
-import axios from '@/lib/axios'
-import { DashboardResponse } from '@/types/dashboard'
+import { supabase } from '@/integrations/supabase/client'
+import type { DashboardResponse } from '@/types/dashboard'
 
-/**
- * Fetch dashboard data for a specific report
- * @param reportId - Unique report identifier
- * @returns Promise<DashboardResponse>
- */
+function rowToDashboard(row: any, doc?: any): DashboardResponse {
+  // Shape the renderer expects: { dashboard: { kpis, charts, insights, ... } }
+  return {
+    dashboard: {
+      id: row.id,
+      document_id: row.document_id,
+      title: doc?.file_name ?? 'Dashboard',
+      kpis: row.kpis ?? [],
+      charts: row.charts ?? [],
+      insights: row.insights ?? [],
+      sixSigma: row.six_sigma ?? null,
+      status: row.status,
+      meta: {
+        document_id: row.document_id,
+        file_name: doc?.file_name,
+        created_at: row.created_at,
+      },
+    },
+  } as unknown as DashboardResponse
+}
+
 export const fetchDashboardData = async (reportId: string): Promise<DashboardResponse> => {
-  const response = await axios.get<DashboardResponse>(`/api/v2/dashboard/${reportId}`)
-  return response.data
+  const { data, error } = await supabase
+    .from('dashboards')
+    .select('*, documents(file_name, status)')
+    .eq('document_id', reportId)
+    .maybeSingle()
+
+  if (error) throw new Error(error.message)
+  if (!data) throw new Error('Dashboard not found')
+  return rowToDashboard(data, (data as any).documents)
 }
 
-/**
- * Fetch latest dashboard data (most recent ingestion)
- * @returns Promise<DashboardResponse>
- */
 export const fetchLatestDashboard = async (): Promise<DashboardResponse> => {
-  const response = await axios.get<DashboardResponse>('/api/v2/dashboard/latest')
-  return response.data
+  const { data, error } = await supabase
+    .from('dashboards')
+    .select('*, documents(file_name, status)')
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (error) throw new Error(error.message)
+  if (!data) throw new Error('No dashboards yet — upload a document to generate one.')
+  return rowToDashboard(data, (data as any).documents)
 }
 
-/**
- * Process and generate dashboard from uploaded file
- * @param fileId - ID of uploaded file
- * @returns Promise<DashboardResponse>
- */
-export const processDashboardFromFile = async (fileId: string): Promise<DashboardResponse> => {
-  const response = await axios.post<DashboardResponse>('/api/v2/generate', { fileId })
-  return response.data
+export const processDashboardFromFile = async (_fileId: string): Promise<DashboardResponse> => {
+  throw new Error('Use the upload flow — dashboards are generated automatically after processing.')
 }
 
-/**
- * Get dashboard processing status
- * @param taskId - Processing task ID
- * @returns Promise with processing status
- */
 export const getDashboardProcessingStatus = async (taskId: string) => {
-  const response = await axios.get(`/api/v2/dashboard/status/${taskId}`)
-  return response.data
+  // Task IDs map to document IDs in the Lovable Cloud pipeline.
+  const { data, error } = await supabase
+    .from('documents')
+    .select('id, status, has_dashboard')
+    .eq('id', taskId)
+    .maybeSingle()
+  if (error) throw new Error(error.message)
+  return {
+    task_id: taskId,
+    status: data?.has_dashboard ? 'completed' : (data?.status ?? 'processing'),
+  }
 }
 
-/**
- * Export dashboard data as PDF
- * @param reportId - Report ID to export
- * @returns Promise<Blob>
- */
-export const exportDashboardPDF = async (reportId: string): Promise<Blob> => {
-  const response = await axios.get(`/api/v2/dashboard/${reportId}/export/pdf`, {
-    responseType: 'blob'
-  })
-  return response.data
+export const exportDashboardPDF = async (_reportId: string): Promise<Blob> => {
+  throw new Error('PDF export is pending migration to Lovable Cloud.')
 }
 
-/**
- * Export dashboard data as Excel
- * @param reportId - Report ID to export
- * @returns Promise<Blob>
- */
-export const exportDashboardExcel = async (reportId: string): Promise<Blob> => {
-  const response = await axios.get(`/api/v2/dashboard/${reportId}/export/excel`, {
-    responseType: 'blob'
-  })
-  return response.data
+export const exportDashboardExcel = async (_reportId: string): Promise<Blob> => {
+  throw new Error('Excel export is pending migration to Lovable Cloud.')
 }
 
-/**
- * React Query hook-friendly functions
- */
 export const dashboardQueries = {
   byId: (reportId: string) => ({
     queryKey: ['dashboard', reportId],
     queryFn: () => fetchDashboardData(reportId),
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000,
   }),
-  
   latest: () => ({
     queryKey: ['dashboard', 'latest'],
     queryFn: fetchLatestDashboard,
-    staleTime: 0,        // Always fetch fresh dashboard data
-    gcTime: 0,           // Don't cache stale shapes from old API format
+    staleTime: 0,
+    gcTime: 0,
     refetchOnMount: true,
   }),
-  
   processing: (taskId: string) => ({
     queryKey: ['dashboard', 'processing', taskId],
     queryFn: () => getDashboardProcessingStatus(taskId),
-    refetchInterval: 2000, // Poll every 2 seconds
+    refetchInterval: 2000,
   }),
 }
